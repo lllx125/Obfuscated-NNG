@@ -1,0 +1,3 @@
+[submodule "externals/NNG4"]
+	path = externals/NNG4
+	url = https://github.com/leanprover-community/NNG4.git
