@@ -1,0 +1,43 @@
+{"full_name": "succ_ne_succ", "code": "theorem succ_ne_succ (m n : MyNat) (h : m ≠ n) : succ m ≠ succ n := sorry", "category": "axiom"}
+{"full_name": "succ_ne_zero", "code": "axiom succ_ne_zero (n : MyNat) : succ n ≠ 0", "category": "axiom"}
+{"full_name": "MyNat", "code": "inductive MyNat where\n| zero : MyNat\n| succ : MyNat → MyNat", "category": "inductive"}
+{"full_name": "ofNat", "code": "def ofNat (x : Nat) : MyNat :=\n  match x with\n  | Nat.zero   => MyNat.zero\n  | Nat.succ b => MyNat.succ (ofNat b)", "category": "definition"}
+{"full_name": "toNat", "code": "def toNat (x : MyNat) : Nat :=\n  match x with\n  | MyNat.zero   => Nat.zero\n  | MyNat.succ b => Nat.succ (toNat b)", "category": "definition"}
+{"full_name": "one", "code": "def one : MyNat := MyNat.succ 0", "category": "definition"}
+{"full_name": "zero_eq_0", "code": "theorem zero_eq_0 : MyNat.zero = 0 := rfl", "category": "theorem"}
+{"full_name": "anonymous_instance", "code": "instance : Inhabited MyNat where\n  default := MyNat.zero", "category": "instance"}
+{"full_name": "instofNat", "code": "instance instofNat {n : Nat} : OfNat MyNat n where\n  ofNat := ofNat n", "category": "instance"}
+{"full_name": "anonymous_instance", "code": "instance : ToString MyNat where\n  toString p := toString (toNat p)", "category": "instance"}
+{"full_name": "pred", "code": "def pred : ℕ → ℕ\n| 0 => 37\n| succ n => n", "category": "definition"}
+{"full_name": "is_zero", "code": "def is_zero : ℕ → Prop\n| 0 => True\n| succ _ => False", "category": "definition"}
+{"full_name": "succ_inj", "code": "theorem succ_inj (a b : ℕ) (h : succ a = succ b) : a = b := by\n  rw [← pred_succ a, h, pred_succ]", "category": "theorem"}
+{"full_name": "zero_ne_succ", "code": "theorem zero_ne_succ (a : ℕ) : 0 ≠ succ a := by\n  intro h\n  rw [← is_zero_succ a]\n  rw [← h]\n  rw [is_zero_zero]\n  trivial", "category": "theorem"}
+{"full_name": "pred_succ", "code": "lemma pred_succ (n : ℕ) : pred (succ n) = n := rfl", "category": "lemma"}
+{"full_name": "is_zero_zero", "code": "lemma is_zero_zero : is_zero 0 = True := rfl", "category": "lemma"}
+{"full_name": "is_zero_succ", "code": "lemma is_zero_succ (n : ℕ) : is_zero (succ n) = False := rfl", "category": "lemma"}
+{"full_name": "add", "code": "opaque add : MyNat → MyNat → MyNat", "category": "opaque"}
+{"full_name": "add_zero", "code": "axiom add_zero (a: MyNat) : a + 0 = a", "category": "axiom"}
+{"full_name": "add_succ", "code": "axiom add_succ (a d: MyNat) : a + (succ d) = succ (a + d)", "category": "axiom"}
+{"full_name": "instAdd", "code": "instance instAdd : Add MyNat where\n  add := MyNat.add", "category": "instance"}
+{"full_name": "mul", "code": "opaque mul : MyNat → MyNat → MyNat", "category": "opaque"}
+{"full_name": "mul_zero", "code": "axiom mul_zero (a: MyNat) : a * 0 = 0", "category": "axiom"}
+{"full_name": "mul_succ", "code": "axiom mul_succ (a b: MyNat) : a * (succ b) = a * b + a", "category": "axiom"}
+{"full_name": "anonymous_instance", "code": "instance : Mul MyNat where\n  mul := MyNat.mul", "category": "instance"}
+{"full_name": "one_eq_succ_zero", "code": "theorem one_eq_succ_zero : 1 = succ 0 := by rfl", "category": "theorem"}
+{"full_name": "two_eq_succ_one", "code": "theorem two_eq_succ_one : 2 = succ 1 := by rfl", "category": "theorem"}
+{"full_name": "three_eq_succ_two", "code": "theorem three_eq_succ_two : 3 = succ 2 := by rfl", "category": "theorem"}
+{"full_name": "four_eq_succ_three", "code": "theorem four_eq_succ_three : 4 = succ 3 := by rfl", "category": "theorem"}
+{"full_name": "pow", "code": "opaque pow : ℕ → ℕ → ℕ", "category": "opaque"}
+{"full_name": "pow_zero", "code": "axiom pow_zero (m: ℕ) : m ^ 0 = 1", "category": "axiom"}
+{"full_name": "pow_succ", "code": "axiom pow_succ (m n: ℕ) : m ^ (succ n) = m ^ n * m", "category": "axiom"}
+{"full_name": "anonymous_instance", "code": "instance : Pow ℕ ℕ where\n  pow := pow\n\n\nmacro_rules | `($x ^ $y)   => `(HPow.hPow ($x : MyNat) ($y : MyNat))", "category": "instance"}
+{"full_name": "le", "code": "def le (a b : ℕ) :=  ∃ (c : ℕ), b = a + c", "category": "definition"}
+{"full_name": "anonymous_instance", "code": "instance : LE MyNat := ⟨MyNat.le⟩", "category": "instance"}
+{"full_name": "le", "code": "def le (a b : MyNat) :=  ∃ (c : MyNat), b = a + c", "category": "definition"}
+{"full_name": "lt_myNat", "code": "def lt_myNat (a b : MyNat) := a ≤ b ∧ ¬ (b ≤ a)", "category": "definition"}
+{"full_name": "le_def", "code": "theorem le_def' : MyNat.le = (.≤.) := rfl", "category": "theorem"}
+{"full_name": "le_iff_exists_add", "code": "theorem le_iff_exists_add (a b : MyNat) : a ≤ b ↔ ∃ (c : MyNat), b = a + c := Iff.rfl", "category": "theorem"}
+{"full_name": "lt", "code": "theorem lt :  ∀ (a b : MyNat), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}
+{"full_name": "anonymous_instance", "code": "instance : LE MyNat := ⟨MyNat.le⟩", "category": "instance"}
+{"full_name": "anonymous_instance", "code": "instance : LT MyNat := ⟨lt_myNat⟩", "category": "instance"}
+{"full_name": "instDecidableEq", "code": "instance instDecidableEq : DecidableEq MyNat\n| 0, 0 => isTrue <| by\n  show 0 = 0\n  rfl\n| succ m, 0 => isFalse <| by\n  show succ m ≠ 0\n  exact succ_ne_zero m\n| 0, succ n => isFalse <| by\n  show 0 ≠ succ n\n  exact zero_ne_succ n\n| succ m, succ n =>\n  match instDecidableEq m n with\n  | isTrue (h : m = n) => isTrue <| by\n    show succ m = succ n\n    rw [h]\n    rfl\n  | isFalse (h : m ≠ n) => isFalse <| by\n    show succ m ≠ succ n\n    exact succ_ne_succ m n h", "category": "instance"}
