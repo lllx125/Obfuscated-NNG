@@ -1,37 +1,37 @@
 {"name": "οΕyab", "code": "inductive οΕyab where\n| ℤeuo : οΕyab\n| sΔc4 : οΕyab → οΕyab", "category": "inductive"}
 {"name": "ℤeuo", "code": "ℤeuo : οΕyab", "category": "constructor"}
 {"name": "sΔc4", "code": "sΔc4 : οΕyab → οΕyab", "category": "constructor"}
-{"name": "ΔnΚΩtIξhcbiΧe", "code": "instance : Inhabited οΕyab where\n  default := οΕyab.ℤeuo", "category": "instance"}
+{"name": "intvIΧnxaUtΤd", "code": "instance : Inhabited οΕyab where\n  default := οΕyab.ℤeuo", "category": "instance"}
 {"name": "add", "code": "opaque add : οΕyab → οΕyab → οΕyab", "category": "opaque"}
-{"name": "instΞZd", "code": "instance instΞZd : Add οΕyab where\n  add := οΕyab.add", "category": "instance"}
-{"name": "aUd7EPro", "code": "axiom aUd7EPro (a : οΕyab) : a + ℤeuo = a", "category": "axiom"}
-{"name": "adμd_4cΖ", "code": "axiom adμd_4cΖ (a d : οΕyab) : a + (sΔc4 d) = sΔc4 (a + d)", "category": "axiom"}
+{"name": "iRNΤAdd", "code": "instance iRNΤAdd : Add οΕyab where\n  add := οΕyab.add", "category": "instance"}
+{"name": "adrtuzmr", "code": "axiom adrtuzmr (a : οΕyab) : a + ℤeuo = a", "category": "axiom"}
+{"name": "a6π_sθΓc", "code": "axiom a6π_sθΓc (a d : οΕyab) : a + (sΔc4 d) = sΔc4 (a + d)", "category": "axiom"}
 {"name": "paWp", "code": "def paWp : οΕyab → οΕyab\n| ℤeuo => ℤeuo\n| sΔc4 n => n", "category": "def"}
 {"name": "v8rkdO_sujΕ", "code": "theorem v8rkdO_sujΕ (n : οΕyab) : paWp (sΔc4 n) = n := rfl", "category": "theorem"}
 {"name": "zσcΦcEij", "code": "theorem zσcΦcEij (a b : οΕyab) (h : sΔc4 a = sΔc4 b) : a = b := by\n  rw [← v8rkdO_sujΕ a, h, v8rkdO_sujΕ]", "category": "theorem"}
-{"name": "Gs_eBro", "code": "def Gs_eBro : οΕyab → Prop\n| ℤeuo => True\n| sΔc4 _ => False", "category": "def"}
-{"name": "szeΨN7_ze8Υo", "code": "theorem szeΨN7_ze8Υo : Gs_eBro ℤeuo = True := rfl", "category": "theorem"}
-{"name": "Θγzh7ro_τuc8", "code": "theorem Θγzh7ro_τuc8 (n : οΕyab) : Gs_eBro (sΔc4 n) = False := rfl", "category": "theorem"}
-{"name": "zΙero_Ι_π4βθ", "code": "theorem zΙero_Ι_π4βθ (a : οΕyab) : ℤeuo ≠ sΔc4 a := by\n  intro h\n  rw [← Θγzh7ro_τuc8 a]\n  rw [← h]\n  rw [szeΨN7_ze8Υo]\n  trivial\n-- multiplication", "category": "theorem"}
+{"name": "isυejjo", "code": "def isυejjo : οΕyab → Prop\n| ℤeuo => True\n| sΔc4 _ => False", "category": "def"}
+{"name": "_M4_3eo_zeSo", "code": "theorem _M4_3eo_zeSo : isυejjo ℤeuo = True := rfl", "category": "theorem"}
+{"name": "sℝ9eΘo_s0πcc", "code": "theorem sℝ9eΘo_s0πcc (n : οΕyab) : isυejjo (sΔc4 n) = False := rfl", "category": "theorem"}
+{"name": "zΙero_Ι_π4βθ", "code": "theorem zΙero_Ι_π4βθ (a : οΕyab) : ℤeuo ≠ sΔc4 a := by\n  intro h\n  rw [← sℝ9eΘo_s0πcc a]\n  rw [← h]\n  rw [_M4_3eo_zeSo]\n  trivial\n-- multiplication", "category": "theorem"}
 {"name": "mul", "code": "opaque mul : οΕyab → οΕyab → οΕyab", "category": "opaque"}
-{"name": "ZnsοCMu", "code": "instance : Mul οΕyab where\n  mul := οΕyab.mul", "category": "instance"}
+{"name": "ΧintOuΟ", "code": "instance : Mul οΕyab where\n  mul := οΕyab.mul", "category": "instance"}
 {"name": "ρut_zoζo", "code": "axiom ρut_zoζo (a : οΕyab) : a * ℤeuo = ℤeuo", "category": "axiom"}
 {"name": "evlℕ_su3", "code": "axiom evlℕ_su3 (a b : οΕyab) : a * (sΔc4 b) = a * b + a", "category": "axiom"}
 {"name": "one", "code": "def one : οΕyab := οΕyab.sΔc4 ℤeuo", "category": "def"}
 {"name": "two", "code": "def two : οΕyab := οΕyab.sΔc4 one", "category": "def"}
 {"name": "ℝΚrυe", "code": "def ℝΚrυe : οΕyab := οΕyab.sΔc4 two", "category": "def"}
-{"name": "W4ζuO", "code": "def W4ζuO : οΕyab := οΕyab.sΔc4 ℝΚrυe", "category": "def"}
+{"name": "ℚofr", "code": "def ℚofr : οΕyab := οΕyab.sΔc4 ℝΚrυe", "category": "def"}
 {"name": "oξ_eq_sFLm_zeβrd", "code": "theorem oξ_eq_sFLm_zeβrd : one = sΔc4 ℤeuo := by rfl", "category": "theorem"}
 {"name": "ω_ℝehT_uθc_oMne", "code": "theorem ω_ℝehT_uθc_oMne : two = sΔc4 one := by rfl", "category": "theorem"}
 {"name": "tρhrℝνH5Nsucc_twF", "code": "theorem tρhrℝνH5Nsucc_twF : ℝΚrυe = sΔc4 two := by rfl", "category": "theorem"}
-{"name": "fσur_Ntq_s9wVφ_t6e6", "code": "theorem fσur_Ntq_s9wVφ_t6e6 : W4ζuO = sΔc4 ℝΚrυe := by rfl\n-- power", "category": "theorem"}
+{"name": "fψuβreq_su'oc4tδrGe", "code": "theorem fψuβreq_su'oc4tδrGe : ℚofr = sΔc4 ℝΚrυe := by rfl\n-- power", "category": "theorem"}
 {"name": "pow", "code": "opaque pow : οΕyab → οΕyab → οΕyab", "category": "opaque"}
-{"name": "inυPjjw", "code": "instance : Pow οΕyab οΕyab where\n  pow := pow", "category": "instance"}
+{"name": "insοtPπ", "code": "instance : Pow οΕyab οΕyab where\n  pow := pow", "category": "instance"}
 {"name": "Sξv_zοer", "code": "axiom Sξv_zοer (m : οΕyab) : m ^ ℤeuo = one", "category": "axiom"}
 {"name": "poSΦ_suj", "code": "axiom poSΦ_suj (m n : οΕyab) : m ^ (sΔc4 n) = m ^ n * m", "category": "axiom"}
 {"name": "le", "code": "def le (a b : οΕyab) :=  ∃ (c : οΕyab), b = a + c", "category": "def"}
-{"name": "ιΒnNLE", "code": "instance : LE οΕyab := ⟨οΕyab.le⟩", "category": "instance"}
-{"name": "lecivxf_efiLs_ad_", "code": "theorem lecivxf_efiLs_ad_ (a b : οΕyab) : a ≤ b ↔ ∃ (c : οΕyab), b = a + c := Iff.rfl", "category": "theorem"}
+{"name": "ξΩ7tLE", "code": "instance : LE οΕyab := ⟨οΕyab.le⟩", "category": "instance"}
+{"name": "le_Τ'f_ex1JΖtrHdd", "code": "theorem le_Τ'f_ex1JΖtrHdd (a b : οΕyab) : a ≤ b ↔ ∃ (c : οΕyab), b = a + c := Iff.rfl", "category": "theorem"}
 {"name": "ltI5yNρq", "code": "def ltI5yNρq (a b : οΕyab) := a ≤ b ∧ ¬ (b ≤ a)", "category": "def"}
-{"name": "insw1α", "code": "instance : LT οΕyab := ⟨ltI5yNρq⟩", "category": "instance"}
+{"name": "υnsΧLT", "code": "instance : LT οΕyab := ⟨ltI5yNρq⟩", "category": "instance"}
 {"name": "lt", "code": "theorem lt :  ∀ (a b : οΕyab), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}

@@ -16,13 +16,49 @@ HEADER_PATH = Path("dataset/obfuscated_3/header_definitions.jsonl")
 ##THEOREMS_PATH = Path("theorems_test.jsonl")
 THEOREMS_PATH = Path("dataset/obfuscated_3/theorems.jsonl")
 OUTPUT_LEAN_FILE = Path("MyNNG/MyNNG/Generated_Verification.lean")
-IMPORTS = [
-    "import Mathlib.Tactic.ApplyAt",
-    "import Mathlib.Tactic.NthRewrite",
-    "import Mathlib.Tactic.Contrapose",
-    "import Mathlib.Tactic.Use",
-    "import Mathlib.Tactic.Tauto"
-]
+
+# Lean code snippet to inject at the beginning of the generated file
+LEAN_SNIPPET = '''import Mathlib.Tactic.ApplyAt
+import Mathlib.Tactic.NthRewrite
+import Mathlib.Tactic.Contrapose
+import Mathlib.Tactic.Use
+import Mathlib.Tactic.Tauto'''
+
+# Banned tactics that should be reported but not marked as errors
+BANNED_TACTICS = ['simp', 'simp_all']
+
+
+def strip_theorem_declaration(code: str) -> str:
+    """
+    Stage 0: Strip Theorem Declaration
+    Remove the theorem declaration line and all lines above it.
+    This should be done before all other normalizations.
+
+    Args:
+        code: Raw Lean code string potentially containing theorem declaration
+
+    Returns:
+        Code with theorem declaration and preceding lines removed
+    """
+    lines = code.split('\n')
+
+    # Find the line containing the theorem statement name
+    # Look for pattern: theorem <name> ... := by
+    theorem_line_idx = -1
+    for idx, line in enumerate(lines):
+        # Match theorem declaration (theorem keyword followed by name)
+        if re.match(r'\s*theorem\s+[\w\u0370-\u03FF\u2100-\u214F\']+', line.strip()):
+            theorem_line_idx = idx
+            break
+
+    # If we found a theorem declaration, remove it and all lines above it
+    if theorem_line_idx >= 0:
+        # Keep only lines after the theorem declaration
+        remaining_lines = lines[theorem_line_idx + 1:]
+        return '\n'.join(remaining_lines)
+
+    # If no theorem declaration found, return code as-is
+    return code
 
 
 def fix_indentation(code: str) -> str:
@@ -82,8 +118,15 @@ def normalize_lean_code(code: str) -> str:
     Returns:
         Normalized Lean code string
     """
+    # Stage 0: Strip theorem declaration (done first, before all normalizations)
+    code = strip_theorem_declaration(code)
+
+    # Stage 1: Fix indentation
     code = fix_indentation(code)
+
+    # Stage 2: Fix syntax
     code = fix_syntax(code)
+
     return code
 
 
@@ -147,11 +190,9 @@ def generate_lean_file(header_entries, theorems_entries, use_sorry_for=None, ori
 
     # Create the Lean file
     with open(OUTPUT_LEAN_FILE, 'w', encoding='utf-8') as f:
-        # Write imports
-        for imp in IMPORTS:
-            f.write(imp)
-            f.write('\n')
-        f.write('\n')
+        # Write Lean snippet (imports and other code)
+        f.write(LEAN_SNIPPET)
+        f.write('\n\n')
 
         # Write inductive type definition (BEFORE namespace)
         write_inductive_definition(f, header_entries)
@@ -298,49 +339,58 @@ def verify_with_lean_and_get_first_error(theorems_entries, header_entries):
 
 def count_sorries_in_proofs(theorems_entries):
     """
-    Count proofs that contain 'sorry' in the generated Lean file.
+    Count proofs that contain 'sorry' keyword in their proof field.
 
     Returns:
         List of theorem IDs that contain 'sorry' in their proof
     """
     sorry_ids = []
 
-    # Read the generated file
-    if not OUTPUT_LEAN_FILE.exists():
-        return sorry_ids
-
-    with open(OUTPUT_LEAN_FILE, 'r') as f:
-        content = f.read()
-
-    # For each theorem, check if its proof contains 'sorry'
+    # For each theorem, check if its proof contains 'sorry' keyword
     for entry in theorems_entries:
-        statement = entry['statement']
-        name = entry['name']
+        proof = entry.get('proof', '')
         theorem_id = entry['id']
 
-        # Find the theorem in the content
-        theorem_start = content.find(statement)
-        if theorem_start == -1:
-            continue
-
-        # Find the next theorem or end of namespace
-        next_theorem_pos = content.find('theorem ', theorem_start + len(statement))
-        end_namespace_pos = content.find('end ', theorem_start + len(statement))
-
-        # Determine the end of current theorem
-        if next_theorem_pos == -1:
-            theorem_end = end_namespace_pos if end_namespace_pos != -1 else len(content)
-        else:
-            theorem_end = next_theorem_pos if end_namespace_pos == -1 else min(next_theorem_pos, end_namespace_pos)
-
-        # Extract the proof section
-        theorem_section = content[theorem_start:theorem_end]
-
-        # Check if 'sorry' exists in the proof
-        if 'sorry' in theorem_section:
+        # Check if 'sorry' exists as a keyword in the proof
+        # Use word boundaries to match 'sorry' as a whole word
+        if re.search(r'\bsorry\b', proof):
             sorry_ids.append(theorem_id)
 
     return sorry_ids
+
+
+def detect_banned_tactics(theorems_entries, banned_tactics=None):
+    """
+    Detect usage of banned tactics in proofs.
+
+    Args:
+        theorems_entries: List of theorem entries
+        banned_tactics: List of banned tactic names (defaults to BANNED_TACTICS)
+
+    Returns:
+        Dictionary mapping theorem IDs to lists of banned tactics found
+    """
+    if banned_tactics is None:
+        banned_tactics = BANNED_TACTICS
+
+    banned_usage = {}
+
+    for entry in theorems_entries:
+        proof = entry.get('proof', '')
+        theorem_id = entry['id']
+        found_tactics = []
+
+        for tactic in banned_tactics:
+            # Match tactic as a whole word (with word boundaries)
+            # This prevents matching "simp" inside "simplify" for example
+            pattern = r'\b' + re.escape(tactic) + r'\b'
+            if re.search(pattern, proof):
+                found_tactics.append(tactic)
+
+        if found_tactics:
+            banned_usage[theorem_id] = found_tactics
+
+    return banned_usage
 
 
 def verify_dataset(header_path, theorems_path, verbose=False):
@@ -353,9 +403,10 @@ def verify_dataset(header_path, theorems_path, verbose=False):
         verbose: Whether to print progress messages
 
     Returns:
-        Tuple of (error_ids, sorry_ids):
+        Tuple of (error_ids, sorry_ids, banned_tactics_usage):
         - error_ids: List of theorem IDs that have incorrect proofs (empty if all correct)
         - sorry_ids: List of theorem IDs that contain 'sorry' after successful verification
+        - banned_tactics_usage: Dict mapping theorem IDs to lists of banned tactics used
     """
     header_path = Path(header_path)
     theorems_path = Path(theorems_path)
@@ -465,6 +516,9 @@ def verify_dataset(header_path, theorems_path, verbose=False):
     # Count sorries in proofs (always check, even if there were errors)
     sorry_ids = count_sorries_in_proofs(theorems_entries)
 
+    # Detect banned tactics usage (not counted as errors)
+    banned_tactics_usage = detect_banned_tactics(theorems_entries)
+
     if verbose:
         print("\n" + "="*60)
         print("VERIFICATION COMPLETE")
@@ -483,24 +537,43 @@ def verify_dataset(header_path, theorems_path, verbose=False):
                 print(f"\n⚠ Found {len(sorry_ids)} proof(s) containing 'sorry':")
                 print(f"  IDs: {sorry_ids}")
 
+        if banned_tactics_usage:
+            print(f"\n⚠ Found {len(banned_tactics_usage)} proof(s) using banned tactics:")
+            for theorem_id in sorted(banned_tactics_usage.keys()):
+                tactics_list = ', '.join(banned_tactics_usage[theorem_id])
+                # Find theorem name
+                theorem_name = None
+                for entry in theorems_entries:
+                    if entry['id'] == theorem_id:
+                        theorem_name = entry['name']
+                        break
+                if theorem_name:
+                    print(f"  - ID {theorem_id} ({theorem_name}): {tactics_list}")
+                else:
+                    print(f"  - ID {theorem_id}: {tactics_list}")
+
         print("="*60)
 
-    return sorted(error_ids), sorted(sorry_ids)
+    return sorted(error_ids), sorted(sorry_ids), banned_tactics_usage
 
 
 def main():
     print("=== JSONL Verifier (Sequential Error Detection) ===\n")
 
     try:
-        error_ids, sorry_ids = verify_dataset(HEADER_PATH, THEOREMS_PATH, verbose=True)
+        error_ids, sorry_ids, banned_tactics_usage = verify_dataset(HEADER_PATH, THEOREMS_PATH, verbose=True)
 
         if error_ids:
             print(f"\nError theorem IDs: {error_ids}")
             print(f"\nThese proofs have been replaced with their original incorrect versions in:")
             print(f"  {OUTPUT_LEAN_FILE}")
-            
+
         if sorry_ids:
             print(f"\n⚠ Warning: Found proofs with 'sorry': {sorry_ids}")
+
+        if banned_tactics_usage:
+            print(f"\n⚠ Warning: Found proofs using banned tactics:")
+            print(f"  {banned_tactics_usage}")
 
 
     except Exception as e:

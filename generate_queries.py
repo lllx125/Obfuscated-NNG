@@ -13,7 +13,7 @@ import sys
 ALLOWED_TACTICS = [
     "rw", "repeat rw", "nth_rewrite", "symm", "intro", "exact",
     "apply", "use", "trivial", "contradiction", "cases", "induction",
-    "tauto", "contrapose!", "simp only", "revert", "split", "left", "right"
+    "tauto", "contrapose!", "revert", "split", "left", "right"
 ]
 TACTIC_STRING = ", ".join(ALLOWED_TACTICS)
 
@@ -28,7 +28,7 @@ def load_jsonl(file_path):
     return entries
 
 
-def generate_system_prompt(header_entries, available_theorems):
+def generate_system_prompt(header_entries, available_theorems, sample_theorem=None):
     """Generate the system prompt with full context."""
     # Build header context from all header entries
     header_context = "\n\n".join([entry['code'] for entry in header_entries])
@@ -36,28 +36,27 @@ def generate_system_prompt(header_entries, available_theorems):
     # Build available theorems string
     theorems_str = "\n".join(available_theorems)
 
-    system_prompt = f"""### ROLE AND CONTEXT
+    # Build sample proof section
+    sample_statement = ""
+    sample_code = ""
+    if sample_theorem:
+        sample_statement = sample_theorem['statement']
+        sample_code = sample_theorem['proof']
+
+    system_prompt = f"""### Role and Context
 You are a highly specialized AI designed for formal theorem proving in Lean 4.
 Your goal is to solve a theorem within an alien mathematical system, strictly using the provided definitions and axioms.
 Your knowledge of external libraries (like Mathlib) is IGNORED. You must base your proof ONLY on the definitions and theorems provided.
 
-### CONSTRAINTS
-- **Goal:** Produce a complete, formally verifiable Lean 4 proof for the given theorem.
-- **Allowed Tactics:** You are limited to the following basic Lean tactics: {TACTIC_STRING}
-- **Output:** Your entire response must be a single, raw JSON object. Do NOT wrap the JSON object in markdown blocks (e.g., ```json or ```lean).
-- **SCHEMA:** The JSON object MUST contain exactly two fields: "draft" and "code".
-  * **"draft" (string):** Your detailed, natural language proof plan and step-by-step reasoning.
-  * **"code" (string):** The final, executable Lean 4 tactic code (everything after `:= by`).
-  
-  Example format:
-  {{
-    "draft": "The proof plan goes here. I will use induction on 'n'...",
-    "code": "induction n with d hd\nrw [adXfkzΚro]"
-  }}
-### THE ALIEN SYSTEM DEFINITIONS (Context)
+### Sample Proof
+- Statement: {sample_statement}
+- Draft: "Your detailed proof plan here"
+- Code: {sample_code}
+
+### The Alien System Defintions and Axioms
 {header_context}
 
-### Available theorems
+### Available Theorems
 {theorems_str}"""
 
     return system_prompt
@@ -68,14 +67,18 @@ def generate_user_prompt(theorem_statement):
     user_prompt = f"""### THEOREM TO PROVE
 {theorem_statement}
 
-Provide a detailed proof plan (draft) and the resulting Lean code (code) in the requested JSON format."""
+Provide a detailed proof plan (draft) and the resulting Lean code (code).
+
+### Allowed Tactics:
+You are limited to the following basic Lean tactics: [{TACTIC_STRING}].
+"""
 
     return user_prompt
 
 
-def generate_query(header_entries, theorem_entry):
+def generate_query(header_entries, theorem_entry, sample_theorem=None):
     """Generate a single query for a theorem."""
-    system_prompt = generate_system_prompt(header_entries, theorem_entry['known_theorems'])
+    system_prompt = generate_system_prompt(header_entries, theorem_entry['known_theorems'], sample_theorem)
     user_prompt = generate_user_prompt(theorem_entry['statement'])
 
     return [
@@ -122,8 +125,10 @@ def generate_queries_for_dataset(folder_path, verbose=True):
     if verbose:
         print("Generating queries...")
     queries = []
+    # Use the first theorem as the sample for all queries
+    sample_theorem = theorem_entries[0] if theorem_entries else None
     for theorem_entry in theorem_entries:
-        query = generate_query(header_entries, theorem_entry)
+        query = generate_query(header_entries, theorem_entry, sample_theorem)
         queries.append(query)
 
     if verbose:

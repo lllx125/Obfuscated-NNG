@@ -26,86 +26,48 @@ def load_jsonl(file_path: Path) -> List[Dict]:
 
 def create_generated_proofs_file(
     result_file: Path,
-    queries_file: Path,
+    theorems_file: Path,
     output_file: Path
 ):
     """
-    Create generated_proofs_n.jsonl file from result_n.jsonl and queries.jsonl.
+    Create generated_proofs_n.jsonl file from result_n.jsonl and theorems.jsonl.
+
+    Does line-by-line matching: takes JSON from theorem and replaces the "proof"
+    property with "code" from result's JSON.
 
     Args:
         result_file: Path to result_n.jsonl
-        queries_file: Path to queries.jsonl
+        theorems_file: Path to theorems.jsonl
         output_file: Path to output generated_proofs_n.jsonl
     """
     # Load results
     results = load_jsonl(result_file)
 
-    # Load queries to get original theorem information
-    queries = load_jsonl(queries_file)
+    # Load theorems
+    theorems = load_jsonl(theorems_file)
 
-    if len(results) != len(queries):
-        print(f"Warning: Number of results ({len(results)}) doesn't match queries ({len(queries)})")
+    # If the lines don't match, use only the same number as the lines in result file
+    num_lines = len(results)
 
-    # Create generated proofs in the same format as theorems.jsonl
+    if len(results) != len(theorems):
+        print(f"Warning: Number of results ({len(results)}) doesn't match theorems ({len(theorems)})")
+        print(f"Using first {num_lines} entries")
+
+    # Create generated proofs by matching line-by-line
     generated_proofs = []
 
-    for i, (result, query) in enumerate(zip(results, queries)):
-        # Parse the query to extract the original theorem info
-        # Query is a list with system and user messages
-        user_message = None
-        for msg in query:
-            if msg.get("role") == "user":
-                user_message = msg.get("content", "")
-                break
+    for i in range(num_lines):
+        # Take JSON from theorem and replace "proof" property with "code" from result
+        theorem = theorems[i] if i < len(theorems) else {}
+        result = results[i]
 
-        if not user_message:
-            print(f"Warning: Could not find user message in query {i}")
-            continue
-
-        # Extract theorem information from user message
-        # The user message contains "### THEOREM TO PROVE" section
-        import re
-        theorem_match = re.search(r'### THEOREM TO PROVE\s+theorem\s+(\w+)\s*(.+?):=\s*by', user_message, re.DOTALL)
-
-        if not theorem_match:
-            print(f"Warning: Could not parse theorem from query {i}")
-            continue
-
-        theorem_name = theorem_match.group(1)
-        theorem_signature = theorem_match.group(2).strip()
-
-        # Reconstruct the statement
-        statement = f"theorem {theorem_name} {theorem_signature}:= by"
-
-        # Extract available theorems (known_theorems) from the system message
-        system_message = None
-        for msg in query:
-            if msg.get("role") == "system":
-                system_message = msg.get("content", "")
-                break
-
-        known_theorems = []
-        if system_message:
-            # Extract theorems from "### Available theorems" section
-            available_section = re.search(r'### Available theorems\s+(.+?)$', system_message, re.DOTALL)
-            if available_section:
-                theorems_text = available_section.group(1)
-                # Extract each theorem line
-                theorem_lines = re.findall(r'theorem\s+\w+[^:]+:=\s*by', theorems_text)
-                known_theorems = [line.strip() for line in theorem_lines]
-
-        # Create the generated proof entry
-        proof_entry = {
-            "id": i + 1,  # Use 1-based indexing to match typical theorem IDs
-            "name": theorem_name,
-            "statement": statement,
-            "proof": result.get("code", "sorry"),
-            "known_theorems": known_theorems
-        }
+        # Copy theorem entry and replace proof
+        proof_entry = theorem.copy()
+        proof_entry["proof"] = result.get("code", "sorry")
 
         generated_proofs.append(proof_entry)
 
-    # Write to output file
+    # Write to output file (overwrite if exists)
     with open(output_file, 'w', encoding='utf-8') as f:
         for entry in generated_proofs:
             f.write(json.dumps(entry, ensure_ascii=False))
@@ -151,18 +113,17 @@ def verify_all_runs(
         print(f"Processing dataset: {dataset_name}")
         print(f"{'='*60}")
 
-        # Get corresponding header and queries files
+        # Get corresponding header and theorems files
         orig_dataset_path = dataset_base / dataset_name
         header_file = orig_dataset_path / "header_definitions.jsonl"
-        queries_file = orig_dataset_path / "queries.jsonl"
         theorems_file = orig_dataset_path / "theorems.jsonl"
 
         if not header_file.exists():
             print(f"Header file not found: {header_file}")
             continue
 
-        if not queries_file.exists():
-            print(f"Queries file not found: {queries_file}")
+        if not theorems_file.exists():
+            print(f"Theorems file not found: {theorems_file}")
             continue
 
         # Load original theorems for comparison
@@ -170,6 +131,13 @@ def verify_all_runs(
         if theorems_file.exists():
             theorems = load_jsonl(theorems_file)
             original_theorems = {t['id']: t for t in theorems}
+
+        # Clean up old generated_proofs files to ensure fresh start
+        old_generated_files = list(dataset_folder.glob("generated_proofs_*.jsonl"))
+        if old_generated_files:
+            for old_file in old_generated_files:
+                old_file.unlink()
+            print(f"Cleaned up {len(old_generated_files)} old generated_proofs file(s)")
 
         # Find all result files
         result_files = sorted(dataset_folder.glob("result_*.jsonl"))
@@ -190,12 +158,12 @@ def verify_all_runs(
 
             # Create generated_proofs file
             generated_proofs_file = dataset_folder / f"generated_proofs_{run_num}.jsonl"
-            create_generated_proofs_file(result_file, queries_file, generated_proofs_file)
+            create_generated_proofs_file(result_file, theorems_file, generated_proofs_file)
 
             # Verify the generated proofs
             print(f"Verifying {generated_proofs_file}...")
             try:
-                error_ids, sorry_ids = verify_dataset(
+                error_ids, sorry_ids, banned_tactics_usage = verify_dataset(
                     str(header_file),
                     str(generated_proofs_file),
                     verbose=False
@@ -204,9 +172,14 @@ def verify_all_runs(
                 # Load generated proofs to count total
                 generated_proofs = load_jsonl(generated_proofs_file)
                 total_proofs = len(generated_proofs)
-                incorrect_count = len(error_ids) + len(sorry_ids)
+                # Count unique incorrect IDs (some IDs may appear in both error_ids and sorry_ids)
+                incorrect_ids = set(error_ids) | set(sorry_ids)
+                incorrect_count = len(incorrect_ids)
                 correct_count = total_proofs - incorrect_count
                 correct_rate = correct_count / total_proofs if total_proofs > 0 else 0.0
+
+                # Count banned tactics usage
+                banned_count = len(banned_tactics_usage) if banned_tactics_usage else 0
 
                 # Load timing information
                 time_file = dataset_folder / f"time_{run_num}.json"
@@ -222,11 +195,13 @@ def verify_all_runs(
                 print(f"  Incorrect: {incorrect_count}")
                 print(f"  Correct rate: {correct_rate*100:.2f}%")
                 print(f"  Average time: {avg_time:.2f}s")
+                if banned_count > 0:
+                    print(f"  ⚠ Using banned tactics: {banned_count}")
 
                 # Print incorrect proof details
-                if error_ids or sorry_ids:
+                if incorrect_ids:
                     print(f"\n  Incorrect proof IDs:")
-                    all_incorrect = sorted(set(error_ids + sorry_ids))
+                    all_incorrect = sorted(incorrect_ids)
                     for proof_id in all_incorrect:
                         # Find the proof in generated proofs
                         for proof in generated_proofs:
@@ -238,6 +213,17 @@ def verify_all_runs(
                                     print(f"      Original: {orig_stmt}")
                                 break
 
+                # Print banned tactics details
+                if banned_tactics_usage:
+                    print(f"\n  ⚠ Proofs using banned tactics:")
+                    for proof_id in sorted(banned_tactics_usage.keys()):
+                        tactics_list = ', '.join(banned_tactics_usage[proof_id])
+                        # Find the proof in generated proofs
+                        for proof in generated_proofs:
+                            if proof['id'] == proof_id:
+                                print(f"    ID {proof_id}: {proof['name']} - used: {tactics_list}")
+                                break
+
                 # Store stats
                 run_stats = {
                     "run": run_num,
@@ -246,6 +232,8 @@ def verify_all_runs(
                     "incorrect": incorrect_count,
                     "error_ids": error_ids,
                     "sorry_ids": sorry_ids,
+                    "banned_tactics_usage": banned_tactics_usage,
+                    "banned_count": banned_count,
                     "correct_rate": correct_rate,
                     "avg_time": avg_time
                 }
@@ -289,25 +277,28 @@ def verify_all_runs(
     return all_stats
 
 
-def plot_average_times(stats: Dict[str, Any], llm_name: str, output_dir: Path):
+def plot_average_times(stats: Dict[str, Any], llm_name: str, results_base_dir: Path):
     """
     Plot average run times across all problems.
+    Stores plots in the same folder as time_n.json files.
 
     Args:
         stats: Statistics dictionary
         llm_name: LLM name
-        output_dir: Output directory for plots
+        results_base_dir: Base results directory (results/{llm_name})
     """
-    output_dir.mkdir(parents=True, exist_ok=True)
-
     for dataset_name, dataset_stats in stats["datasets"].items():
         if not dataset_stats.get("runs"):
             continue
 
+        # Output directory is the same as where time_n.json files are stored
+        dataset_dir = results_base_dir / dataset_name
+        dataset_dir.mkdir(parents=True, exist_ok=True)
+
         # Get times from all runs
         all_times = []
         for run_stats in dataset_stats["runs"]:
-            time_file = output_dir.parent / dataset_name / f"time_{run_stats['run']}.json"
+            time_file = dataset_dir / f"time_{run_stats['run']}.json"
             if time_file.exists():
                 with open(time_file, 'r') as f:
                     times = json.load(f)
@@ -334,13 +325,13 @@ def plot_average_times(stats: Dict[str, Any], llm_name: str, output_dir: Path):
         ax.set_title(f'Average Solving Time per Problem\n{llm_name} - {dataset_name}')
         ax.grid(axis='y', alpha=0.3)
 
-        # Save plot
-        plot_file = output_dir / f"avg_times_{dataset_name}.png"
+        # Save plot in the same folder as time_n.json files (overwrite if exists)
+        plot_file = dataset_dir / "avg_times.png"
         plt.tight_layout()
         plt.savefig(plot_file, dpi=150)
         plt.close()
 
-        print(f"\nSaved plot: {plot_file}")
+        print(f"Saved plot: {plot_file}")
 
 
 def main():
@@ -370,9 +361,9 @@ def main():
     results_dir = Path("results") / llm_name
     plot_average_times(stats, llm_name, results_dir)
 
-    # Save statistics to JSON
+    # Save statistics to JSON (overwrite if exists)
     stats_file = results_dir / "statistics.json"
-    with open(stats_file, 'w') as f:
+    with open(stats_file, 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2)
     print(f"\nStatistics saved to: {stats_file}")
 
