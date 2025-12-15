@@ -1,0 +1,37 @@
+{"name": "MyNat", "code": "inductive MyNat where\n| zero : MyNat\n| succ : MyNat → MyNat", "category": "inductive"}
+{"name": "zero", "code": "zero : MyNat", "category": "constructor"}
+{"name": "succ", "code": "succ : MyNat → MyNat", "category": "constructor"}
+{"name": "instInhabited", "code": "instance : Inhabited MyNat where\n  default := MyNat.zero", "category": "instance"}
+{"name": "add", "code": "opaque add : MyNat → MyNat → MyNat", "category": "opaque"}
+{"name": "instAdd", "code": "instance instAdd : Add MyNat where\n  add := MyNat.add", "category": "instance"}
+{"name": "add_zero", "code": "axiom add_zero (a : MyNat) : a + zero = a", "category": "axiom"}
+{"name": "add_succ", "code": "axiom add_succ (a d : MyNat) : a + (succ d) = succ (a + d)", "category": "axiom"}
+{"name": "pred", "code": "def pred : MyNat → MyNat\n| zero => zero\n| succ n => n", "category": "def"}
+{"name": "pred_succ", "code": "theorem pred_succ (n : MyNat) : pred (succ n) = n := rfl", "category": "theorem"}
+{"name": "succ_inj", "code": "theorem succ_inj (a b : MyNat) (h : succ a = succ b) : a = b := by\n  rw [← pred_succ a, h, pred_succ]", "category": "theorem"}
+{"name": "is_zero", "code": "def is_zero : MyNat → Prop\n| zero => True\n| succ _ => False", "category": "def"}
+{"name": "is_zero_zero", "code": "theorem is_zero_zero : is_zero zero = True := rfl", "category": "theorem"}
+{"name": "is_zero_succ", "code": "theorem is_zero_succ (n : MyNat) : is_zero (succ n) = False := rfl", "category": "theorem"}
+{"name": "zero_ne_succ", "code": "theorem zero_ne_succ (a : MyNat) : zero ≠ succ a := by\n  intro h\n  rw [← is_zero_succ a]\n  rw [← h]\n  rw [is_zero_zero]\n  trivial\n-- multiplication", "category": "theorem"}
+{"name": "mul", "code": "opaque mul : MyNat → MyNat → MyNat", "category": "opaque"}
+{"name": "instMul", "code": "instance : Mul MyNat where\n  mul := MyNat.mul", "category": "instance"}
+{"name": "mul_zero", "code": "axiom mul_zero (a : MyNat) : a * zero = zero", "category": "axiom"}
+{"name": "mul_succ", "code": "axiom mul_succ (a b : MyNat) : a * (succ b) = a * b + a", "category": "axiom"}
+{"name": "one", "code": "def one : MyNat := MyNat.succ zero", "category": "def"}
+{"name": "two", "code": "def two : MyNat := MyNat.succ one", "category": "def"}
+{"name": "three", "code": "def three : MyNat := MyNat.succ two", "category": "def"}
+{"name": "four", "code": "def four : MyNat := MyNat.succ three", "category": "def"}
+{"name": "one_eq_succ_zero", "code": "theorem one_eq_succ_zero : one = succ zero := by rfl", "category": "theorem"}
+{"name": "two_eq_succ_one", "code": "theorem two_eq_succ_one : two = succ one := by rfl", "category": "theorem"}
+{"name": "three_eq_succ_two", "code": "theorem three_eq_succ_two : three = succ two := by rfl", "category": "theorem"}
+{"name": "four_eq_succ_three", "code": "theorem four_eq_succ_three : four = succ three := by rfl\n-- power", "category": "theorem"}
+{"name": "pow", "code": "opaque pow : MyNat → MyNat → MyNat", "category": "opaque"}
+{"name": "instPow", "code": "instance : Pow MyNat MyNat where\n  pow := pow", "category": "instance"}
+{"name": "pow_zero", "code": "axiom pow_zero (m : MyNat) : m ^ zero = one", "category": "axiom"}
+{"name": "pow_succ", "code": "axiom pow_succ (m n : MyNat) : m ^ (succ n) = m ^ n * m", "category": "axiom"}
+{"name": "le", "code": "def le (a b : MyNat) :=  ∃ (c : MyNat), b = a + c", "category": "def"}
+{"name": "instLE", "code": "instance : LE MyNat := ⟨MyNat.le⟩", "category": "instance"}
+{"name": "le_iff_exists_add", "code": "theorem le_iff_exists_add (a b : MyNat) : a ≤ b ↔ ∃ (c : MyNat), b = a + c := Iff.rfl", "category": "theorem"}
+{"name": "lt_myNat", "code": "def lt_myNat (a b : MyNat) := a ≤ b ∧ ¬ (b ≤ a)", "category": "def"}
+{"name": "instLT", "code": "instance : LT MyNat := ⟨lt_myNat⟩", "category": "instance"}
+{"name": "lt", "code": "theorem lt :  ∀ (a b : MyNat), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}

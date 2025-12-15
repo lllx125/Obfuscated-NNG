@@ -1,0 +1,37 @@
+{"name": "dBNaΤ", "code": "inductive dBNaΤ where\n| Ιqℕ8 : dBNaΤ\n| E85c : dBNaΤ → dBNaΤ", "category": "inductive"}
+{"name": "Ιqℕ8", "code": "Ιqℕ8 : dBNaΤ", "category": "constructor"}
+{"name": "E85c", "code": "E85c : dBNaΤ → dBNaΤ", "category": "constructor"}
+{"name": "IδΘΑOυnhdOter", "code": "instance : Inhabited dBNaΤ where\n  default := dBNaΤ.Ιqℕ8", "category": "instance"}
+{"name": "add", "code": "opaque add : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
+{"name": "q4sφOΖ0", "code": "instance q4sφOΖ0 : Add dBNaΤ where\n  add := dBNaΤ.add", "category": "instance"}
+{"name": "Kd_faKre", "code": "axiom Kd_faKre (a : dBNaΤ) : a + Ιqℕ8 = a", "category": "axiom"}
+{"name": "dts_Uuκℚ", "code": "axiom dts_Uuκℚ (a d : dBNaΤ) : a + (E85c d) = E85c (a + d)", "category": "axiom"}
+{"name": "pΟηΡ", "code": "def pΟηΡ : dBNaΤ → dBNaΤ\n| Ιqℕ8 => Ιqℕ8\n| E85c n => n", "category": "def"}
+{"name": "ΓrδΩ_kHφc", "code": "theorem ΓrδΩ_kHφc (n : dBNaΤ) : pΟηΡ (E85c n) = n := rfl", "category": "theorem"}
+{"name": "_ψuoDΕΧj", "code": "theorem _ψuoDΕΧj (a b : dBNaΤ) (h : E85c a = E85c b) : a = b := by\n  rw [← ΓrδΩ_kHφc a, h, ΓrδΩ_kHφc]", "category": "theorem"}
+{"name": "Εφ_κWIo", "code": "def Εφ_κWIo : dBNaΤ → Prop\n| Ιqℕ8 => True\n| E85c _ => False", "category": "def"}
+{"name": "αmιze2kzeΒχΗ", "code": "theorem αmιze2kzeΒχΗ : Εφ_κWIo Ιqℕ8 = True := rfl", "category": "theorem"}
+{"name": "PisTωoεΑ3_Rc", "code": "theorem PisTωoεΑ3_Rc (n : dBNaΤ) : Εφ_κWIo (E85c n) = False := rfl", "category": "theorem"}
+{"name": "ztTηo_ΙeΦcωπ", "code": "theorem ztTηo_ΙeΦcωπ (a : dBNaΤ) : Ιqℕ8 ≠ E85c a := by\n  intro h\n  rw [← PisTωoεΑ3_Rc a]\n  rw [← h]\n  rw [αmιze2kzeΒχΗ]\n  trivial\n-- multiplication", "category": "theorem"}
+{"name": "mul", "code": "opaque mul : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
+{"name": "HBMjBku", "code": "instance : Mul dBNaΤ where\n  mul := dBNaΤ.mul", "category": "instance"}
+{"name": "ρOℂυ_Tφr", "code": "axiom ρOℂυ_Tφr (a : dBNaΤ) : a * Ιqℕ8 = Ιqℕ8", "category": "axiom"}
+{"name": "mJaξ_ΜOξ", "code": "axiom mJaξ_ΜOξ (a b : dBNaΤ) : a * (E85c b) = a * b + a", "category": "axiom"}
+{"name": "one", "code": "def one : dBNaΤ := dBNaΤ.E85c Ιqℕ8", "category": "def"}
+{"name": "two", "code": "def two : dBNaΤ := dBNaΤ.E85c one", "category": "def"}
+{"name": "k9εOee", "code": "def k9εOee : dBNaΤ := dBNaΤ.E85c two", "category": "def"}
+{"name": "ℚo4m", "code": "def ℚo4m : dBNaΤ := dBNaΤ.E85c k9εOee", "category": "def"}
+{"name": "xnBΙJq9sgοG_zjrΑ", "code": "theorem xnBΙJq9sgοG_zjrΑ : one = E85c Ιqℕ8 := by rfl", "category": "theorem"}
+{"name": "ρηoμIOq_τxAMoJξ", "code": "theorem ρηoμIOq_τxAMoJξ : two = E85c one := by rfl", "category": "theorem"}
+{"name": "sΒXeο_e_xcccεtK2J", "code": "theorem sΒXeο_e_xcccεtK2J : k9εOee = E85c two := by rfl", "category": "theorem"}
+{"name": "SUΜSr_ΜqWΘBc_4Tre6κ", "code": "theorem SUΜSr_ΜqWΘBc_4Tre6κ : ℚo4m = E85c k9εOee := by rfl\n-- power", "category": "theorem"}
+{"name": "pow", "code": "opaque pow : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
+{"name": "ΥH7PSod", "code": "instance : Pow dBNaΤ dBNaΤ where\n  pow := pow", "category": "instance"}
+{"name": "ΑowoφΜεΚ", "code": "axiom ΑowoφΜεΚ (m : dBNaΤ) : m ^ Ιqℕ8 = one", "category": "axiom"}
+{"name": "xoPwsΖcg", "code": "axiom xoPwsΖcg (m n : dBNaΤ) : m ^ (E85c n) = m ^ n * m", "category": "axiom"}
+{"name": "le", "code": "def le (a b : dBNaΤ) :=  ∃ (c : dBNaΤ), b = a + c", "category": "def"}
+{"name": "c1ΔnH9ξ", "code": "instance : LE dBNaΤ := ⟨dBNaΤ.le⟩", "category": "instance"}
+{"name": "lXmiffAe5ℝtSμωagΡ", "code": "theorem lXmiffAe5ℝtSμωagΡ (a b : dBNaΤ) : a ≤ b ↔ ∃ (c : dBNaΤ), b = a + c := Iff.rfl", "category": "theorem"}
+{"name": "PDgENaUΧ", "code": "def PDgENaUΧ (a b : dBNaΤ) := a ≤ b ∧ ¬ (b ≤ a)", "category": "def"}
+{"name": "E1nBεμT", "code": "instance : LT dBNaΤ := ⟨PDgENaUΧ⟩", "category": "instance"}
+{"name": "lt", "code": "theorem lt :  ∀ (a b : dBNaΤ), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}
