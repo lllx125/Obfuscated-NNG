@@ -9,6 +9,10 @@ from typing import Any, Dict, Optional
 
 def extract_json_from_response(text: str) -> Optional[Dict[str, Any]]:
     """Robustly extracts and fixes JSON from LLM responses."""
+    # Handle None or empty responses
+    if text is None or not text:
+        return {"draft": "fail", "code": "sorry"}
+
     def sanitize_json_string(match):
         content = match.group(0)
         content = content.replace('\n', '\\n').replace('\r', '').replace('\t', '\\t')

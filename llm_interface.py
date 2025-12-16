@@ -38,12 +38,12 @@ class ModelInterface:
         if self.model is not None: return
 
         print(f"[*] Initializing Model: {self.llm_name}")
-        
-        if self.llm_name == "deepseek-prover-v2":
+
+        if self.llm_name == "deepseek-prover-v2-local":
             self._load_local_prover("deepseek-ai/DeepSeek-Prover-V2-7B")
         elif self.llm_name == "goedel-prover-v2":
             self._load_local_prover("Goedel-LM/Goedel-Prover-V2-8B")
-        elif self.llm_name in ["deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash"]:
+        elif self.llm_name in ["deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash", "deepseek-prover-v2"]:
             print(f"[!] API Model selected: {self.llm_name}.")
         else:
             raise ValueError(f"Unknown LLM: {self.llm_name}")
@@ -156,7 +156,7 @@ class ModelInterface:
             self._force_cleanup()
 
     def _generate_raw(self, messages: List[Dict[str, str]]) -> str:
-        if self.llm_name in ["deepseek-prover-v2", "goedel-prover-v2"]:
+        if self.llm_name in ["deepseek-prover-v2-local", "goedel-prover-v2"]:
             return self._generate_local(messages)
         else:
             return self._generate_api(messages)
@@ -165,7 +165,7 @@ class ModelInterface:
         if raw_output in ["OOM_SIGNAL", "OOM_PREVENTED"]:
             return {"draft": "OOM crash", "code": "sorry"}
 
-        if self.llm_name in ["deepseek-prover-v2", "goedel-prover-v2", "deepseek-r1"]:
+        if self.llm_name in ["deepseek-prover-v2-local", "goedel-prover-v2", "deepseek-r1", "deepseek-prover-v2"]:
             return extract_lean_code_from_response(raw_output)
         else:
             result = extract_json_from_response(raw_output)
@@ -266,48 +266,51 @@ class ModelInterface:
             "gpt-4o": "gpt-4o-mini",
             "gemini-flash": "gemini-2.5-flash",
             "gemini-pro": "gemini-2.5-pro", # Assuming you want the Pro model for '2.5', or change to specific ID
+            "deepseek-prover-v2": "deepseek/deepseek-prover-v2",
         }
-        
+
         target_model = model_map[self.llm_name]
 
         try:
             # =================================================================
             # DEEPSEEK & OPENAI (OpenAI-Compatible APIs)
             # =================================================================
-            if target_model in ["deepseek-reasoner", "gpt-4o-mini"]:
+            if target_model in ["deepseek-reasoner", "gpt-4o-mini", "deepseek/deepseek-prover-v2"]:
                 client = None
-                
-                if target_model == "deepseek-reasoner":
+
+
+                is_deepseek = (target_model == "deepseek-reasoner")
+                is_openrouter = (target_model == "deepseek/deepseek-prover-v2")
+
+                if is_deepseek:
                     api_key = os.getenv("DEEPSEEK_API_KEY")
                     base_url = "https://api.deepseek.com"
-                    client = OpenAI(api_key=api_key, base_url=base_url)
+                elif is_openrouter:
+                    api_key = os.getenv("OPENROUTER_API_KEY")
+                    base_url = "https://openrouter.ai/api/v1"
                 else:
                     api_key = os.getenv("OPENAI_API_KEY")
-                    client = OpenAI(api_key=api_key)
+                    base_url = None
 
                 if not api_key:
                     return '{"draft": "Missing API Key", "code": "sorry"}'
 
+                client = OpenAI(api_key=api_key, base_url=base_url, timeout=900.0)
                 # Prepare arguments
                 kwargs = {
                     "model": target_model,
                     "messages": messages,
-                    "max_tokens": MAX_TOKENS,
                     "stream": False
                 }
-                
-                is_deepseek = (target_model == "deepseek-reasoner")
 
                 # strict JSON mode for GPT-4o
-                if not is_deepseek:
+                if is_deepseek or is_openrouter:
+                    kwargs["max_tokens"] = 32000
+                    kwargs["temperature"] = 0.6
+                else:
                     kwargs["response_format"] = {"type": "json_object"}
                     kwargs["temperature"] = 0.2
-                else:
-                    # DeepSeek R1 (Reasoner) specific
-                    # We don't force response_format="json_object" here as it can sometimes 
-                    # conflict with the reasoning block output structure.
-                    # We rely on the prompt + low temperature.
-                    kwargs["temperature"] = 0.6 # R1 recommends slightly higher temp for reasoning
+                    kwargs["max_tokens"] = 16000
 
                 response = client.chat.completions.create(**kwargs)
                 
@@ -328,16 +331,60 @@ class ModelInterface:
                 user_msg = messages[1]['content']
                 full_prompt = f"{system_instruction}\n\n{user_msg}"
 
-                # New Generate Content Call
+
+                safety_settings = [
+                    types.SafetySetting(
+                        category=types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                        threshold=types.HarmBlockThreshold.BLOCK_NONE
+                    ),
+                    types.SafetySetting(
+                        category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                        threshold=types.HarmBlockThreshold.BLOCK_NONE
+                    ),
+                    types.SafetySetting(
+                        category=types.HarmCategory.HARM_CATEGORY_HARASSMENT,
+                        threshold=types.HarmBlockThreshold.BLOCK_NONE
+                    ),
+                    types.SafetySetting(
+                        category=types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                        threshold=types.HarmBlockThreshold.BLOCK_NONE
+                    ),
+                ]
+                
+                kwargs = {                        
+                        "response_mime_type": "application/json",
+                        "response_schema": {
+                            "type": "object",
+                            "properties": {
+                                "draft": {"type": "string"},
+                                "code": {"type": "string"}
+                            },
+                            "required": ["draft", "code"]
+                        },
+                        "temperature": 0.2,
+                        "safety_settings": safety_settings
+                }
+                
+                if "flash" in target_model:
+                    kwargs["max_output_tokens"] = 8192
+                else:
+                    kwargs["max_output_tokens"] = 65000
+                    kwargs["thinking_config"] = types.ThinkingConfig(
+                        thinking_budget=32000  # Allocates ~32k tokens just for reasoning
+                    )
+
                 response = client.models.generate_content(
                     model=target_model,
                     contents=full_prompt,
                     config=types.GenerateContentConfig(
-                        response_mime_type='application/json', # Strict JSON
-                        max_output_tokens=MAX_TOKENS,
-                        temperature=0.2
+                        **kwargs
+                        )
                     )
-                )
+                if not response.text:
+                    if response.candidates:
+                        reason = response.candidates[0].finish_reason
+                        print(f" [!] GEMINI BLOCKED. Reason: {reason}")
+                    
                 return response.text
 
         except Exception as e:
@@ -363,7 +410,7 @@ class ModelInterface:
   }}
 """
 
-        if self.llm_name in ["deepseek-prover-v2", "goedel-prover-v2", "deepseek-r1"]:
+        if self.llm_name in ["deepseek-prover-v2-local", "deepseek-prover-v2", "goedel-prover-v2", "deepseek-r1"]:
             messages[1]["content"] += "\n\n### Instructions:\n" + cot_instruction
         else:
             messages[0]["content"] += "\n\n" + json_schema
