@@ -16,26 +16,24 @@ from llm_interface import ModelInterface
 # ============================================================================
 
 # LLM Selection: 
-# "deepseek-prover-v2", "goedel-prover-v2", "deepseek-r1", 
-# "gemini-2.5", "gpt-4o-mini", "gemini-1.5-flash"
-LLM_NAME = "deepseek-prover-v2"
+# "deepseek-prover-v2", "goedel-prover-v2"
+# "deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash"
+LLM_NAME = "deepseek-r1"
 
 # Experiment Settings
 MAX_RETRY = 3       # Max retries if output format is wrong
-NUM_RUNS = 1        # How many full passes to run
+NUM_RUNS = 2        # How many full passes to run
 START_RUN = 1       # Start index for run filenames (e.g., result_0.jsonl)
 
 # Dataset folders to process
 TARGET_DATASETS = [
     "original", 
     "obfuscated_1", 
-#    "obfuscated_2", 
-#    "obfuscated_3", 
-#    "obfuscated_4", 
-#    "obfuscated_5"
+    "obfuscated_2", 
+    "obfuscated_3", 
+    "obfuscated_4", 
+    "obfuscated_5"
 ]
-
-# Note: JSON extraction and validation functions have been moved to llm_interface.py
 
 # ============================================================================
 # CORE LOGIC

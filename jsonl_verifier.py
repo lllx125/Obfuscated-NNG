@@ -25,41 +25,7 @@ import Mathlib.Tactic.Use
 import Mathlib.Tactic.Tauto'''
 
 # Banned tactics that should be reported but not marked as errors
-BANNED_TACTICS = ['simp', 'simp_all']
-
-
-def strip_theorem_declaration(code: str) -> str:
-    """
-    Stage 0: Strip Theorem Declaration
-    Remove the theorem declaration line and all lines above it.
-    This should be done before all other normalizations.
-
-    Args:
-        code: Raw Lean code string potentially containing theorem declaration
-
-    Returns:
-        Code with theorem declaration and preceding lines removed
-    """
-    lines = code.split('\n')
-
-    # Find the line containing the theorem statement name
-    # Look for pattern: theorem <name> ... := by
-    theorem_line_idx = -1
-    for idx, line in enumerate(lines):
-        # Match theorem declaration (theorem keyword followed by name)
-        if re.match(r'\s*theorem\s+[\w\u0370-\u03FF\u2100-\u214F\']+', line.strip()):
-            theorem_line_idx = idx
-            break
-
-    # If we found a theorem declaration, remove it and all lines above it
-    if theorem_line_idx >= 0:
-        # Keep only lines after the theorem declaration
-        remaining_lines = lines[theorem_line_idx + 1:]
-        return '\n'.join(remaining_lines)
-
-    # If no theorem declaration found, return code as-is
-    return code
-
+BANNED_TACTICS = ['simp']
 
 def fix_indentation(code: str) -> str:
     """
@@ -583,3 +549,34 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def strip_theorem_declaration(code: str) -> str:
+    """
+    Stage 0: Strip Theorem Declaration
+    Remove the theorem declaration line and all lines above it.
+    This should be done before all other normalizations.
+
+    Args:
+        code: Raw Lean code string potentially containing theorem declaration
+
+    Returns:
+        Code with theorem declaration and preceding lines removed
+    """
+    lines = code.split('\n')
+
+    # Find the line containing the theorem statement name
+    # Look for pattern: theorem <name> ... := by
+    theorem_line_idx = -1
+    for idx, line in enumerate(lines):
+        # Match theorem declaration (theorem keyword followed by name)
+        if "theorem " in line and ":= by" in line:
+            theorem_line_idx = idx
+
+    # If we found a theorem declaration, remove it and all lines above it
+    if theorem_line_idx >= 0:
+        # Keep only lines after the theorem declaration
+        remaining_lines = lines[theorem_line_idx + 1:]
+        return '\n'.join(remaining_lines)
+
+    # If no theorem declaration found, return code as-is
+    return code
