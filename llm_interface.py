@@ -1,8 +1,6 @@
-import torch
 import gc
 import os
 import psutil
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from parse_output import extract_lean_code_from_response, extract_json_from_response, validate_schema
 from typing import Dict, List, Any, Optional
 from openai import OpenAI
@@ -73,8 +71,15 @@ class ModelInterface:
             valid_response = {"draft": "failed", "code": "sorry"}
 
         return valid_response
+    
+    def _import_heavy_libs(self):
+        """Lazy load libraries only when needed."""
+        global torch, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
     def _load_local_prover(self, model_id: str):
+        self._import_heavy_libs()
         torch.manual_seed(30)
 
         quantization_config = BitsAndBytesConfig(
