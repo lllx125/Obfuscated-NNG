@@ -14,8 +14,11 @@ from google.genai import types
 # STRATEGY: Try 8k. If OOM, auto-drop to 4k, then 2k.
 MAX_TOKENS = 8192
 TOKEN_TIERS = [8192, 4096, 2048]
+SAFE_MEMORY_BUFFER_GB = 5.0  # Minimum free VRAM to avoid Grey Zone
 
 MAX_INPUT_LENGTH = 16000 
+
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 # ============================================================================
 # MODEL INTERFACE
@@ -121,12 +124,10 @@ class ModelInterface:
         free_gb = free_mem / (1024**3)
         
         # LOGIC: 
-        # If > 3.0 GB free: We are safe. Speed mode.
-        # If < 3.0 GB free: We are in the Danger Zone. CLEAN IMMEDIATELY.
-        if free_gb > 3.0:
+        if free_gb > SAFE_MEMORY_BUFFER_GB:
             return True
 
-        # If we are here, we are in the Grey Zone (<3GB). Force cleanup now.
+        # If we are here, we are in the Grey Zone (<5GB). Force cleanup now.
         print(f"    [⚠️] VRAM Buffer Low ({free_gb:.1f}GB free). Performing proactive cleanup...")
         self._force_cleanup()
         
@@ -177,10 +178,9 @@ class ModelInterface:
 
     
     def _generate_local(self, messages: List[Dict[str, str]]) -> str:
+                    # 1. Smart Memory Check (Fast)
+        self._maintain_memory_health()
         with torch.inference_mode():
-            # 1. Smart Memory Check (Fast)
-            self._maintain_memory_health()
-
             inputs = None
             outputs = None
             generated_ids = None
@@ -249,13 +249,10 @@ class ModelInterface:
                 return '{"draft": "failed", "code": "sorry"}'
 
             finally:
-                # Final cleanup only if variables exist
-                try:
-                    if generated_ids is not None: del generated_ids
-                    if outputs is not None: del outputs
-                    if inputs is not None: del inputs
-                except:
-                    pass
+                if 'outputs' in locals() and outputs is not None: del outputs
+                if 'inputs' in locals() and inputs is not None: del inputs
+                if 'generated_ids' in locals() and generated_ids is not None: del generated_ids
+                self._force_cleanup()
 
     def _generate_api(self, messages: List[Dict[str, str]]) -> str:
         """
