@@ -11,20 +11,20 @@ import traceback
 WEBHOOK_URL = "https://discord.com/api/webhooks/1450642863212855336/wN-tvEiSHOJ1Yn-Yc9dSWQYdHnZc_cLyHjSC39ezufLYwDZGTakYCj6xcqYJQK9Nc8UA"
 
 # Toggle for remote mode - only send Discord messages when True
-REMOTE_MODE = True
+DEVICE_NAME = "g6"
 
 
 def send_msg(message):
     """Sends a message to Discord"""
     # Only send if remote mode is enabled
-    if not REMOTE_MODE:
+    if DEVICE_NAME == "local":
         return
 
     if not WEBHOOK_URL.startswith("http"):
         print("Error: Webhook URL not set.")
         return
 
-    data = {"content": message}
+    data = {"content": DEVICE_NAME + ": " + message}
     try:
         requests.post(WEBHOOK_URL, json=data)
     except Exception as e:
