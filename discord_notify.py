@@ -3,15 +3,14 @@ Discord Webhook Progress Notification System
 Sends progress updates and crash reports to Discord during long-running jobs.
 """
 
+import os
 import requests
-import sys
 import traceback
 
 
 WEBHOOK_URL = "https://discord.com/api/webhooks/1450642863212855336/wN-tvEiSHOJ1Yn-Yc9dSWQYdHnZc_cLyHjSC39ezufLYwDZGTakYCj6xcqYJQK9Nc8UA"
 
-# Toggle for remote mode - only send Discord messages when True
-DEVICE_NAME = "g6"
+DEVICE_NAME = os.getenv("DEVICE_NAME", "local")
 
 
 def send_msg(message):
