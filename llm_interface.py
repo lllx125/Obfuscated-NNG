@@ -297,7 +297,8 @@ class ModelInterface:
                     base_url = None
 
                 if not api_key:
-                    return '{"draft": "Missing API Key", "code": "sorry"}'
+                    key_name = "DEEPSEEK_API_KEY" if is_deepseek else ("OPENROUTER_API_KEY" if is_openrouter else "OPENAI_API_KEY")
+                    raise ValueError(f"Missing API key: {key_name} environment variable is not set")
 
                 client = OpenAI(api_key=api_key, base_url=base_url, timeout=900.0)
                 # Prepare arguments
@@ -325,8 +326,7 @@ class ModelInterface:
             elif "gemini" in target_model:
                 api_key = os.getenv("GEMINI_API_KEY")
                 if not api_key:
-                    print(" [!] ERROR: GEMINI_API_KEY not found.")
-                    return '{"draft": "Missing API Key", "code": "sorry"}'
+                    raise ValueError("Missing API key: GEMINI_API_KEY environment variable is not set")
 
                 client = genai.Client(api_key=api_key)
                 

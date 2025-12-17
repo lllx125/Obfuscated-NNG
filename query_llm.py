@@ -19,7 +19,7 @@ from discord_notify import DiscordProgress, send_msg
 # LLM Selection: 
 # "deepseek-prover-v2", "goedel-prover-v2"
 # "deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash"
-LLM_NAME = "deepseek-r1"
+LLM_NAME = "deepseek-prover-v2-local"
 
 # Experiment Settings
 MAX_RETRY = 3       # Max retries if output format is wrong
@@ -70,9 +70,8 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
             result_file_path = output_dir / f"result_{run_idx}.jsonl"
             time_file_path = output_dir / f"time_{run_idx}.json"
 
-            # Clear existing files for this run to avoid appending to old runs
-            if result_file_path.exists(): result_file_path.unlink()
-            if time_file_path.exists(): time_file_path.unlink()
+            # Don't delete files immediately - only after first successful query
+            # This preserves results from previous failed runs
 
             with open(queries_path, "r", encoding="utf-8") as f:
                 queries = [json.loads(line) for line in f if line.strip()]
@@ -81,6 +80,7 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
             send_msg(f"🔄 **Processing**: `{ds_name}` ({dataset_idx}/{total_datasets}) | {len(queries)} queries")
 
             times_buffer = [] # We keep this in memory to dump the full list every time
+            first_write_done = False  # Track if we've successfully written the first result
 
             pbar = tqdm(queries, desc=f"Run {run_idx}/{ds_name}", unit="thm")
 
@@ -96,11 +96,19 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
                 # 1. Update Time Buffer
                 times_buffer.append(solve_time)
 
-                # 2. Write Result Immediately (Append Mode)
+                # 2. On first successful write, delete old files from previous failed runs
+                if not first_write_done:
+                    if result_file_path.exists():
+                        result_file_path.unlink()
+                    if time_file_path.exists():
+                        time_file_path.unlink()
+                    first_write_done = True
+
+                # 3. Write Result Immediately (Append Mode)
                 with open(result_file_path, "a", encoding="utf-8") as f_res:
                     f_res.write(json.dumps(valid_response) + "\n")
 
-                # 3. Update Time File Immediately (Overwrite with current list)
+                # 4. Update Time File Immediately (Overwrite with current list)
                 with open(time_file_path, "w", encoding="utf-8") as f_time:
                     json.dump(times_buffer, f_time, indent=4)
 

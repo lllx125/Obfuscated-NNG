@@ -3,7 +3,7 @@ from pathlib import Path
 from llm_interface import ModelInterface
 import time
 
-TARGET_LLM = "goedel-prover-v2"          # LLM to test
+TARGET_LLM = "deepseek-prover-v2-local"          # LLM to test
 DATASET_NAME = "obfuscated_5"          # Folder name in /dataset/
 THEOREM_ID = 67                    # The line number in queries.jsonl (1-indexed)
 MAX_RETRY = 1                      # Number of retries for parsing
