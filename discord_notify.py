@@ -23,7 +23,7 @@ def send_msg(message):
         print("Error: Webhook URL not set.")
         return
 
-    data = {"content": DEVICE_NAME + ": " + message}
+    data = {"content": f'**{DEVICE_NAME}**: {message}'}
     try:
         requests.post(WEBHOOK_URL, json=data)
     except Exception as e:
