@@ -47,10 +47,6 @@ class ModelInterface:
             raise ValueError(f"Unknown LLM: {self.llm_name}")
     
     def generate(self, messages: List[Dict[str, str]]) -> Dict[str, str]:
-        # Pre-flight check
-        if not self._maintain_memory_health():
-            return {"draft": "OOM PREVENTED", "code": "sorry"}
-
         self._append_llm_specific_instructions(messages)
 
         valid_response = None
@@ -162,6 +158,9 @@ class ModelInterface:
 
     def _generate_raw(self, messages: List[Dict[str, str]]) -> str:
         if self.llm_name in ["deepseek-prover-v2-local", "goedel-prover-v2"]:
+            # Pre-flight check
+            if not self._maintain_memory_health():
+                return {"draft": "OOM PREVENTED", "code": "sorry"}
             return self._generate_local(messages)
         else:
             return self._generate_api(messages)
@@ -176,87 +175,87 @@ class ModelInterface:
             result = extract_json_from_response(raw_output)
             return result if result else {"draft": raw_output, "code": "sorry"}
 
-    @torch.inference_mode()
+    
     def _generate_local(self, messages: List[Dict[str, str]]) -> str:
-        
-        # 1. Smart Memory Check (Fast)
-        self._maintain_memory_health()
+        with torch.inference_mode():
+            # 1. Smart Memory Check (Fast)
+            self._maintain_memory_health()
 
-        inputs = None
-        outputs = None
-        generated_ids = None
+            inputs = None
+            outputs = None
+            generated_ids = None
 
-        try:
-            # STEP 1: Pre-validate input length
-            estimated_tokens = sum(len(msg["content"]) // 3.5 for msg in messages) # 3.5 chars/token estimate
-            
-            # Truncate if insanely long to avoid immediate crash
-            if estimated_tokens > MAX_INPUT_LENGTH:
-                if len(messages) > 1:
-                    max_chars = int(MAX_INPUT_LENGTH * 3.5)
-                    messages[1]["content"] = messages[1]["content"][:max_chars]
-
-            inputs = self.tokenizer.apply_chat_template(
-                messages, tokenize=True, add_generation_prompt=True, return_tensors="pt"
-            ).to(self.model.device)
-
-            input_len = inputs.shape[1]
-
-            # STEP 2: Try tiers (8192 -> 4096 -> 2048)
-            for attempt, max_tokens in enumerate(TOKEN_TIERS):
-                
-                # OPTIMIZATION: Don't even try 8192 if we are already almost full
-                # If asking for >4k tokens but have <4.5GB free, skip 8k tier to save time.
-                if max_tokens > 4096:
-                    free_mem, _ = torch.cuda.mem_get_info(0)
-                    if (free_mem / 1024**3) < 4.5:
-                        continue # Skip to 4096 tier immediately
-
-                try:
-                    # FORCE CACHE = TRUE for speed
-                    outputs = self.model.generate(
-                        inputs,
-                        max_new_tokens=max_tokens,
-                        pad_token_id=self.tokenizer.eos_token_id,
-                        use_cache=True, 
-                        do_sample=False
-                    )
-
-                    generated_ids = outputs[0][input_len:].clone()
-                    response = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
-                    return response # Success
-
-                except torch.cuda.OutOfMemoryError:
-                    print(f"    [⚠️] OOM at {max_tokens}. Cleaning...")
-                    
-                    # Local variable cleanup is critical here
-                    if 'outputs' in locals(): del outputs
-                    if 'generated_ids' in locals(): del generated_ids
-                    outputs = None
-                    generated_ids = None
-                    
-                    self._force_cleanup()
-                    
-                    # If this was the last tier, give up
-                    if attempt == len(TOKEN_TIERS) - 1:
-                        raise
-
-        except torch.cuda.OutOfMemoryError:
-            print("    [💥] GPU OOM DETECTED! All tiers failed.")
-            return "OOM_SIGNAL"
-
-        except Exception as e:
-            print(f"    [!] Gen error: {e}")
-            return '{"draft": "failed", "code": "sorry"}'
-
-        finally:
-            # Final cleanup only if variables exist
             try:
-                if generated_ids is not None: del generated_ids
-                if outputs is not None: del outputs
-                if inputs is not None: del inputs
-            except:
-                pass
+                # STEP 1: Pre-validate input length
+                estimated_tokens = sum(len(msg["content"]) // 3.5 for msg in messages) # 3.5 chars/token estimate
+                
+                # Truncate if insanely long to avoid immediate crash
+                if estimated_tokens > MAX_INPUT_LENGTH:
+                    if len(messages) > 1:
+                        max_chars = int(MAX_INPUT_LENGTH * 3.5)
+                        messages[1]["content"] = messages[1]["content"][:max_chars]
+
+                inputs = self.tokenizer.apply_chat_template(
+                    messages, tokenize=True, add_generation_prompt=True, return_tensors="pt"
+                ).to(self.model.device)
+
+                input_len = inputs.shape[1]
+
+                # STEP 2: Try tiers (8192 -> 4096 -> 2048)
+                for attempt, max_tokens in enumerate(TOKEN_TIERS):
+                    
+                    # OPTIMIZATION: Don't even try 8192 if we are already almost full
+                    # If asking for >4k tokens but have <4.5GB free, skip 8k tier to save time.
+                    if max_tokens > 4096:
+                        free_mem, _ = torch.cuda.mem_get_info(0)
+                        if (free_mem / 1024**3) < 4.5:
+                            continue # Skip to 4096 tier immediately
+
+                    try:
+                        # FORCE CACHE = TRUE for speed
+                        outputs = self.model.generate(
+                            inputs,
+                            max_new_tokens=max_tokens,
+                            pad_token_id=self.tokenizer.eos_token_id,
+                            use_cache=True, 
+                            do_sample=False
+                        )
+
+                        generated_ids = outputs[0][input_len:].clone()
+                        response = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+                        return response # Success
+
+                    except torch.cuda.OutOfMemoryError:
+                        print(f"    [⚠️] OOM at {max_tokens}. Cleaning...")
+                        
+                        # Local variable cleanup is critical here
+                        if 'outputs' in locals(): del outputs
+                        if 'generated_ids' in locals(): del generated_ids
+                        outputs = None
+                        generated_ids = None
+                        
+                        self._force_cleanup()
+                        
+                        # If this was the last tier, give up
+                        if attempt == len(TOKEN_TIERS) - 1:
+                            raise
+
+            except torch.cuda.OutOfMemoryError:
+                print("    [💥] GPU OOM DETECTED! All tiers failed.")
+                return "OOM_SIGNAL"
+
+            except Exception as e:
+                print(f"    [!] Gen error: {e}")
+                return '{"draft": "failed", "code": "sorry"}'
+
+            finally:
+                # Final cleanup only if variables exist
+                try:
+                    if generated_ids is not None: del generated_ids
+                    if outputs is not None: del outputs
+                    if inputs is not None: del inputs
+                except:
+                    pass
 
     def _generate_api(self, messages: List[Dict[str, str]]) -> str:
         """

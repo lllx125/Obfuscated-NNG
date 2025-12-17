@@ -96,10 +96,12 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
             # End of Dataset Loop
             print(f"    ✓ Completed {ds_name}. Saved to {result_file_path}")
 
-            # Cool-down Period
-            print("    [zZz] Cooling down laptop for 2 minutes...")
-            time.sleep(120)
-            print("    [!] Resuming...")
+
+            # Cool-down Period if running on local models
+            if llm_name in ["deepseek-prover-v2-local", "goedel-prover-v2"]:
+                print("    [zZz] Cooling down laptop for 2 minutes...")
+                time.sleep(120)
+                print("    [!] Resuming...")
 
 if __name__ == "__main__":
     if not os.path.exists("dataset"):
