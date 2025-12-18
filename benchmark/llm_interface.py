@@ -1,7 +1,7 @@
 import gc
 import os
 import psutil
-from parse_output import extract_lean_code_from_response, extract_json_from_response, validate_schema
+from utils.parse_output import extract_lean_code_from_response, extract_json_from_response, validate_schema
 from typing import Dict, List, Any, Optional
 from openai import OpenAI
 from google import genai 
@@ -50,10 +50,12 @@ class ModelInterface:
             raise ValueError(f"Unknown LLM: {self.llm_name}")
     
     def generate(self, messages: List[Dict[str, str]]) -> Dict[str, str]:
+        from utils.discord_notify import send_msg
+
         self._append_llm_specific_instructions(messages)
 
         valid_response = None
-        
+
         for attempt in range(self.max_retry + 1):
             raw_output = self._generate_raw(messages)
             processed_output = self._process_output(raw_output)
@@ -68,6 +70,9 @@ class ModelInterface:
 
         if not valid_response:
             valid_response = {"draft": "failed", "code": "sorry"}
+            # Report parsing failure to Discord
+            error_msg = f"⚠️ **Parse Failure**: {self.llm_name} failed to generate valid output after {self.max_retry + 1} attempts"
+            send_msg(error_msg)
 
         return valid_response
     
@@ -257,9 +262,13 @@ class ModelInterface:
     def _generate_api(self, messages: List[Dict[str, str]]) -> str:
         """
         Handles API calls for OpenAI, DeepSeek, and Google Gemini.
+        Includes retry logic for API overload errors (503, 429, etc.)
         """
+        import time as time_module
+        from utils.discord_notify import send_msg
+
         api_key = None
-        
+
         # --- 1. Model Mapping ---
         # Maps your internal names to the actual API model strings
         model_map = {
@@ -272,127 +281,153 @@ class ModelInterface:
 
         target_model = model_map[self.llm_name]
 
-        try:
-            # =================================================================
-            # DEEPSEEK & OPENAI (OpenAI-Compatible APIs)
-            # =================================================================
-            if target_model in ["deepseek-reasoner", "gpt-4o-mini", "deepseek/deepseek-prover-v2"]:
-                client = None
+        # Retry loop for API overload errors (matches global max_retry)
+        for retry_attempt in range(self.max_retry):
+            try:
+                # =================================================================
+                # DEEPSEEK & OPENAI (OpenAI-Compatible APIs)
+                # =================================================================
+                if target_model in ["deepseek-reasoner", "gpt-4o-mini", "deepseek/deepseek-prover-v2"]:
+                    client = None
 
 
-                is_deepseek = (target_model == "deepseek-reasoner")
-                is_openrouter = (target_model == "deepseek/deepseek-prover-v2")
+                    is_deepseek = (target_model == "deepseek-reasoner")
+                    is_openrouter = (target_model == "deepseek/deepseek-prover-v2")
 
-                if is_deepseek:
-                    api_key = os.getenv("DEEPSEEK_API_KEY")
-                    base_url = "https://api.deepseek.com"
-                elif is_openrouter:
-                    api_key = os.getenv("OPENROUTER_API_KEY")
-                    base_url = "https://openrouter.ai/api/v1"
-                else:
-                    api_key = os.getenv("OPENAI_API_KEY")
-                    base_url = None
+                    if is_deepseek:
+                        api_key = os.getenv("DEEPSEEK_API_KEY")
+                        base_url = "https://api.deepseek.com"
+                    elif is_openrouter:
+                        api_key = os.getenv("OPENROUTER_API_KEY")
+                        base_url = "https://openrouter.ai/api/v1"
+                    else:
+                        api_key = os.getenv("OPENAI_API_KEY")
+                        base_url = None
 
-                if not api_key:
-                    key_name = "DEEPSEEK_API_KEY" if is_deepseek else ("OPENROUTER_API_KEY" if is_openrouter else "OPENAI_API_KEY")
-                    raise ValueError(f"Missing API key: {key_name} environment variable is not set")
+                    if not api_key:
+                        key_name = "DEEPSEEK_API_KEY" if is_deepseek else ("OPENROUTER_API_KEY" if is_openrouter else "OPENAI_API_KEY")
+                        raise ValueError(f"Missing API key: {key_name} environment variable is not set")
 
-                client = OpenAI(api_key=api_key, base_url=base_url, timeout=900.0)
-                # Prepare arguments
-                kwargs = {
-                    "model": target_model,
-                    "messages": messages,
-                    "stream": False
-                }
+                    client = OpenAI(api_key=api_key, base_url=base_url, timeout=900.0)
+                    # Prepare arguments
+                    kwargs = {
+                        "model": target_model,
+                        "messages": messages,
+                        "stream": False
+                    }
 
-                # strict JSON mode for GPT-4o
-                if is_deepseek or is_openrouter:
-                    kwargs["max_tokens"] = 32000
-                    kwargs["temperature"] = 0.6
-                else:
-                    kwargs["response_format"] = {"type": "json_object"}
-                    kwargs["temperature"] = 0.2
-                    kwargs["max_tokens"] = 16000
+                    # strict JSON mode for GPT-4o
+                    if is_deepseek or is_openrouter:
+                        kwargs["max_tokens"] = 32000
+                        kwargs["temperature"] = 0.6
+                    else:
+                        kwargs["response_format"] = {"type": "json_object"}
+                        kwargs["temperature"] = 0.2
+                        kwargs["max_tokens"] = 16000
 
-                response = client.chat.completions.create(**kwargs)
-                
-                return response.choices[0].message.content
-            # =================================================================
-            # GOOGLE GEMINI
-            # =================================================================
-            elif "gemini" in target_model:
-                api_key = os.getenv("GEMINI_API_KEY")
-                if not api_key:
-                    raise ValueError("Missing API key: GEMINI_API_KEY environment variable is not set")
+                    response = client.chat.completions.create(**kwargs)
 
-                client = genai.Client(api_key=api_key)
-                
-                # Construct simple string prompt from messages
-                system_instruction = messages[0]['content']
-                user_msg = messages[1]['content']
-                full_prompt = f"{system_instruction}\n\n{user_msg}"
+                    return response.choices[0].message.content
+                # =================================================================
+                # GOOGLE GEMINI
+                # =================================================================
+                elif "gemini" in target_model:
+                    api_key = os.getenv("GEMINI_API_KEY")
+                    if not api_key:
+                        raise ValueError("Missing API key: GEMINI_API_KEY environment variable is not set")
+
+                    client = genai.Client(api_key=api_key)
+
+                    # Construct simple string prompt from messages
+                    system_instruction = messages[0]['content']
+                    user_msg = messages[1]['content']
+                    full_prompt = f"{system_instruction}\n\n{user_msg}"
 
 
-                safety_settings = [
-                    types.SafetySetting(
-                        category=types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                        threshold=types.HarmBlockThreshold.BLOCK_NONE
-                    ),
-                    types.SafetySetting(
-                        category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                        threshold=types.HarmBlockThreshold.BLOCK_NONE
-                    ),
-                    types.SafetySetting(
-                        category=types.HarmCategory.HARM_CATEGORY_HARASSMENT,
-                        threshold=types.HarmBlockThreshold.BLOCK_NONE
-                    ),
-                    types.SafetySetting(
-                        category=types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                        threshold=types.HarmBlockThreshold.BLOCK_NONE
-                    ),
-                ]
-                
-                kwargs = {                        
-                        "response_mime_type": "application/json",
-                        "response_schema": {
-                            "type": "object",
-                            "properties": {
-                                "draft": {"type": "string"},
-                                "code": {"type": "string"}
+                    safety_settings = [
+                        types.SafetySetting(
+                            category=types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                            threshold=types.HarmBlockThreshold.BLOCK_NONE
+                        ),
+                        types.SafetySetting(
+                            category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                            threshold=types.HarmBlockThreshold.BLOCK_NONE
+                        ),
+                        types.SafetySetting(
+                            category=types.HarmCategory.HARM_CATEGORY_HARASSMENT,
+                            threshold=types.HarmBlockThreshold.BLOCK_NONE
+                        ),
+                        types.SafetySetting(
+                            category=types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                            threshold=types.HarmBlockThreshold.BLOCK_NONE
+                        ),
+                    ]
+
+                    kwargs = {
+                            "response_mime_type": "application/json",
+                            "response_schema": {
+                                "type": "object",
+                                "properties": {
+                                    "draft": {"type": "string"},
+                                    "code": {"type": "string"}
+                                },
+                                "required": ["draft", "code"]
                             },
-                            "required": ["draft", "code"]
-                        },
-                        "temperature": 0.2,
-                        "safety_settings": safety_settings
-                }
-                
-                if "flash" in target_model:
-                    kwargs["max_output_tokens"] = 8192
-                else:
-                    kwargs["max_output_tokens"] = 65000
-                    kwargs["thinking_config"] = types.ThinkingConfig(
-                        thinking_budget=32000  # Allocates ~32k tokens just for reasoning
-                    )
+                            "temperature": 0.2,
+                            "safety_settings": safety_settings
+                    }
 
-                response = client.models.generate_content(
-                    model=target_model,
-                    contents=full_prompt,
-                    config=types.GenerateContentConfig(
-                        **kwargs
+                    if "flash" in target_model:
+                        kwargs["max_output_tokens"] = 8192
+                    else:
+                        kwargs["max_output_tokens"] = 65000
+                        kwargs["thinking_config"] = types.ThinkingConfig(
+                            thinking_budget=32000  # Allocates ~32k tokens just for reasoning
                         )
-                    )
-                if not response.text:
-                    if response.candidates:
-                        reason = response.candidates[0].finish_reason
-                        print(f" [!] GEMINI BLOCKED. Reason: {reason}")
-                    
-                return response.text
 
-        except Exception as e:
-            print(f"    [!] API Error ({self.llm_name}): {e}")
-            return '{"draft": "API Error", "code": "sorry"}'
+                    response = client.models.generate_content(
+                        model=target_model,
+                        contents=full_prompt,
+                        config=types.GenerateContentConfig(
+                            **kwargs
+                            )
+                        )
+                    if not response.text:
+                        if response.candidates:
+                            reason = response.candidates[0].finish_reason
+                            print(f" [!] GEMINI BLOCKED. Reason: {reason}")
 
-        return '{"draft": "Unknown API Model", "code": "sorry"}'
+                    return response.text
+
+                # Success - return the result
+                return '{"draft": "Unknown API Model", "code": "sorry"}'
+
+            except Exception as e:
+                error_str = str(e)
+                # Check if it's an overload/rate limit error (503, 429, etc.)
+                is_overload = any(code in error_str for code in ['503', '429', 'UNAVAILABLE', 'overloaded', 'rate limit'])
+
+                # Always report the error to console
+                print(f"    [!] API Error ({self.llm_name}): {error_str}")
+
+                if is_overload and retry_attempt < self.max_retry - 1:
+                    wait_time = 60  # Wait 1 minute before retrying
+                    print(f"    [⏳] Waiting {wait_time}s before retry {retry_attempt + 1}/{self.max_retry}...")
+                    # Send Discord notification for overload errors
+                    send_msg(f"⚠️ **API Overload**: {self.llm_name} - {error_str[:200]}. Retrying in 60s (attempt {retry_attempt + 1}/{self.max_retry})...")
+                    time_module.sleep(wait_time)
+                    continue  # Retry
+                else:
+                    # Not an overload error, or we've exhausted retries - send final error report
+                    if retry_attempt >= self.max_retry - 1:
+                        send_msg(f"❌ **API Error (Max Retries)**: {self.llm_name} - {error_str[:200]}")
+                    else:
+                        send_msg(f"❌ **API Error**: {self.llm_name} - {error_str[:200]}")
+                    # Break out of retry loop
+                    break
+
+        # If we reach here, all retries exhausted or non-retryable error
+        return '{"draft": "API Error", "code": "sorry"}'
     
     def _append_llm_specific_instructions(self, messages: List[Dict[str, str]]) -> List[Dict[str, str]]:
         cot_instruction = "Before producing the Lean 4 code to formally prove the given theorem, provide a detailed proof plan outlining the main proof steps and strategies. The plan should highlight key ideas, intermediate lemmas, and proof structures that will guide the construction of the final formal proof."

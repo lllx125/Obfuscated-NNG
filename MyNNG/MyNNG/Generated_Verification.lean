@@ -4,602 +4,508 @@ import Mathlib.Tactic.Contrapose
 import Mathlib.Tactic.Use
 import Mathlib.Tactic.Tauto
 
-inductive Η0Ja where
-| GnΑ0 : Η0Ja
-| Θ7Κr : Η0Ja → Η0Ja
+inductive dBNaΤ where
+| ΙMτr : dBNaΤ
+| lBut : dBNaΤ → dBNaΤ
 
-namespace Η0Ja
+namespace dBNaΤ
 
-instance : Inhabited Η0Ja where
-  default := Η0Ja.GnΑ0
+instance : Inhabited dBNaΤ where
+  default := dBNaΤ.ΙMτr
 
-opaque ΚxΝ : Η0Ja → Η0Ja → Η0Ja
+opaque Υdd : dBNaΤ → dBNaΤ → dBNaΤ
 
-axiom Ε6ΖΜF_Zζ (a : Η0Ja) : ΚxΝ a GnΑ0 = a
+axiom aℚΗSωrκΩ (a : dBNaΤ) : Υdd a ΙMτr = a
 
-axiom Qγx1dtΨo (a d : Η0Ja) : ΚxΝ a (Θ7Κr d) = Θ7Κr (ΚxΝ a d)
+axiom ωΙduΟsΗΕ (a d : dBNaΤ) : Υdd a (lBut d) = lBut (Υdd a d)
 
-def gkDΞ : Η0Ja → Η0Ja
-| GnΑ0 => GnΑ0
-| Θ7Κr n => n
+def DrNℂ : dBNaΤ → dBNaΤ
+| ΙMτr => ΙMτr
+| lBut n => n
 
-theorem O0ℝΒΝDΨℕ2 (n : Η0Ja) : gkDΞ (Θ7Κr n) = n := rfl
+theorem YEeJssuMW (n : dBNaΤ) : DrNℂ (lBut n) = n := rfl
 
-theorem o5Εgγtdvl (a b : Η0Ja) (h : Θ7Κr a = Θ7Κr b) : a = b := by
-  rw [← O0ℝΒΝDΨℕ2 a, h, O0ℝΒΝDΨℕ2]
+theorem ycqbigHj (a b : dBNaΤ) (h : lBut a = lBut b) : a = b := by
+  rw [← YEeJssuMW a, h, YEeJssuMW]
 
-def ℂy'tΒγ : Η0Ja → Prop
-| GnΑ0 => True
-| Θ7Κr _ => False
+def Vu4zψSΙ : dBNaΤ → Prop
+| ΙMτr => True
+| lBut _ => False
 
-theorem I4ξΒℤk_z8ξΩν : ℂy'tΒγ GnΑ0 = True := rfl
+theorem iχφzεNaΗerhε : Vu4zψSΙ ΙMτr = True := rfl
 
-theorem OiiFkEΖ__bp (n : Η0Ja) : ℂy'tΒγ (Θ7Κr n) = False := rfl
+theorem πOvΒ2o_ΘuΧσΨ (n : dBNaΤ) : Vu4zψSΙ (lBut n) = False := rfl
 
-theorem ΙΩζβτeΜwυ'ec (a : Η0Ja) : GnΑ0 ≠ Θ7Κr a := by
+theorem MQΧBoeωnρΥcc (a : dBNaΤ) : ΙMτr ≠ lBut a := by
   intro h
-  rw [← OiiFkEΖ__bp a]
+  rw [← πOvΒ2o_ΘuΧσΨ a]
   rw [← h]
-  rw [I4ξΒℤk_z8ξΩν]
+  rw [iχφzεNaΗerhε]
   trivial
 -- multiplication
 
-opaque ΕWβ : Η0Ja → Η0Ja → Η0Ja
+opaque ΚμD : dBNaΤ → dBNaΤ → dBNaΤ
 
-axiom θ'vxθΑfφ (a : Η0Ja) : ΕWβ a GnΑ0 = GnΑ0
+axiom QΗglΜOeC (a : dBNaΤ) : ΚμD a ΙMτr = ΙMτr
 
-axiom ΑΩ7Ξ3νnr (a b : Η0Ja) : ΕWβ a (Θ7Κr b) = ΚxΝ (ΕWβ a b) a
+axiom muρΗℚ8sR (a b : dBNaΤ) : ΚμD a (lBut b) = Υdd (ΚμD a b) a
 
-def gfΧ : Η0Ja := Η0Ja.Θ7Κr GnΑ0
+def oΜℕe : dBNaΤ := dBNaΤ.lBut ΙMτr
 
-def oVΟ : Η0Ja := Η0Ja.Θ7Κr gfΧ
+def κw' : dBNaΤ := dBNaΤ.lBut oΜℕe
 
-def χΗΡd : Η0Ja := Η0Ja.Θ7Κr oVΟ
+def Shxde : dBNaΤ := dBNaΤ.lBut κw'
 
-def Wre0 : Η0Ja := Η0Ja.Θ7Κr χΗΡd
+def μζρr : dBNaΤ := dBNaΤ.lBut Shxde
 
-theorem U3ωΘτ_q_7oH_ℂe9no : gfΧ = Θ7Κr GnΑ0 := by rfl
+theorem oψeℚ_4rεutΞHze9Η : oΜℕe = lBut ΙMτr := by rfl
 
-theorem ℚJo_ℕΧΑkUvKΝne : oVΟ = Θ7Κr gfΧ := by rfl
+theorem tuphxwΞΨOℤcψc_o : κw' = lBut oΜℕe := by rfl
 
-theorem hNX_eqΓoXβα6BΗOw : χΗΡd = Θ7Κr oVΟ := by rfl
+theorem fhreXυ_eΒ1ψρdpQsw : Shxde = lBut κw' := by rfl
 
-theorem XfξHc_eqζΗJcιrVEr9 : Wre0 = Θ7Κr χΗΡd := by rfl
+theorem fρLXVqYℚχvc_mυhrℚVe : μζρr = lBut Shxde := by rfl
 -- power
 
-opaque νΦΗ : Η0Ja → Η0Ja → Η0Ja
+opaque Γoq : dBNaΤ → dBNaΤ → dBNaΤ
 
-axiom φΜwoΓvΞΦ (m : Η0Ja) : νΦΗ m GnΑ0 = gfΧ
+axiom pGΖ_zξrΞ (m : dBNaΤ) : Γoq m ΙMτr = oΜℕe
 
-axiom t4πℂ'Rτ (m n : Η0Ja) : νΦΗ m (Θ7Κr n) = ΕWβ (νΦΗ m n) m
+axiom VHcp_sMκ (m n : dBNaΤ) : Γoq m (lBut n) = ΚμD (Γoq m n) m
 
-def IJ (a b : Η0Ja) :=  ∃ (c : Η0Ja), b = ΚxΝ a c
+def ΚΧυ (a b : dBNaΤ) :=  ∃ (c : dBNaΤ), b = Υdd a c
 
-theorem _iΝf'_εfApyη9tGD (a b : Η0Ja) : IJ a b ↔ ∃ (c : Η0Ja), b = ΚxΝ a c := Iff.rfl
+theorem ye_3siV'C8ioΥEv8d (a b : dBNaΤ) : ΚΧυ a b ↔ ∃ (c : dBNaΤ), b = Υdd a c := Iff.rfl
 
-def sXΝηkΞNΨ (a b : Η0Ja) :=  (IJ a b) ∧ ¬ (IJ b  a)
+def ΩtΙ7yΩΞγ (a b : dBNaΤ) :=  (ΚΧυ a b) ∧ ¬ (ΚΧυ b  a)
 
-open Η0Ja
+open dBNaΤ
 
-theorem ωΙξaινη7 (n : Η0Ja) : ΚxΝ GnΑ0 n = n := by
-  induction n with
-  | GnΑ0 =>
-    rw [Ε6ΖΜF_Zζ]
-  | Θ7Κr d ih =>
-    rw [Qγx1dtΨo,ih]
+theorem ℂCs_ℝΥψd (n : dBNaΤ) : Υdd ΙMτr n = n := by
+  sorry
 
-theorem gXqΧΔℝvO (a b : Η0Ja) : ΚxΝ (Θ7Κr a) b = Θ7Κr (ΚxΝ a b)  := by
-  induction b with
-  | GnΑ0 =>
-    rw [Ε6ΖΜF_Zζ,Ε6ΖΜF_Zζ]
-  | Θ7Κr d ih =>
-    rw [Qγx1dtΨo,ih,Qγx1dtΨo]
+theorem sokcΩΑdι (a b : dBNaΤ) : Υdd (lBut a) b = lBut (Υdd a b)  := by
+  sorry
 
-theorem KΩΦzαυωT (a b : Η0Ja) : ΚxΝ a b = ΚxΝ b a := by
-  induction b with
-  | GnΑ0 =>
-    rw [Ε6ΖΜF_Zζ, ωΙξaινη7]
-  | Θ7Κr d ih =>
-    rw [Qγx1dtΨo, ih, gXqΧΔℝvO]
+theorem μ4dA_c2o (a b : dBNaΤ) : Υdd a b = Υdd b a := by
+  sorry
 
-theorem nv3ΧWtℕsL (a b c : Η0Ja) : ΚxΝ (ΚxΝ a b) c = ΚxΝ a (ΚxΝ b c) := by
-  induction c with
-  | GnΑ0 =>
-    rw [Ε6ΖΜF_Zζ, Ε6ΖΜF_Zζ]
-  | Θ7Κr d ih =>
-    rw [Qγx1dtΨo, Qγx1dtΨo, ih, Qγx1dtΨo]
+theorem apφQΞwLdc (a b c : dBNaΤ) : Υdd (Υdd a b) c = Υdd a (Υdd b c) := by
+  sorry
 
-theorem ΝκdWγΤσkbcΚFNΒ (a b c : Η0Ja) : ΚxΝ (ΚxΝ a b) c = ΚxΝ (ΚxΝ a c) b := by
-  rw [nv3ΧWtℕsL]
-  rw [KΩΦzαυωT b, nv3ΧWtℕsL]
+theorem aΨ_rνykn8ΨcρΥT (a b c : dBNaΤ) : Υdd (Υdd a b) c = Υdd (Υdd a c) b := by
+  sorry
 
-theorem dℚN_γK8ο9d'pχρ (a b c : Η0Ja) : ΚxΝ a (ΚxΝ b c) = ΚxΝ b (ΚxΝ a c) := by
-  rw [← nv3ΧWtℕsL]
-  rw [KΩΦzαυωT a b]
-  rw [nv3ΧWtℕsL]
+theorem ΥdΝefetkℂcCηg (a b c : dBNaΤ) : Υdd a (Υdd b c) = Υdd b (Υdd a c) := by
+  sorry
 
-theorem SZuΟvETq_ιWνJe (n : Η0Ja) : Θ7Κr n = ΚxΝ n gfΧ := by
-  rw [U3ωΘτ_q_7oH_ℂe9no]
-  rw [Qγx1dtΨo, Ε6ΖΜF_Zζ]
+theorem φMhX_vsqasVYnae (n : dBNaΤ) : lBut n = Υdd n oΜℕe := by
+  sorry
 
-theorem T7WδnΕΝFtℂεymne (x y z : Η0Ja) (h1 : ΚxΝ x y = Wre0) (h2 : ΚxΝ (ΕWβ χΗΡd x) z = oVΟ) : ΚxΝ x y = Wre0 := by
-  exact h1
+theorem Ξbα9PhiΔcaHκ_nκ (x y z : dBNaΤ) (h1 : Υdd x y = μζρr) (h2 : Υdd (ΚμD Shxde x) z = κw') : Υdd x y = μζρr := by
+  sorry
 
-theorem Nσ0lLiΞpWγjΜυℝ (x y : Η0Ja) (h : ΚxΝ GnΑ0 x = ΚxΝ (ΚxΝ GnΑ0 y) oVΟ) : x = ΚxΝ y oVΟ := by
-  rw [ωΙξaινη7] at h
-  rw [ωΙξaινη7] at h
-  exact h
+theorem icplXRapGoHXRho (x y : dBNaΤ) (h : Υdd ΙMτr x = Υdd (Υdd ΙMτr y) κw') : x = Υdd y κw' := by
+  sorry
 
-theorem iΙpχnχct2ΧttΘ4aΗ (x y : Η0Ja) (h1 : x = χΗΡd) (h2 : x = χΗΡd → y = Wre0) : y = Wre0 := by
-  apply h2 at h1
-  exact h1
+theorem GΜvpΝiΝahqonV0Δre (x y : dBNaΤ) (h1 : x = Shxde) (h2 : x = Shxde → y = μζρr) : y = μζρr := by
+  sorry
 
-theorem immΑRioΝΒ5κSc_sI (x : Η0Ja) (h : ΚxΝ x gfΧ = Wre0) : x = χΗΡd := by
-  rw [U3ωΘτ_q_7oH_ℂe9no] at h
-  rw [XfξHc_eqζΗJcιrVEr9] at h
-  rw [Qγx1dtΨo] at h
-  apply o5Εgγtdvl at h
-  rw [Ε6ΖΜF_Zζ] at h
-  exact h
+theorem HζΕιχ9ΝonξfxΡuΒr (x : dBNaΤ) (h : Υdd x oΜℕe = μζρr) : x = Shxde := by
+  sorry
 
-theorem ovΓΡFΓctCκHνℂℂπi (x : Η0Ja) : x = Wre0 → x = Wre0 := by
+theorem I5WXliAΚdnℂRfiΤvq (x : dBNaΤ) : x = μζρr → x = μζρr := by
+  sorry
+
+theorem ξπ4piΦaμoβG3sΧΙ (x y : dBNaΤ) : Υdd x oΜℕe = Υdd y oΜℕe → x = y := by
+  sorry
+
+theorem υΟmmplΔΥuωβΞnysue (x y : dBNaΤ) (h1 : x = y) (h2 : x ≠ y) : False := by
+  sorry
+
+theorem V5_XMexℤoΥΘe : (ΙMτr : dBNaΤ) ≠ oΜℕe := by
+  sorry
+
+theorem onByxTzte5γ : (oΜℕe : dBNaΤ) ≠ ΙMτr := by
+  sorry
+
+theorem t8tpKuφ_wt'ΝφNe9Βvoe : Υdd (lBut (lBut ΙMτr)) (lBut (lBut ΙMτr)) ≠ lBut (lBut (lBut (lBut (lBut ΙMτr)))) := by
+  sorry
+
+theorem υ2_εlKγ351 (a b c d : dBNaΤ) : Υdd (Υdd a b) (Υdd c d) = Υdd (Υdd (Υdd a c) d) b := by
+  sorry
+
+theorem Εcyc_9ΦΩΝσZo (a : dBNaΤ) : lBut a ≠ ΙMτr := by
+  sorry
+
+theorem GnℂΩμne_φΗ6N (m n : dBNaΤ) (h : m ≠ n) : lBut m ≠ lBut n := by
+  sorry
+
+theorem εsLkovβ (m : dBNaΤ) : ΚμD m oΜℕe = m := by
+  sorry
+
+theorem Ο9rdLοul (m : dBNaΤ) : ΚμD ΙMτr m = ΙMτr := by
+  sorry
+
+theorem NΑℕ_ψmuΔ (a b : dBNaΤ) : ΚμD (lBut a) b = Υdd (ΚμD a b) b := by
+  sorry
+
+theorem mlP_Ocℚi (a b : dBNaΤ) : ΚμD a b = ΚμD b a := by
+  sorry
+
+theorem ΖθΔΗχKl (m : dBNaΤ) : ΚμD oΜℕe m = m := by
+  sorry
+
+theorem tkμΚΜWν (m : dBNaΤ) : ΚμD κw' m = Υdd m m := by
+  sorry
+
+theorem ApΝℕιaΑ (a b c : dBNaΤ) : ΚμD a (Υdd b c) = Υdd (ΚμD a b) (ΚμD a c) := by
+  sorry
+
+theorem aKddνρb (a b c : dBNaΤ) : ΚμD (Υdd a b) c = Υdd (ΚμD a c) (ΚμD b c) := by
+  sorry
+
+theorem H1πlZsℕxΥc (a b c : dBNaΤ) : ΚμD (ΚμD a b) c = ΚμD a (ΚμD b c)  := by
+  sorry
+
+theorem zℕ_ozΝDzHKΒσo : Γoq (ΙMτr : dBNaΤ)  ΙMτr = oΜℕe := by
+  sorry
+
+theorem σwro_pℝπts1vv (m : dBNaΤ) : Γoq (ΙMτr : dBNaΤ) (lBut m) = ΙMτr := by
+  sorry
+
+theorem zJDvnΗe (a : dBNaΤ) : Γoq a oΜℕe = a  := by
+  sorry
+
+theorem ΙγnεμBw (m : dBNaΤ) : Γoq (oΜℕe : dBNaΤ) m = oΜℕe := by
+  sorry
+
+theorem ηFw_ΓJκ (a : dBNaΤ) : Γoq a κw' = ΚμD a a := by
+  sorry
+
+theorem ραΩ4aAd (a m n : dBNaΤ) : Γoq a (Υdd m n) = ΚμD (Γoq a m) (Γoq a n) := by
+  sorry
+
+theorem o25pxΨw (a b n : dBNaΤ) : Γoq (ΚμD a b) n = ΚμD (Γoq a n) (Γoq b n) := by
+  sorry
+
+theorem οJi_ZΙw (a m n : dBNaΤ) : Γoq (Γoq a m) n = Γoq a (ΚμD m n) := by
+  sorry
+
+theorem axysSρ (a b : dBNaΤ) : Γoq (Υdd a b) κw' = Υdd (Υdd (Γoq a κw') (Γoq b κw')) (ΚμD (ΚμD κw' a) b) := by
+  sorry
+
+theorem Ih9ℂυMrKℕBσcΓneΗ (a b n : dBNaΤ) : Υdd a n = Υdd b n → a = b := by
+  sorry
+
+theorem ℝddχHsefPgOιoeι (a b n : dBNaΤ) : Υdd n a = Υdd n b → a = b := by
+  sorry
+
+theorem Οa_9doeθeζqVℝulw (x y : dBNaΤ) : Υdd x y = y → x = ΙMτr := by
+theorem Οa_9doeθeζqVℝulw (x y : dBNaΤ) : x + y = y → x = Ζινr := by
   intro h
-  exact h
-
-theorem VθξΚΥΝtΟΑdΗjγx (x y : Η0Ja) : ΚxΝ x gfΧ = ΚxΝ y gfΧ → x = y := by
-  intro h
-  rw[U3ωΘτ_q_7oH_ℂe9no] at h
-  rw[Qγx1dtΨo,Qγx1dtΨo] at h
-  apply o5Εgγtdvl at h
-  rw[Ε6ΖΜF_Zζ,Ε6ΖΜF_Zζ] at h
-  exact h
-
-theorem ωΜνpdRκΧ1tK_seΩ_ (x y : Η0Ja) (h1 : x = y) (h2 : x ≠ y) : False := by
-  apply h2 at h1
-  exact h1
-
-theorem ρUμΞYe'u9Απ : (GnΑ0 : Η0Ja) ≠ gfΧ := by
-  intro h
-  rw [U3ωΘτ_q_7oH_ℂe9no] at h
-  apply ΙΩζβτeΜwυ'ec at h
-  exact h
-
-theorem oβθΤMΚιΑyor : (gfΧ : Η0Ja) ≠ GnΑ0 := by
-  symm
-  exact ρUμΞYe'u9Απ
-
-theorem vτδZμ3θ_ΩtwqKμ9fψiΘ : ΚxΝ (Θ7Κr (Θ7Κr GnΑ0)) (Θ7Κr (Θ7Κr GnΑ0)) ≠ Θ7Κr (Θ7Κr (Θ7Κr (Θ7Κr (Θ7Κr GnΑ0)))) := by
-  intro h
-  rw [Qγx1dtΨo, Qγx1dtΨo, Ε6ΖΜF_Zζ] at h
-  repeat apply o5Εgγtdvl at h
-  apply ΙΩζβτeΜwυ'ec at h
-  exact h
-
-theorem Rμl53fxρz (a b c d : Η0Ja) : ΚxΝ (ΚxΝ a b) (ΚxΝ c d) = ΚxΝ (ΚxΝ (ΚxΝ a c) d) b := by
-  repeat rw [nv3ΧWtℕsL]
-  rw [dℚN_γK8ο9d'pχρ b c]
-  rw [KΩΦzαυωT b d]
-
-theorem sαAιΕLζFrVp (a : Η0Ja) : Θ7Κr a ≠ GnΑ0 := by
-  intro h
-  rw [← OiiFkEΖ__bp a]
-  rw [h]
-  rw [I4ξΒℤk_z8ξΩν]
-  trivial
-
-theorem βΖLMclΥhℂuΘ (m n : Η0Ja) (h : m ≠ n) : Θ7Κr m ≠ Θ7Κr n := by
-  contrapose! h
-  apply o5Εgγtdvl at h
-  exact h
-
-theorem ΤyΥewev (m : Η0Ja) : ΕWβ m gfΧ = m := by
-  rw [U3ωΘτ_q_7oH_ℂe9no]
-  rw [ΑΩ7Ξ3νnr]
-  rw [θ'vxθΑfφ]
-  rw [ωΙξaινη7]
-
-theorem ωCΥiCazτ (m : Η0Ja) : ΕWβ GnΑ0 m = GnΑ0 := by
-  induction m with
-  | GnΑ0 =>
-    rw [θ'vxθΑfφ]
-  | Θ7Κr d ih =>
-    rw [ΑΩ7Ξ3νnr, ih, ωΙξaινη7]
-
-theorem Ν_zivκyA (a b : Η0Ja) : ΕWβ (Θ7Κr a) b = ΚxΝ (ΕWβ a b) b := by
-  induction b with
-  | GnΑ0 =>
-    rw [θ'vxθΑfφ, θ'vxθΑfφ, Ε6ΖΜF_Zζ]
-  | Θ7Κr d hd =>
-    rw [ΑΩ7Ξ3νnr, ΑΩ7Ξ3νnr, hd, Qγx1dtΨo, Qγx1dtΨo, ΝκdWγΤσkbcΚFNΒ]
-
-theorem ΧFΤΟξrdψ (a b : Η0Ja) : ΕWβ a b = ΕWβ b a := by
-  induction b with
-  | GnΑ0 =>
-    rw [ωCΥiCazτ]
-    rw [θ'vxθΑfφ]
-  | Θ7Κr d hd =>
-    rw [Ν_zivκyA]
-    rw [← hd]
-    rw [ΑΩ7Ξ3νnr]
-
-theorem ℝzΗσℝcψ (m : Η0Ja) : ΕWβ gfΧ m = m := by
-  rw [ΧFΤΟξrdψ, ΤyΥewev]
-
-theorem ΙΦΔVfe9 (m : Η0Ja) : ΕWβ oVΟ m = ΚxΝ m m := by
-  rw [ℚJo_ℕΧΑkUvKΝne, Ν_zivκyA, ℝzΗσℝcψ]
-
-theorem Ωψ'YiΑσ (a b c : Η0Ja) : ΕWβ a (ΚxΝ b c) = ΚxΝ (ΕWβ a b) (ΕWβ a c) := by
-  induction c with
-  | GnΑ0 =>
-    rw [Ε6ΖΜF_Zζ, θ'vxθΑfφ, Ε6ΖΜF_Zζ]
-  | Θ7Κr d hd =>
-    rw [Qγx1dtΨo, ΑΩ7Ξ3νnr, hd, ΑΩ7Ξ3νnr, nv3ΧWtℕsL]
-
-theorem eexzzm_ (a b c : Η0Ja) : ΕWβ (ΚxΝ a b) c = ΚxΝ (ΕWβ a c) (ΕWβ b c) := by
-  rw [ΧFΤΟξrdψ, Ωψ'YiΑσ]
-  repeat rw [ΧFΤΟξrdψ c]
-
-theorem ℚQswΘΟVνy (a b c : Η0Ja) : ΕWβ (ΕWβ a b) c = ΕWβ a (ΕWβ b c)  := by
-  induction c with
-  | GnΑ0 =>
-    rw [θ'vxθΑfφ, θ'vxθΑfφ, θ'vxθΑfφ]
-  | Θ7Κr d ih =>
-    rw [ΑΩ7Ξ3νnr, ΑΩ7Ξ3νnr, ih, Ωψ'YiΑσ]
-
-theorem dσvrJφMβqℝYr0 : νΦΗ (GnΑ0 : Η0Ja)  GnΑ0 = gfΧ := by
-  rw [φΜwoΓvΞΦ]
-
-theorem wzKξΔΕevEΕcrz (m : Η0Ja) : νΦΗ (GnΑ0 : Η0Ja) (Θ7Κr m) = GnΑ0 := by
-  rw [t4πℂ'Rτ]
-  rw [θ'vxθΑfφ]
-
-theorem hℚyaτxΦ (a : Η0Ja) : νΦΗ a gfΧ = a  := by
-  rw [U3ωΘτ_q_7oH_ℂe9no]
-  rw [t4πℂ'Rτ]
-  rw [φΜwoΓvΞΦ]
-  rw [ℝzΗσℝcψ]
-
-theorem sYJδΓνΩ (m : Η0Ja) : νΦΗ (gfΧ : Η0Ja) m = gfΧ := by
-  induction m with
-  | GnΑ0 =>
-    rw [φΜwoΓvΞΦ]
-  | Θ7Κr t ht =>
-    rw [t4πℂ'Rτ]
-    rw [ht]
-    rw [ℝzΗσℝcψ]
-
-theorem ΓpKΚYδω (a : Η0Ja) : νΦΗ a oVΟ = ΕWβ a a := by
-  rw [ℚJo_ℕΧΑkUvKΝne]
-  rw [t4πℂ'Rτ]
-  rw [hℚyaτxΦ]
-
-theorem ΗAΥuZΡd (a m n : Η0Ja) : νΦΗ a (ΚxΝ m n) = ΕWβ (νΦΗ a m) (νΦΗ a n) := by
-  induction n with
-  | GnΑ0 =>
-    rw [Ε6ΖΜF_Zζ]
-    rw [φΜwoΓvΞΦ]
-    rw [ΤyΥewev]
-  | Θ7Κr t ht =>
-    rw [Qγx1dtΨo]
-    rw [t4πℂ'Rτ]
-    rw [t4πℂ'Rτ]
-    rw [ht]
-    rw [ℚQswΘΟVνy]
-
-theorem HζιξQoκ (a b n : Η0Ja) : νΦΗ (ΕWβ a b) n = ΕWβ (νΦΗ a n) (νΦΗ b n) := by
-  induction n with
-  | GnΑ0 =>
-    repeat rw [φΜwoΓvΞΦ]
-    rw [ℝzΗσℝcψ]
-  | Θ7Κr t ht =>
-    repeat rw [t4πℂ'Rτ]
-    rw [ht]
-    rw [ℚQswΘΟVνy]
-    rw [ΧFΤΟξrdψ (νΦΗ b t) (ΕWβ a b)]
-    rw [ΧFΤΟξrdψ (νΦΗ b t) b]
-    repeat rw [← ℚQswΘΟVνy]
-
-theorem Xωο'Aεk (a m n : Η0Ja) : νΦΗ (νΦΗ a m) n = νΦΗ a (ΕWβ m n) := by
-  induction n with
-  | GnΑ0 =>
-    rw [θ'vxθΑfφ]
-    rw [φΜwoΓvΞΦ]
-    rw [φΜwoΓvΞΦ]
-  | Θ7Κr t ht =>
-    rw [t4πℂ'Rτ]
-    rw [ht]
-    rw [ΑΩ7Ξ3νnr]
-    rw [ΗAΥuZΡd]
-
-theorem ΚΚlwMW (a b : Η0Ja) : νΦΗ (ΚxΝ a b) oVΟ = ΚxΝ (ΚxΝ (νΦΗ a oVΟ) (νΦΗ b oVΟ)) (ΕWβ (ΕWβ oVΟ a) b) := by
-  rw [ΓpKΚYδω, ΓpKΚYδω, ΓpKΚYδω]
-  rw [ΝκdWγΤσkbcΚFNΒ]
-  rw [Ωψ'YiΑσ, eexzzm_, eexzzm_]
-  rw [ΙΦΔVfe9, eexzzm_]
-  rw [ΧFΤΟξrdψ b a]
-  rw [← nv3ΧWtℕsL, ← nv3ΧWtℕsL]
-
-theorem γdκDχkΩΨρη_eaΔcU (a b n : Η0Ja) : ΚxΝ a n = ΚxΝ b n → a = b := by
-  induction n with
-  | GnΑ0 =>
-    intro h
-    rw [Ε6ΖΜF_Zζ, Ε6ΖΜF_Zζ] at h
-    exact h
-  | Θ7Κr d ih =>
-    intro h
-    rw [Qγx1dtΨo, Qγx1dtΨo] at h
-    apply o5Εgγtdvl at h
-    apply ih
-    exact h
-
-theorem TeL1SWχπRβcζνl (a b n : Η0Ja) : ΚxΝ n a = ΚxΝ n b → a = b := by
-  repeat rw [KΩΦzαυωT n]
-  intro h
-  apply γdκDχkΩΨρη_eaΔcU at h
-  exact h
-
-theorem _adiΜ2ieMΩeaΖΒΞK (x y : Η0Ja) : ΚxΝ x y = y → x = GnΑ0 := by
-  intro h
-  nth_rewrite 2 [← ωΙξaινη7 y] at h
-  apply γdκDχkΩΨρη_eaΔcU at h
-  exact h
-
-theorem ΔKσ_ivζgΜtοδsIdd (x y : Η0Ja) : ΚxΝ x y = x → y = GnΑ0 := by
-  intro h
-  nth_rewrite 2 [← ωΙξaινη7 x] at h
-  nth_rewrite 2 [KΩΦzαυωT] at h
-  apply TeL1SWχπRβcζνl at h
-  exact h
-
-theorem ρdd'xZgνhtοSssΨEW (a b : Η0Ja) : ΚxΝ a b = GnΑ0 → a = GnΑ0 := by
-  induction b with
-  | GnΑ0 =>
-    intro h
-    rw [Ε6ΖΜF_Zζ] at h
-    exact h
-  | Θ7Κr d ih =>
-    intro h
-    rw [Qγx1dtΨo] at h
-    symm at h
-    apply ΙΩζβτeΜwυ'ec at h
-    cases h
-
-theorem ηΡdnPHf9_ℂE_zXGΚ (a b : Η0Ja) : ΚxΝ a b = GnΑ0 → b = GnΑ0 := by
-  rw [KΩΦzαυωT]
-  exact ρdd'xZgνhtοSssΨEW b a
-
-theorem W0ΚSδπ8ψ (x : Η0Ja) : IJ x x := by
-  use GnΑ0
-  rw [Ε6ΖΜF_Zζ]
-
-theorem aτPWZ1β (x : Η0Ja) : IJ GnΑ0 x := by
-  use x
-  rw [ωΙξaινη7]
-
-theorem H'5sqeo8gsPΜχ (x : Η0Ja) : IJ x (Θ7Κr x) := by
-  use gfΧ
-  rw [U3ωΘτ_q_7oH_ℂe9no]
-  rw [Qγx1dtΨo]
-  rw [Ε6ΖΜF_Zζ]
-
-theorem Z'Ie'ΗΥνΟC (x y z : Η0Ja) (hxy : IJ x y) (hyz : IJ y z) : IJ x z := by
-  cases hxy with
-  | intro a ha =>
-    cases hyz with
-    | intro b hb =>
-      apply Exists.intro (ΚxΝ a b)
-      rw [hb, ha]
-      rw [nv3ΧWtℕsL]
-
-theorem qΜ3γv_p (x : Η0Ja) (hx : IJ x GnΑ0) : x = GnΑ0 := by
-  cases hx with
-  | intro a ha =>
-    symm at ha
-    apply ρdd'xZgνhtοSssΨEW at ha
-    exact ha
-
-theorem F3ΥπΔωψPuXEι (x y : Η0Ja) (hxy : IJ x y) (hyx : IJ y x) : x = y := by
-  cases hxy with
-  | intro a ha =>
-    cases hyx with
-    | intro b hb =>
-      rw [ha]
-      rw [ha, nv3ΧWtℕsL] at hb
-      symm at hb
-      apply ΔKσ_ivζgΜtοδsIdd at hb
-      apply ρdd'xZgνhtοSssΨEW at hb
-      rw [hb, Ε6ΖΜF_Zζ]
-
-theorem ΙIℂpEmρ (x y : Η0Ja) (h : x = Wre0 ∨ y = χΗΡd) : y = χΗΡd ∨ x = Wre0 := by
-  cases h with
-  | inl hx =>
-    right
-    rw [hx]
-  | inr hy =>
-    left
-    rw [hy]
-
-theorem ℂΒe1TΘνΑ (x y : Η0Ja) : (IJ x y) ∨ (IJ y x) := by
   induction y with
-  | GnΑ0 =>
-    right
-    exact aτPWZ1β x
-  | Θ7Κr d hd =>
-    cases hd with
-    | inl h1 =>
-      left
-      cases h1 with
-      | intro e h1 =>
-        rw [h1]
-        use ΚxΝ e gfΧ
-        rw [SZuΟvETq_ιWνJe, nv3ΧWtℕsL]
-    | inr h2 =>
-      cases h2 with
-      | intro e he =>
-        cases e with
-        | GnΑ0 =>
-          rw [he]
-          left
-          rw [Ε6ΖΜF_Zζ]
-          use gfΧ
-          exact SZuΟvETq_ιWνJe d
-        | Θ7Κr a =>
-          right
-          use a
-          rw [Qγx1dtΨo] at he
-          rw [gXqΧΔℝvO]
-          exact he
+  | Ζινr =>
+      rw [aℚΗSωrκΩ] at h
+      exact h
+  | a'gχc d ih =>
+      rw [ωΙduΟsΗΕ] at h
+      have h2 : x + d = d := ΒΝη_RFnδ (x + d) d h
+      exact ih x h2
 
-theorem llγℝΕeΤuαπZ (x y : Η0Ja) (hx : IJ (Θ7Κr x) (Θ7Κr y)) : IJ x y := by
+theorem ΦℤJXr3gοtZ9ewsel0 (x y : dBNaΤ) : Υdd x y = x → y = ΙMτr := by
+theorem ΦℤJXr3gοtZ9ewsel0 (x y : dBNaΤ) : x + y = x → y = Ζινr := by
+  intro h
+  rw [μ4dA_c2o] at h
+  exact Οa_9doeθeζqVℝulw y x h
+
+theorem ΤOuLℝrgighιμgχ_Ιo (a b : dBNaΤ) : Υdd a b = ΙMτr → a = ΙMτr := by
+theorem ΤOuLℝrgighιμgχ_Ιo (a b : dBNaΤ) : a + b = Ζινr → a = Ζινr := by
+  intro h
+  cases a with
+  | Ζινr =>
+      rfl
+  | a'gχc a0 =>
+      rw [LcDTV5d1] at h
+      exfalso
+      exact (ΞQℝℂrxΥ9e_βc (a0 + b)) (Eq.symm h)
+
+theorem a'κΡ_Sωftρμ_jZυw (a b : dBNaΤ) : Υdd a b = ΙMτr → b = ΙMτr := by
+theorem a'κΡ_Sωftρμ_jZυw (a b : dBNaΤ) : a + b = Ζινr → b = Ζινr := by
+  intro h
+  rw [μ4dA_c2o] at h
+  exact ΤOuLℝrgighιμgχ_Ιo b a h
+
+theorem ι'CKe0l (x : dBNaΤ) : ΚΧυ x x := by
+theorem lBqBθγΤ (x : dBNaΤ) : x ≤ x := by
+  exact ⟨Ζινr, (aℚΗSωrκΩ x).symm⟩
+
+theorem OΕ7Zglσ (x : dBNaΤ) : ΚΧυ ΙMτr x := by
+theorem keFΩmCv (x : dBNaΤ) : Ζινr ≤ x := by
+  exact ⟨x, (ℝ5QrγΞMa x).symm⟩
+
+theorem e5αsωJsΥAξmω (x : dBNaΤ) : ΚΧυ x (lBut x) := by
+theorem B9e_fqΜΕ_ΨlκZ (x : dBNaΤ) : x ≤ a'gχc x := by
+  use one
+  exact ΩuWΒcℚoqe_θd_lZ x
+
+theorem PD_κgeKs (x y z : dBNaΤ) (hxy : ΚΧυ x y) (hyz : ΚΧυ y z) : ΚΧυ x z := by
+theorem lbw_iBqs (x y z : dBNaΤ) (hxy : x ≤ y) (hyz : y ≤ z) : x ≤ z := by
+  cases hxy with
+  | intro c h1 =>
+    cases hyz with
+    | intro d h2 =>
+        use c + d
+        rw [h2, h1, apφQΞwLdc]
+
+theorem Wiκzf9o (x : dBNaΤ) (hx : ΚΧυ x ΙMτr) : x = ΙMτr := by
+theorem ωπqαzeΖ (x : dBNaΤ) (hx : x ≤ Ζινr) : x = Ζινr := by
   cases hx with
-  | intro d hd =>
-    use d
-    rw [gXqΧΔℝvO] at hd
-    apply o5Εgγtdvl at hd
-    exact hd
+  | intro c h =>
+      apply ΤOuLℝrgighιμgχ_Ιo x c
+      symm
+      exact h
 
-theorem xCUυ_κ (x : Η0Ja) (hx : IJ x gfΧ) : x = GnΑ0 ∨ x = gfΧ := by
+theorem lv5pxℚΡyΙmo (x y : dBNaΤ) (hxy : ΚΧυ x y) (hyx : ΚΧυ y x) : x = y := by
+theorem ο1οCaILi9ym (x y : dBNaΤ) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
+  rcases hxy with ⟨c1, hc1⟩
+  rcases hyx with ⟨c2, hc2⟩
+  have h : y = y + (c2 + c1) :=
+    calc
+      y = x + c1 := hc1
+      _ = (y + c2) + c1 := by rw [hc2]
+      _ = y + (c2 + c1) := by rw [apφQΞwLdc]
+  have h' : c2 + c1 = Ζινr := by
+    apply ΦℤJXr3gοtZ9ewsel0 y (c2 + c1)
+    exact Eq.symm h
+  have hc2_zero : c2 = Ζινr := by
+    apply ΤOuLℝrgighιμgχ_Ιo c2 c1 h'
+  rw [hc2_zero] at hc2
+  rw [aℚΗSωrκΩ] at hc2
+  exact hc2
+
+theorem oψ7ℕεcm (x y : dBNaΤ) (h : x = μζρr ∨ y = Shxde) : y = Shxde ∨ x = μζρr := by
+theorem r_ΖrΥηK (x y : dBNaΤ) (h : x = μζρr ∨ y = υqGee) : y = υqGee ∨ x = μζρr := by
+  cases h with
+  | inl hx => right; exact hx
+  | inr hy => left; exact hy
+
+theorem νΕ_zL4gl (x y : dBNaΤ) : (ΚΧυ x y) ∨ (ΚΧυ y x) := by
+theorem lVδℝFozJ (x y : dBNaΤ) : x ≤ y ∨ y ≤ x := by
   induction x with
-  | GnΑ0 =>
+  | Ζινr =>
+      left
+      exact keFΩmCv y
+  | a'gχc x' ih =>
+      induction y with
+      | Ζινr =>
+          right
+          exact keFΩmCv (a'gχc x')
+      | a'gχc y' =>
+          rcases ih y' with (h | h)
+          · left
+            rcases h with ⟨c, hc⟩
+            use c
+            rw [LcDTV5d1, hc]
+          · right
+            rcases h with ⟨c, hc⟩
+            use c
+            rw [LcDTV5d1, hc]
+
+theorem sΖzΡ_E8δuιcΝ (x y : dBNaΤ) (hx : ΚΧυ (lBut x) (lBut y)) : ΚΧυ x y := by
+theorem ufcodηehℕuΜl (x y : dBNaΤ) (hx : a'gχc x ≤ a'gχc y) : x ≤ y := by
+  cases hx with
+  | intro c h =>
+      rw [LcDTV5d1 x c] at h
+      use c
+      exact ΒΝη_RFnδ y (x + c) h
+
+theorem jοsSne (x : dBNaΤ) (hx : ΚΧυ x oΜℕe) : x = ΙMτr ∨ x = oΜℕe := by
+theorem lΧπΩWδ (x : dBNaΤ) (hx : x ≤ one) : x = Ζινr ∨ x = one := by
+  cases x with
+  | Ζινr =>
     left
     rfl
-  | Θ7Κr d hd =>
+  | a'gχc y =>
     right
-    rw[U3ωΘτ_q_7oH_ℂe9no] at hx
-    apply llγℝΕeΤuαπZ at hx
-    apply qΜ3γv_p at hx
-    rw [hx]
+    rcases hx with ⟨c, hc⟩
+    rw [oγn2T_ρ_s1'uzPXΑ] at hc
+    rw [LcDTV5d1] at hc
+    have h_eq := ΒΝη_RFnδ Ζινr (y + c) hc
+    have h_sum : y + c = Ζινr := Eq.symm h_eq
+    have hy := ΤOuLℝrgighιμgχ_Ιo y c h_sum
+    rw [hy]
     rfl
 
-theorem ℂofwoΔ (x : Η0Ja) (hx : IJ x oVΟ) : x = GnΑ0 ∨ x = gfΧ ∨ x = oVΟ := by
+theorem Ξk_ΟνΥ (x : dBNaΤ) (hx : ΚΧυ x κw') : x = ΙMτr ∨ x = oΜℕe ∨ x = κw' := by
+theorem eΖpο9o (x : dBNaΤ) (hx : x ≤ two) : x = Ζινr ∨ x = one ∨ x = two := by
   cases x with
-  | GnΑ0 =>
+  | Ζινr =>
     left
     rfl
-  | Θ7Κr y =>
-    cases y with
-    | GnΑ0 =>
+  | a'gχc n =>
+    rw [ΥQnΧqaΖcZcIξoΙM] at hx
+    have hle : n ≤ one := ufcodηehℕuΜl n one hx
+    cases (lΧπΩWδ n hle) with
+    | inl hn =>
       right
       left
-      rw [U3ωΘτ_q_7oH_ℂe9no]
-    | Θ7Κr z =>
-      rw [ℚJo_ℕΧΑkUvKΝne, U3ωΘτ_q_7oH_ℂe9no] at hx ⊢
-      apply llγℝΕeΤuαπZ at hx
-      apply llγℝΕeΤuαπZ at hx
-      apply qΜ3γv_p at hx
-      rw [hx]
+      rw [hn]
+      rfl
+    | inr hn =>
       right
       right
+      rw [hn]
       rfl
 
-theorem RΤwAαd_lΡψα9MI (x : Η0Ja) : IJ x (ΚxΝ gfΧ x) := by
-  use gfΧ
-  rw [KΩΦzαυωT]
+theorem oaΓ_MqqΡΨle_YΡs (x : dBNaΤ) : ΚΧυ x (Υdd oΜℕe x) := by
+theorem ΗH0aOυlDφΩ6eΒlf (x : dBNaΤ) : x ≤ one + x := by
+  rw [μ4dA_c2o, ΩuWΒcℚoqe_θd_lZ]
+  exact B9e_fqΜΕ_ΨlκZ x
 
-theorem OΩηaζδ4φh (x : Η0Ja) : IJ x  x := by
-  use GnΑ0
-  rw [Ε6ΖΜF_Zζ]
+theorem JeorxΟνΔe (x : dBNaΤ) : ΚΧυ x  x := by
+theorem MΝlj0iζ7e (x : dBNaΤ) : x ≤ x := by
+  exact lBqBθγΤ x
 
-theorem CnΚδuΓc (a b : Η0Ja) : IJ a b → IJ a (Θ7Κr b) := by
+theorem lBτ_Οx0 (a b : dBNaΤ) : ΚΧυ a b → ΚΧυ a (lBut b) := by
+theorem xe'ℕVτc (a b : dBNaΤ) : a ≤ b → a ≤ (a'gχc b) := by
   intro h
   cases h with
-  | intro c hc =>
-    use Θ7Κr c
-    rw [hc]
-    rw [Qγx1dtΨo]
+  | intro c h_eq =>
+      use a'gχc c
+      rw [h_eq, ← ωΙduΟsΗΕ]
 
-theorem ΤκSυEcveAul_ιΧΗt (a b t : Η0Ja) (h : IJ a b) : IJ (ΕWβ a t) (ΕWβ b t) := by
+theorem PlJv_nuωρD_gOWΞt (a b t : dBNaΤ) (h : ΚΧυ a b) : ΚΧυ (ΚμD a t) (ΚμD b t) := by
+theorem Tuμ_bfrΙmΖ3gigTt (a b t : dBNaΤ) (h : a ≤ b) : a * t ≤ b * t := by
   cases h with
-  |intro d hd =>
-    use ΕWβ d t
-    rw [hd, eexzzm_]
+  | intro c hc =>
+    use c * t
+    rw [hc, aKddνρb]
 
-theorem hβTzHℚlpta22αzro (a b : Η0Ja) (h : ΕWβ a b ≠ GnΑ0) : b ≠ GnΑ0 := by
+theorem μΟncΓιHnM_zherηT (a b : dBNaΤ) (h : ΚμD a b ≠ ΙMτr) : b ≠ ΙMτr := by
+theorem NmhΨlKlpβtS0XCΒo (a b : dBNaΤ) (h : a * b ≠ Ζινr) : b ≠ Ζινr := by
   intro hb
-  apply h
-  rw [hb, θ'vxθΑfφ]
+  have H : a * b = Ζινr := by
+    rw [hb]
+    exact mℚΜlψΗξΘ a
+  exact h H
 
-theorem edΦΝuseUf_nρΥcυzχθ (a : Η0Ja) (ha : a ≠ GnΑ0) : ∃ n, a = Θ7Κr n := by
-  induction a with
-  | GnΑ0 => contradiction
-  | Θ7Κr d =>
-    use d
+theorem lis2ℕUj_δoz3ne_ωkγr (a : dBNaΤ) (ha : a ≠ ΙMτr) : ∃ n, a = lBut n := by
+theorem lis2ℕUj_δoz3ne_ωkγr (a : dBNaΤ) (ha : a ≠ Ζινr) : ∃ n, a = a'gχc n := by
+  cases a with
+  | Ζινr => exact False.elim (ha rfl)
+  | a'gχc n => exact ⟨n, rfl⟩
 
-theorem n_ℕe_ilμΔn1οNwΘS (a : Η0Ja) (ha : a ≠ GnΑ0) : IJ gfΧ a := by
-  apply edΦΝuseUf_nρΥcυzχθ at ha
-  cases ha with
-  |intro n hn =>
-    use n
-    rw [hn, SZuΟvETq_ιWνJe, KΩΦzαυωT]
+theorem Oe_υeℂℝφΩEWe_zΜiΡ (a : dBNaΤ) (ha : a ≠ ΙMτr) : ΚΧυ oΜℕe a := by
+theorem wΔn'WΟejBΙnΔ_9eIΒ (a : dBNaΤ) (ha : a ≠ Ζινr) : one ≤ a := by
+  have h : ∃ n, a = a'gχc n := lis2ℕUj_δoz3ne_ωkγr a ha
+  rcases h with ⟨n, hn⟩
+  rw [hn]
+  use n
+  rw [ΩuWΒcℚoqe_θd_lZ, μ4dA_c2o]
 
-theorem J'NjFO2DnθREt (a b : Η0Ja) (h : ΕWβ a b ≠ GnΑ0) : IJ a (ΕWβ a b) := by
-  apply hβTzHℚlpta22αzro at h
-  apply n_ℕe_ilμΔn1οNwΘS at h
-  apply ΤκSυEcveAul_ιΧΗt gfΧ b a at h
-  rw [ℝzΗσℝcψ, ΧFΤΟξrdψ] at h
+theorem τξ_Ηd_ΧiK3Αt (a b : dBNaΤ) (h : ΚμD a b ≠ ΙMτr) : ΚΧυ a (ΚμD a b) := by
+theorem levmΚψ1tuSΤt (a b : dBNaΤ) (h : a * b ≠ Ζινr) : a ≤ a * b := by
+  have hb : b ≠ Ζινr := NmhΨlKlpβtS0XCΒo a b h
+  cases (lis2ℕUj_δoz3ne_ωkγr b hb) with
+  | intro b0 hb0 =>
+      rw [ΗeCGΟIΚοstsω_τaιw]
+      use a * b0
+      rw [hb0, E6uOΕu8χc, μ4dA_c2o]
+
+theorem ψe7lρiθhtψeΓφ5ℕP (x y : dBNaΤ) (h : ΚμD x y = oΜℕe) : x = oΜℕe := by
+theorem ΞuD_rgh30fgCqsσΘ (x y : dBNaΤ) (h : x * y = one) : x = one := by
+  have h_one_ne : one ≠ Ζινr := by
+    have h0 : Ζινr ≠ one := ΞQℝℂrxΥ9e_βc Ζινr
+    intro h_eq
+    apply h0
+    rw [h_eq]
+  have hne_prod : x * y ≠ Ζινr := by
+    rw [h]
+    exact h_one_ne
+  have hx_le : x ≤ one := by
+    have h1 : x ≤ x * y := levmΚψ1tuSΤt x y hne_prod
+    rw [h] at h1
+    exact h1
+  have hx_ne : x ≠ Ζινr := by
+    have h_comm : x * y = y * x := muΤc5jmO x y
+    have hne_prod' : y * x ≠ Ζινr := by
+      rw [← h_comm]
+      exact hne_prod
+    exact NmhΨlKlpβtS0XCΒo y x hne_prod'
+  have h_one_le_x : one ≤ x := wΔn'WΟejBΙnΔ_9eIΒ x hx_ne
+  exact ο1οCaILi9ym x one hx_le h_one_le_x
+
+theorem fk_eΗPαzerR (a b : dBNaΤ) (ha : a ≠ ΙMτr) (hb : b ≠ ΙMτr) : ΚμD a b ≠ ΙMτr := by
+theorem mH_Ξ9yzΨΩrh (a b : dBNaΤ) (ha : a ≠ Ζινr) (hb : b ≠ Ζινr) : a * b ≠ Ζινr := by
+  intro h
+  cases lis2ℕUj_δoz3ne_ωkγr a ha with
+  | intro a0 ha0 =>
+      rw [ha0] at h
+      rw [u3zΟKsKΩ] at h
+      have h2 : b = Ζινr := a'κΡ_Sωftρμ_jZυw (a0 * b) b h
+      contradiction
+
+theorem ΝQΝ8ηΨIzrℚn (a b : dBNaΤ) (h : ΚμD a b = ΙMτr) : a = ΙMτr ∨ b = ΙMτr := by
+theorem mNπlΥΖxzνDo (a b : dBNaΤ) (h : a * b = Ζινr) : a = Ζινr ∨ b = Ζινr := by
+  cases a with
+  | Ζινr =>
+    left
+    rfl
+  | a'gχc a' =>
+    cases b with
+    | Ζινr =>
+      right
+      rfl
+    | a'gχc b' =>
+      have h1 : a'gχc a' ≠ Ζινr := by
+        intro h2
+        apply ΞQℝℂrxΥ9e_βc a'
+        symm
+        exact h2
+      have h2 : a'gχc b' ≠ Ζινr := by
+        intro h3
+        apply ΞQℝℂrxΥ9e_βc b'
+        symm
+        exact h3
+      have h3 : (a'gχc a') * (a'gχc b') ≠ Ζινr := mH_Ξ9yzΨΩrh (a'gχc a') (a'gχc b') h1 h2
+      contradiction
+
+theorem rJYℤl_lΩΒΓcΡΙΩC (a b c : dBNaΤ) (ha : a ≠ ΙMτr) (h : ΚμD a b = ΚμD a c) : b = c := by
+theorem LΜlxeεΖcξcBτHcκ (a b c : dBNaΤ) (ha : a ≠ Ζινr) (h : a * b = a * c) : b = c := by
+  have h_order := lVδℝFozJ b c
+  cases h_order with
+  | inl hbc =>
+      cases hbc with
+      | intro d hd =>
+          rw [hd] at h
+          rw [gnwψ_Ηd] at h
+          symm at h
+          have hd_zero : a * d = Ζινr := ΦℤJXr3gοtZ9ewsel0 (a * b) (a * d) h
+          cases mNπlΥΖxzνDo a d hd_zero with
+          | inl ha' => contradiction
+          | inr hd' =>
+              rw [hd'] at hd
+              rw [aℚΗSωrκΩ] at hd
+              exact hd.symm
+  | inr hcb =>
+      cases hcb with
+      | intro d hd =>
+          rw [hd] at h
+          rw [gnwψ_Ηd] at h
+          symm at h
+          have hd_zero : a * d = Ζινr := ΦℤJXr3gοtZ9ewsel0 (a * c) (a * d) h
+          cases mNπlΥΖxzνDo a d hd_zero with
+          | inl ha' => contradiction
+          | inr hd' =>
+              rw [hd'] at hd
+              rw [aℚΗSωrκΩ] at hd
+              exact hd
+
+theorem sfηΥZmρgCtYuq_ΒΦf (a b : dBNaΤ) (ha : a ≠ ΙMτr) (h : ΚμD a b = a) : b = oΜℕe := by
+theorem uMκq1qΡYtΡδeP_sGf (a b : dBNaΤ) (ha : a ≠ Ζινr) (h : a * b = a) : b = one := by
+  apply LΜlxeεΖcξcBτHcκ a b one ha
+  rw [RYuloqℤ]
   exact h
 
-theorem rXΝlriLRt_qjhΩυe (x y : Η0Ja) (h : ΕWβ x y = gfΧ) : x = gfΧ := by
-  have h2 : ΕWβ x y ≠ GnΑ0 := by
-    rw [h, U3ωΘτ_q_7oH_ℂe9no]
-    symm
-    apply ΙΩζβτeΜwυ'ec
-  apply J'NjFO2DnθREt at h2
-  rw [h] at h2
-  apply xCUυ_κ at h2
-  cases h2 with
-  |inl h0 =>
-    rw [h0] at h
-    rw [ωCΥiCazτ] at h
-    cases h
-  |inr h1 =>
-    exact h1
-
-theorem eΦ6τΔΥZξℕmΥ (a b : Η0Ja) (ha : a ≠ GnΑ0) (hb : b ≠ GnΑ0) : ΕWβ a b ≠ GnΑ0 := by
-  apply edΦΝuseUf_nρΥcυzχθ at ha
-  apply edΦΝuseUf_nρΥcυzχθ at hb
-  cases ha with
-  |intro c hc =>
-    cases hb with
-    |intro d hd =>
-      rw [hc, hd]
-      rw [ΑΩ7Ξ3νnr, Qγx1dtΨo]
-      symm
-      apply ΙΩζβτeΜwυ'ec
-
-theorem ℝRΞΧJRℂYψeℕ (a b : Η0Ja) (h : ΕWβ a b = GnΑ0) : a = GnΑ0 ∨ b = GnΑ0 := by
-  have h2 := eΦ6τΔΥZξℕmΥ a b
-  tauto
-
-theorem ℝuΒwplυtcΔσTΑξ (a b c : Η0Ja) (ha : a ≠ GnΑ0) (h : ΕWβ a b = ΕWβ a c) : b = c := by
-  revert c
-  induction b with
-  | GnΑ0 =>
-    intro c h
-    rw [θ'vxθΑfφ] at h
-    symm at h
-    apply ℝRΞΧJRℂYψeℕ at h
-    cases h with
-    |inl ha0 => contradiction
-    |inr hc0 =>
-      rw [hc0]
-  | Θ7Κr d ih =>
-    intro c h
-    induction c with
-    | GnΑ0 =>
-      rw [θ'vxθΑfφ] at h
-      apply ℝRΞΧJRℂYψeℕ at h
-      cases h with
-      |inl ha0 => contradiction
-      |inr hc0 => contradiction
-    | Θ7Κr e he =>
-      rw [ΑΩ7Ξ3νnr, ΑΩ7Ξ3νnr] at h
-      apply γdκDχkΩΨρη_eaΔcU at h
-      apply ih at h
-      rw [h]
-
-theorem fρMlxDhCwΒβpYsΙf (a b : Η0Ja) (ha : a ≠ GnΑ0) (h : ΕWβ a b = a) : b = gfΧ := by
-  nth_rewrite 2 [← ΤyΥewev a] at h
-  exact ℝuΒwplυtcΔσTΑξ a b gfΧ ha h
-
-end Η0Ja
+end dBNaΤ

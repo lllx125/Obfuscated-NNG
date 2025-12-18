@@ -4,6 +4,7 @@ Score LLM results by verifying generated proofs and computing statistics.
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
@@ -11,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Import the verifier
-from jsonl_verifier import verify_dataset
+from verification.jsonl_verifier import verify_dataset
 
 
 def load_jsonl(file_path: Path) -> List[Dict]:
@@ -373,7 +374,7 @@ def main():
 # ============================================================================
 
 # LLM to score - must match one of the LLM names used in query_llm.py
-LLM_NAME = "deepseek-prover-v2"
+LLM_NAME = os.getenv("LLM_NAME", "none")
 
 
 if __name__ == "__main__":

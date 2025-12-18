@@ -1,0 +1,50 @@
+[
+  {
+    "dataset": "original",
+    "total_theorems": 68,
+    "failed_theorems": 0,
+    "failed_ids": [],
+    "success_rate": 100.0,
+    "lean_file": "/home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_original.lean"
+  },
+  {
+    "dataset": "obfuscated_1",
+    "total_theorems": 68,
+    "failed_theorems": 0,
+    "failed_ids": [],
+    "success_rate": 100.0,
+    "lean_file": "/home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_1.lean"
+  },
+  {
+    "dataset": "obfuscated_2",
+    "total_theorems": 68,
+    "failed_theorems": 0,
+    "failed_ids": [],
+    "success_rate": 100.0,
+    "lean_file": "/home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_2.lean"
+  },
+  {
+    "dataset": "obfuscated_3",
+    "total_theorems": 68,
+    "failed_theorems": 0,
+    "failed_ids": [],
+    "success_rate": 100.0,
+    "lean_file": "/home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_3.lean"
+  },
+  {
+    "dataset": "obfuscated_4",
+    "total_theorems": 68,
+    "failed_theorems": 0,
+    "failed_ids": [],
+    "success_rate": 100.0,
+    "lean_file": "/home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_4.lean"
+  },
+  {
+    "dataset": "obfuscated_5",
+    "total_theorems": 68,
+    "failed_theorems": 0,
+    "failed_ids": [],
+    "success_rate": 100.0,
+    "lean_file": "/home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_5.lean"
+  }
+]

@@ -6,7 +6,7 @@ Creates obfuscated datasets with queries and updates original dataset.
 
 import sys
 from pathlib import Path
-from jsonl_verifier import verify_dataset
+from verification.jsonl_verifier import verify_dataset
 
 # Try to import tqdm, but make it optional
 try:
@@ -31,8 +31,8 @@ except ImportError:
             pass
 
 # Import functions from other modules
-from obfuscate_names import create_obfuscated_dataset
-from generate_queries import generate_queries_for_dataset
+from obfuscation.obfuscate_names import create_obfuscated_dataset
+from queries.generate_queries import generate_queries_for_dataset
 
 
 def create_dataset(set_number, randomness_level, show_progress=True):
@@ -83,8 +83,8 @@ def update_original_with_queries():
     Returns:
         Path to queries.jsonl file
     """
-    from parse_header import create_header_definitions
-    from parse_theorems import create_theorems_dataset
+    from parsing.parse_header import create_header_definitions
+    from parsing.parse_theorems import create_theorems_dataset
 
     original_dir = Path("dataset/original")
 

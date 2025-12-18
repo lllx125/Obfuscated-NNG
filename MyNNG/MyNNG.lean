@@ -1,1 +1,9 @@
-import MyNNG.Basic
+import MyNNG.Header
+import MyNNG.Addition
+import MyNNG.Multiplication
+import MyNNG.Power
+import MyNNG.Implication
+import MyNNG.Algorithm
+import MyNNG.AdvAddition
+import MyNNG.AdvMultiplication
+import MyNNG.LessOrEqual

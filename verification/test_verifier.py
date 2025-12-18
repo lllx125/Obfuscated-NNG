@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Test script for jsonl_verifier.py with theorems_test.jsonl"""
 
-from jsonl_verifier import verify_dataset
+from verification.jsonl_verifier import verify_dataset
 
 print("=== Testing jsonl_verifier.py with theorems_test.jsonl ===\n")
 

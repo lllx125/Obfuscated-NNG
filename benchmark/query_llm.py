@@ -9,14 +9,13 @@ import time
 import os
 from pathlib import Path
 from tqdm import tqdm
-from llm_interface import ModelInterface
-from discord_notify import DiscordProgress, send_msg, build_progress_message
+from benchmark.llm_interface import ModelInterface
 
 # ============================================================================
-# GLOBAL CONFIGURATION
+# GLOBAL CONFIGURATION (for standalone execution)
 # ============================================================================
 
-# LLM Selection: 
+# LLM Selection:
 # "deepseek-prover-v2", "goedel-prover-v2"
 # "deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash"
 LLM_NAME = os.getenv("LLM_NAME")
@@ -28,11 +27,11 @@ START_RUN = int(os.getenv("START_RUN", "1"))       # Start index for run filenam
 
 # Dataset folders to process
 TARGET_DATASETS = [
-    "original", 
-    "obfuscated_1", 
-    "obfuscated_2", 
-    "obfuscated_3", 
-    "obfuscated_4", 
+    "original",
+    "obfuscated_1",
+    "obfuscated_2",
+    "obfuscated_3",
+    "obfuscated_4",
     "obfuscated_5"
 ]
 
@@ -40,7 +39,7 @@ TARGET_DATASETS = [
 # CORE LOGIC
 # ============================================================================
 
-def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int, target_datasets: list):
+def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int, target_datasets: list, progress_callback=None):
     repo_folder = Path(".").resolve()
     dataset_base = repo_folder / "dataset"
 
@@ -57,21 +56,17 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
     for run_idx in range(start_run, start_run + num_runs):
         print(f"\n{'#'*60}\nStarting Global RUN {run_idx}\n{'#'*60}\n")
 
-        run_info = {
-            'current_run': run_idx - start_run + 1,
-            'total_runs': num_runs
-        }
-        time_info = {
-            'elapsed_time': time.time() - experiment_start_time,
-            'completed_queries': completed_queries,
-            'total_queries': total_queries
-        }
-        msg = build_progress_message(
-            f"📊 **Starting Run {run_idx}** of {start_run + num_runs - 1}",
-            run_info=run_info,
-            time_info=time_info
-        )
-        send_msg(msg)
+        if progress_callback:
+            progress_callback({
+                'event': 'run_start',
+                'llm_name': llm_name,
+                'run_idx': run_idx,
+                'current_run': run_idx - start_run + 1,
+                'total_runs': num_runs,
+                'completed_queries': completed_queries,
+                'total_queries': total_queries,
+                'elapsed_time': time.time() - experiment_start_time
+            })
 
         for dataset_idx, ds_name in enumerate(target_datasets, 1):
             ds_path = dataset_base / ds_name
@@ -79,7 +74,12 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
 
             if not queries_path.exists():
                 print(f"[!] Skipping {ds_name}: queries.jsonl not found.")
-                send_msg(f"⚠️ Skipping `{ds_name}`: queries.jsonl not found")
+                if progress_callback:
+                    progress_callback({
+                        'event': 'dataset_skip',
+                        'llm_name': llm_name,
+                        'dataset': ds_name
+                    })
                 continue
 
             # Setup Output Files
@@ -96,21 +96,19 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
 
             print(f"--> Processing: {ds_name} | Queries: {len(queries)}")
 
-            run_info = {
-                'current_run': run_idx - start_run + 1,
-                'total_runs': num_runs
-            }
-            time_info = {
-                'elapsed_time': time.time() - experiment_start_time,
-                'completed_queries': completed_queries,
-                'total_queries': total_queries
-            }
-            msg = build_progress_message(
-                f"🔄 **Processing**: `{ds_name}` ({dataset_idx}/{total_datasets}) | {len(queries)} queries",
-                run_info=run_info,
-                time_info=time_info
-            )
-            send_msg(msg)
+            if progress_callback:
+                progress_callback({
+                    'event': 'dataset_start',
+                    'llm_name': llm_name,
+                    'dataset': ds_name,
+                    'run_idx': run_idx,
+                    'dataset_idx': dataset_idx,
+                    'total_datasets': total_datasets,
+                    'num_queries': len(queries),
+                    'completed_queries': completed_queries,
+                    'total_queries': total_queries,
+                    'elapsed_time': time.time() - experiment_start_time
+                })
 
             times_buffer = [] # We keep this in memory to dump the full list every time
             first_write_done = False  # Track if we've successfully written the first result
@@ -150,55 +148,57 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
 
                 # Send progress update every 10%
                 if query_idx % progress_interval == 0:
-                    progress_pct = int((query_idx / len(queries)) * 100)
-                    run_info = {
-                        'current_run': run_idx - start_run + 1,
-                        'total_runs': num_runs
-                    }
-                    time_info = {
-                        'elapsed_time': time.time() - experiment_start_time,
-                        'completed_queries': completed_queries,
-                        'total_queries': total_queries
-                    }
-                    msg = build_progress_message(
-                        f"⏳ **Progress**: `{ds_name}` - {query_idx}/{len(queries)} ({progress_pct}%) queries completed",
-                        run_info=run_info,
-                        time_info=time_info
-                    )
-                    send_msg(msg)
+                    if progress_callback:
+                        progress_callback({
+                            'event': 'query_progress',
+                            'llm_name': llm_name,
+                            'dataset': ds_name,
+                            'query_idx': query_idx,
+                            'num_queries': len(queries),
+                            'completed_queries': completed_queries,
+                            'total_queries': total_queries,
+                            'elapsed_time': time.time() - experiment_start_time
+                        })
 
             # End of Dataset Loop
             print(f"    ✓ Completed {ds_name}. Saved to {result_file_path}")
 
-            run_info = {
-                'current_run': run_idx - start_run + 1,
-                'total_runs': num_runs
-            }
-            time_info = {
-                'elapsed_time': time.time() - experiment_start_time,
-                'completed_queries': completed_queries,
-                'total_queries': total_queries
-            }
-            msg = build_progress_message(
-                f"✅ **Completed**: `{ds_name}` - All {len(queries)} queries processed",
-                run_info=run_info,
-                time_info=time_info
-            )
-            send_msg(msg)
-
+            if progress_callback:
+                progress_callback({
+                    'event': 'dataset_complete',
+                    'llm_name': llm_name,
+                    'dataset': ds_name,
+                    'num_queries': len(queries),
+                    'completed_queries': completed_queries,
+                    'total_queries': total_queries,
+                    'elapsed_time': time.time() - experiment_start_time
+                })
 
             # Cool-down Period if running on local models
             if llm_name in ["deepseek-prover-v2-local", "goedel-prover-v2"]:
                 print("    [zZz] Cooling down laptop for 2 minutes...")
-                send_msg("💤 Cooling down laptop for 2 minutes...")
+                if progress_callback:
+                    progress_callback({
+                        'event': 'cooldown_start',
+                        'llm_name': llm_name
+                    })
                 time.sleep(120)
                 print("    [!] Resuming...")
-                send_msg("🔥 Resuming after cooldown")
+                if progress_callback:
+                    progress_callback({
+                        'event': 'cooldown_end',
+                        'llm_name': llm_name
+                    })
+
+    # Return final stats
+    return {
+        'completed_queries': completed_queries,
+        'total_queries': total_queries,
+        'elapsed_time': time.time() - experiment_start_time
+    }
 
 if __name__ == "__main__":
     if not os.path.exists("dataset"):
         print("Error: 'dataset' folder not found.")
     else:
-        # Wrap entire execution with Discord progress tracking
-        with DiscordProgress():
-            run_experiment(LLM_NAME, MAX_RETRY, NUM_RUNS, START_RUN, TARGET_DATASETS)
+        run_experiment(LLM_NAME, MAX_RETRY, NUM_RUNS, START_RUN, TARGET_DATASETS)

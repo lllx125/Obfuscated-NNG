@@ -3,6 +3,7 @@ import Mathlib.Tactic.NthRewrite
 import Mathlib.Tactic.Contrapose
 import Mathlib.Tactic.Use
 import Mathlib.Tactic.Tauto
+import Canonical
 
 -- definition
 inductive MyNat where
