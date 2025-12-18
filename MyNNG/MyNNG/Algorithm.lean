@@ -2,7 +2,7 @@ import MyNNG.Addition
 
 open MyNat
 
-theorem add_algo_1 (a b c d : MyNat) : a + b + (c + d) = a + c + d + b := by
+theorem add_algo_1 (a b c d : MyNat) : add (add a b) (add c d) = add (add (add a c) d) b := by
   repeat rw [add_assoc]
   rw [add_left_comm b c]
   rw [add_comm b d]

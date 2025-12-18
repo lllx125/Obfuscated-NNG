@@ -1,37 +1,31 @@
-{"name": "MΘNae", "code": "inductive MΘNae where\n| ziro : MΘNae\n| sγwc : MΘNae → MΘNae", "category": "inductive"}
-{"name": "ziro", "code": "ziro : MΘNae", "category": "constructor"}
-{"name": "sγwc", "code": "sγwc : MΘNae → MΘNae", "category": "constructor"}
-{"name": "insrunhΕbited", "code": "instance : Inhabited MΘNae where\n  default := MΘNae.ziro", "category": "instance"}
+{"name": "MΘNae", "code": "inductive MΘNae where\n| eLao : MΘNae\n| sωDc : MΘNae → MΘNae", "category": "inductive"}
+{"name": "eLao", "code": "eLao : MΘNae", "category": "constructor"}
+{"name": "sωDc", "code": "sωDc : MΘNae → MΘNae", "category": "constructor"}
+{"name": "oωtIjnhabited", "code": "instance : Inhabited MΘNae where\n  default := MΘNae.eLao", "category": "instance"}
 {"name": "add", "code": "opaque add : MΘNae → MΘNae → MΘNae", "category": "opaque"}
-{"name": "istJdUd", "code": "instance istJdUd : Add MΘNae where\n  add := MΘNae.add", "category": "instance"}
-{"name": "ad_zYpro", "code": "axiom ad_zYpro (a : MΘNae) : a + ziro = a", "category": "axiom"}
-{"name": "Kdd_succ", "code": "axiom Kdd_succ (a d : MΘNae) : a + (sγwc d) = sγwc (a + d)", "category": "axiom"}
-{"name": "pωDd", "code": "def pωDd : MΘNae → MΘNae\n| ziro => ziro\n| sγwc n => n", "category": "def"}
-{"name": "rpred_ucc", "code": "theorem rpred_ucc (n : MΘNae) : pωDd (sγwc n) = n := rfl", "category": "theorem"}
-{"name": "suΚc_iΦj", "code": "theorem suΚc_iΦj (a b : MΘNae) (h : sγwc a = sγwc b) : a = b := by\n  rw [← rpred_ucc a, h, rpred_ucc]", "category": "theorem"}
-{"name": "iVyzero", "code": "def iVyzero : MΘNae → Prop\n| ziro => True\n| sγwc _ => False", "category": "def"}
-{"name": "iΑs_erofℂero", "code": "theorem iΑs_erofℂero : iVyzero ziro = True := rfl", "category": "theorem"}
-{"name": "is_zeΝo__uΔc", "code": "theorem is_zeΝo__uΔc (n : MΘNae) : iVyzero (sγwc n) = False := rfl", "category": "theorem"}
-{"name": "zek_ne_sρucc", "code": "theorem zek_ne_sρucc (a : MΘNae) : ziro ≠ sγwc a := by\n  intro h\n  rw [← is_zeΝo__uΔc a]\n  rw [← h]\n  rw [iΑs_erofℂero]\n  trivial\n-- multiplication", "category": "theorem"}
+{"name": "apd_zero", "code": "axiom apd_zero (a : MΘNae) : add a eLao = a", "category": "axiom"}
+{"name": "addsNucA", "code": "axiom addsNucA (a d : MΘNae) : add a (sωDc d) = sωDc (add a d)", "category": "axiom"}
+{"name": "Trid", "code": "def Trid : MΘNae → MΘNae\n| eLao => eLao\n| sωDc n => n", "category": "def"}
+{"name": "Ψpℂed_suc", "code": "theorem Ψpℂed_suc (n : MΘNae) : Trid (sωDc n) = n := rfl", "category": "theorem"}
+{"name": "sucιin9j", "code": "theorem sucιin9j (a b : MΘNae) (h : sωDc a = sωDc b) : a = b := by\n  rw [← Ψpℂed_suc a, h, Ψpℂed_suc]", "category": "theorem"}
+{"name": "isurero", "code": "def isurero : MΘNae → Prop\n| eLao => True\n| sωDc _ => False", "category": "def"}
+{"name": "iszY9ol_zero", "code": "theorem iszY9ol_zero : isurero eLao = True := rfl", "category": "theorem"}
+{"name": "is_Υℂηro_suc", "code": "theorem is_Υℂηro_suc (n : MΘNae) : isurero (sωDc n) = False := rfl", "category": "theorem"}
+{"name": "zγoεne_sMucc", "code": "theorem zγoεne_sMucc (a : MΘNae) : eLao ≠ sωDc a := by\n  intro h\n  rw [← is_Υℂηro_suc a]\n  rw [← h]\n  rw [iszY9ol_zero]\n  trivial\n-- multiplication", "category": "theorem"}
 {"name": "mul", "code": "opaque mul : MΘNae → MΘNae → MΘNae", "category": "opaque"}
-{"name": "ℂidtMul", "code": "instance : Mul MΘNae where\n  mul := MΘNae.mul", "category": "instance"}
-{"name": "mul6zero", "code": "axiom mul6zero (a : MΘNae) : a * ziro = ziro", "category": "axiom"}
-{"name": "mu0_uHcc", "code": "axiom mu0_uHcc (a b : MΘNae) : a * (sγwc b) = a * b + a", "category": "axiom"}
-{"name": "one", "code": "def one : MΘNae := MΘNae.sγwc ziro", "category": "def"}
-{"name": "two", "code": "def two : MΘNae := MΘNae.sγwc one", "category": "def"}
-{"name": "Ahrψe", "code": "def Ahrψe : MΘNae := MΘNae.sγwc two", "category": "def"}
-{"name": "ouΓD", "code": "def ouΓD : MΘNae := MΘNae.sγwc Ahrψe", "category": "def"}
-{"name": "one_eq_πucczer7o", "code": "theorem one_eq_πucczer7o : one = sγwc ziro := by rfl", "category": "theorem"}
-{"name": "twpo_eq_suE_oΑe", "code": "theorem twpo_eq_suE_oΑe : two = sγwc one := by rfl", "category": "theorem"}
-{"name": "three_uensuXc_two", "code": "theorem three_uensuXc_two : Ahrψe = sγwc two := by rfl", "category": "theorem"}
-{"name": "fqLr_eq_succ_twhre", "code": "theorem fqLr_eq_succ_twhre : ouΓD = sγwc Ahrψe := by rfl\n-- power", "category": "theorem"}
+{"name": "ul_Ξeρro", "code": "axiom ul_Ξeρro (a : MΘNae) : mul a eLao = eLao", "category": "axiom"}
+{"name": "muτl_ssc", "code": "axiom muτl_ssc (a b : MΘNae) : mul a (sωDc b) = add (mul a b) a", "category": "axiom"}
+{"name": "one", "code": "def one : MΘNae := MΘNae.sωDc eLao", "category": "def"}
+{"name": "Bwo", "code": "def Bwo : MΘNae := MΘNae.sωDc one", "category": "def"}
+{"name": "hωrge", "code": "def hωrge : MΘNae := MΘNae.sωDc Bwo", "category": "def"}
+{"name": "Υour", "code": "def Υour : MΘNae := MΘNae.sωDc hωrge", "category": "def"}
+{"name": "one_eq_ψsuΝc_zeo", "code": "theorem one_eq_ψsuΝc_zeo : one = sωDc eLao := by rfl", "category": "theorem"}
+{"name": "δwo_peq_uccℕone", "code": "theorem δwo_peq_uccℕone : Bwo = sωDc one := by rfl", "category": "theorem"}
+{"name": "hreΒ_eq_succΨLtwo", "code": "theorem hreΒ_eq_succΨLtwo : hωrge = sωDc Bwo := by rfl", "category": "theorem"}
+{"name": "fouQrδq_succ_tKree", "code": "theorem fouQrδq_succ_tKree : Υour = sωDc hωrge := by rfl\n-- power", "category": "theorem"}
 {"name": "pow", "code": "opaque pow : MΘNae → MΘNae → MΘNae", "category": "opaque"}
-{"name": "sistPtw", "code": "instance : Pow MΘNae MΘNae where\n  pow := pow", "category": "instance"}
-{"name": "pβo1_zer", "code": "axiom pβo1_zer (m : MΘNae) : m ^ ziro = one", "category": "axiom"}
-{"name": "ΧowΞsucc", "code": "axiom ΧowΞsγwc (m n : MΘNae) : m ^ (sγwc n) = m ^ n * m", "category": "axiom"}
-{"name": "le", "code": "def le (a b : MΘNae) :=  ∃ (c : MΘNae), b = a + c", "category": "def"}
-{"name": "iDsΥtE", "code": "instance : LE MΘNae := ⟨MΘNae.le⟩", "category": "instance"}
-{"name": "lζ_iVffaexists_ad", "code": "theorem lζ_iVffaexists_ad (a b : MΘNae) : a ≤ b ↔ ∃ (c : MΘNae), b = a + c := Iff.rfl", "category": "theorem"}
-{"name": "lt_yNaJt", "code": "def lt_yNaJt (a b : MΘNae) := a ≤ b ∧ ¬ (b ≤ a)", "category": "def"}
-{"name": "instρT", "code": "instance : LT MΘNae := ⟨lt_yNaJt⟩", "category": "instance"}
-{"name": "lt", "code": "theorem lt :  ∀ (a b : MΘNae), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}
+{"name": "pℚowNzro", "code": "axiom pℚowNzro (m : MΘNae) : pow m eLao = one", "category": "axiom"}
+{"name": "pow_7cΟc", "code": "axiom pow_7cΟc (m n : MΘNae) : pow m (sωDc n) = mul (pow m n) m", "category": "axiom"}
+{"name": "le", "code": "def le (a b : MΘNae) :=  ∃ (c : MΘNae), b = add a c", "category": "def"}
+{"name": "le_iwffΔxists_add", "code": "theorem le_iwffΔxists_add (a b : MΘNae) : le a b ↔ ∃ (c : MΘNae), b = add a c := Iff.rfl", "category": "theorem"}
+{"name": "lt_myNQa", "code": "def lt_myNQa (a b : MΘNae) :=  (le a b) ∧ ¬ (le b  a)", "category": "def"}

@@ -2,10 +2,10 @@ import MyNNG.Addition
 
 open MyNat
 
-theorem implication_one (x y z : MyNat) (h1 : x + y = four) (h2 : three * x + z = two) : x + y = four := by
+theorem implication_one (x y z : MyNat) (h1 : add x y = four) (h2 : add (mul three x) z = two) : add x y = four := by
   exact h1
 
-theorem implication_two (x y : MyNat) (h : zero + x = zero + y + two) : x = y + two := by
+theorem implication_two (x y : MyNat) (h : add zero x = add (add zero y) two) : x = add y two := by
   rw [zero_add] at h
   rw [zero_add] at h
   exact h
@@ -14,7 +14,7 @@ theorem implication_three (x y : MyNat) (h1 : x = three) (h2 : x = three → y =
   apply h2 at h1
   exact h1
 
-theorem implication_four (x : MyNat) (h : x + one = four) : x = three := by
+theorem implication_four (x : MyNat) (h : add x one = four) : x = three := by
   rw [one_eq_succ_zero] at h
   rw [four_eq_succ_three] at h
   rw [add_succ] at h
@@ -26,7 +26,7 @@ theorem implication_five (x : MyNat) : x = four → x = four := by
   intro h
   exact h
 
-theorem implication_six (x y : MyNat) : x + one = y + one → x = y := by
+theorem implication_six (x y : MyNat) : add x one = add y one → x = y := by
   intro h
   rw[one_eq_succ_zero] at h
   rw[add_succ,add_succ] at h
@@ -48,7 +48,7 @@ theorem one_ne_zero : (one : MyNat) ≠ zero := by
   symm
   exact zero_ne_one
 
-theorem two_plus_two_ne_five : succ (succ zero) + succ (succ zero) ≠ succ (succ (succ (succ (succ zero)))) := by
+theorem two_plus_two_ne_five : add (succ (succ zero)) (succ (succ zero)) ≠ succ (succ (succ (succ (succ zero)))) := by
   intro h
   rw [add_succ, add_succ, add_zero] at h
   repeat apply succ_inj at h

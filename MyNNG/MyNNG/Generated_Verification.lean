@@ -4,1032 +4,602 @@ import Mathlib.Tactic.Contrapose
 import Mathlib.Tactic.Use
 import Mathlib.Tactic.Tauto
 
-inductive MyNat where
-| zero : MyNat
-| succ : MyNat → MyNat
+inductive Η0Ja where
+| GnΑ0 : Η0Ja
+| Θ7Κr : Η0Ja → Η0Ja
 
-namespace MyNat
+namespace Η0Ja
 
-instance : Inhabited MyNat where
-  default := MyNat.zero
+instance : Inhabited Η0Ja where
+  default := Η0Ja.GnΑ0
 
-opaque add : MyNat → MyNat → MyNat
+opaque ΚxΝ : Η0Ja → Η0Ja → Η0Ja
 
-instance instAdd : Add MyNat where
-  add := MyNat.add
+axiom Ε6ΖΜF_Zζ (a : Η0Ja) : ΚxΝ a GnΑ0 = a
 
-axiom add_zero (a : MyNat) : a + zero = a
+axiom Qγx1dtΨo (a d : Η0Ja) : ΚxΝ a (Θ7Κr d) = Θ7Κr (ΚxΝ a d)
 
-axiom add_succ (a d : MyNat) : a + (succ d) = succ (a + d)
+def gkDΞ : Η0Ja → Η0Ja
+| GnΑ0 => GnΑ0
+| Θ7Κr n => n
 
-def pred : MyNat → MyNat
-| zero => zero
-| succ n => n
+theorem O0ℝΒΝDΨℕ2 (n : Η0Ja) : gkDΞ (Θ7Κr n) = n := rfl
 
-theorem pred_succ (n : MyNat) : pred (succ n) = n := rfl
+theorem o5Εgγtdvl (a b : Η0Ja) (h : Θ7Κr a = Θ7Κr b) : a = b := by
+  rw [← O0ℝΒΝDΨℕ2 a, h, O0ℝΒΝDΨℕ2]
 
-theorem succ_inj (a b : MyNat) (h : succ a = succ b) : a = b := by
-  rw [← pred_succ a, h, pred_succ]
+def ℂy'tΒγ : Η0Ja → Prop
+| GnΑ0 => True
+| Θ7Κr _ => False
 
-def is_zero : MyNat → Prop
-| zero => True
-| succ _ => False
+theorem I4ξΒℤk_z8ξΩν : ℂy'tΒγ GnΑ0 = True := rfl
 
-theorem is_zero_zero : is_zero zero = True := rfl
+theorem OiiFkEΖ__bp (n : Η0Ja) : ℂy'tΒγ (Θ7Κr n) = False := rfl
 
-theorem is_zero_succ (n : MyNat) : is_zero (succ n) = False := rfl
-
-theorem zero_ne_succ (a : MyNat) : zero ≠ succ a := by
+theorem ΙΩζβτeΜwυ'ec (a : Η0Ja) : GnΑ0 ≠ Θ7Κr a := by
   intro h
-  rw [← is_zero_succ a]
+  rw [← OiiFkEΖ__bp a]
   rw [← h]
-  rw [is_zero_zero]
+  rw [I4ξΒℤk_z8ξΩν]
   trivial
 -- multiplication
 
-opaque mul : MyNat → MyNat → MyNat
+opaque ΕWβ : Η0Ja → Η0Ja → Η0Ja
 
-instance : Mul MyNat where
-  mul := MyNat.mul
+axiom θ'vxθΑfφ (a : Η0Ja) : ΕWβ a GnΑ0 = GnΑ0
 
-axiom mul_zero (a : MyNat) : a * zero = zero
+axiom ΑΩ7Ξ3νnr (a b : Η0Ja) : ΕWβ a (Θ7Κr b) = ΚxΝ (ΕWβ a b) a
 
-axiom mul_succ (a b : MyNat) : a * (succ b) = a * b + a
+def gfΧ : Η0Ja := Η0Ja.Θ7Κr GnΑ0
 
-def one : MyNat := MyNat.succ zero
+def oVΟ : Η0Ja := Η0Ja.Θ7Κr gfΧ
 
-def two : MyNat := MyNat.succ one
+def χΗΡd : Η0Ja := Η0Ja.Θ7Κr oVΟ
 
-def three : MyNat := MyNat.succ two
+def Wre0 : Η0Ja := Η0Ja.Θ7Κr χΗΡd
 
-def four : MyNat := MyNat.succ three
+theorem U3ωΘτ_q_7oH_ℂe9no : gfΧ = Θ7Κr GnΑ0 := by rfl
 
-theorem one_eq_succ_zero : one = succ zero := by rfl
+theorem ℚJo_ℕΧΑkUvKΝne : oVΟ = Θ7Κr gfΧ := by rfl
 
-theorem two_eq_succ_one : two = succ one := by rfl
+theorem hNX_eqΓoXβα6BΗOw : χΗΡd = Θ7Κr oVΟ := by rfl
 
-theorem three_eq_succ_two : three = succ two := by rfl
-
-theorem four_eq_succ_three : four = succ three := by rfl
+theorem XfξHc_eqζΗJcιrVEr9 : Wre0 = Θ7Κr χΗΡd := by rfl
 -- power
 
-opaque pow : MyNat → MyNat → MyNat
+opaque νΦΗ : Η0Ja → Η0Ja → Η0Ja
 
-instance : Pow MyNat MyNat where
-  pow := pow
+axiom φΜwoΓvΞΦ (m : Η0Ja) : νΦΗ m GnΑ0 = gfΧ
 
-axiom pow_zero (m : MyNat) : m ^ zero = one
+axiom t4πℂ'Rτ (m n : Η0Ja) : νΦΗ m (Θ7Κr n) = ΕWβ (νΦΗ m n) m
 
-axiom pow_succ (m n : MyNat) : m ^ (succ n) = m ^ n * m
+def IJ (a b : Η0Ja) :=  ∃ (c : Η0Ja), b = ΚxΝ a c
 
-def le (a b : MyNat) :=  ∃ (c : MyNat), b = a + c
+theorem _iΝf'_εfApyη9tGD (a b : Η0Ja) : IJ a b ↔ ∃ (c : Η0Ja), b = ΚxΝ a c := Iff.rfl
 
-instance : LE MyNat := ⟨MyNat.le⟩
+def sXΝηkΞNΨ (a b : Η0Ja) :=  (IJ a b) ∧ ¬ (IJ b  a)
 
-theorem le_iff_exists_add (a b : MyNat) : a ≤ b ↔ ∃ (c : MyNat), b = a + c := Iff.rfl
+open Η0Ja
 
-def lt_myNat (a b : MyNat) := a ≤ b ∧ ¬ (b ≤ a)
+theorem ωΙξaινη7 (n : Η0Ja) : ΚxΝ GnΑ0 n = n := by
+  induction n with
+  | GnΑ0 =>
+    rw [Ε6ΖΜF_Zζ]
+  | Θ7Κr d ih =>
+    rw [Qγx1dtΨo,ih]
 
-instance : LT MyNat := ⟨lt_myNat⟩
-
-theorem lt :  ∀ (a b : MyNat), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl
-
-open MyNat
-
-theorem zero_add (n : MyNat) : .zero + n = n := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-  have h_base : .zero + .zero = .zero := by
-    rw [add_zero]
-    <;> rfl
-  
-  have h_inductive : ∀ (d : MyNat), .zero + d = d → .zero + (succ d) = succ d := by
-    intro d h
-    rw [add_succ]
-    <;> simp_all [add_zero]
-    <;> rfl
-  
-  have h_main : .zero + n = n := by
-    induction n with
-    | zero =>
-      simpa using h_base
-    | succ n ih =>
-      have h₁ : .zero + n = n := ih
-      have h₂ : .zero + (succ n) = succ n := by
-        apply h_inductive
-        exact h₁
-      simpa using h₂
-  
-  exact h_main
-
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-  have h : succ a + b = succ (a + b) := by
-    induction b with
-    | zero =>
-      -- Base case: b = 0
-      -- By definition, a + 0 = a, so succ a + 0 = succ (a + 0) = succ a
-      simp [add_zero, add_succ]
-    | succ b ih =>
-      -- Inductive step: assume the statement holds for b, prove for succ b
-      -- Using the recursive definition of addition:
-      -- succ a + (succ b) = succ (succ a + b)
-      -- By the inductive hypothesis, succ a + b = succ (a + b)
-      -- Therefore, succ a + (succ b) = succ (succ (a + b)) = succ (a + (succ b))
-      simp_all [add_succ, Nat.succ_eq_add_one]
-      <;>
-      (try omega) <;>
-      (try simp_all [add_assoc, add_comm, add_left_comm]) <;>
-      (try ring_nf at * <;> omega) <;>
-      (try omega) <;>
-      (try simp_all [add_assoc, add_comm, add_left_comm]) <;>
-      (try omega)
-  exact h
-
-theorem add_comm (a b : MyNat) : a + b = b + a := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-theorem add_comm (a b : MyNat) : a + b = b + a := by
+theorem gXqΧΔℝvO (a b : Η0Ja) : ΚxΝ (Θ7Κr a) b = Θ7Κr (ΚxΝ a b)  := by
   induction b with
-  | zero =>
-    -- Base case: b = 0
-    -- We need to show a + 0 = 0 + a
-    -- By definition, a + 0 = a and 0 + a = a, so they are equal.
-    simp [add_zero, zero_add]
-  | succ b ih =>
-    -- Inductive step: assume the statement holds for b, i.e., a + b = b + a
-    -- We need to show a + (b + 1) = (b + 1) + a
-    simp_all [add_succ, succ_add, add_comm]
-    -- Simplify using the inductive hypothesis and properties of addition
-    <;> omega
+  | GnΑ0 =>
+    rw [Ε6ΖΜF_Zζ,Ε6ΖΜF_Zζ]
+  | Θ7Κr d ih =>
+    rw [Qγx1dtΨo,ih,Qγx1dtΨo]
 
-theorem add_assoc (a b c : MyNat) : a + b + c = a + (b + c) := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-theorem add_comm (a b : MyNat) : a + b = b + a := by
-theorem add_assoc (a b c : MyNat) : a + b + c = a + (b + c) := by
+theorem KΩΦzαυωT (a b : Η0Ja) : ΚxΝ a b = ΚxΝ b a := by
+  induction b with
+  | GnΑ0 =>
+    rw [Ε6ΖΜF_Zζ, ωΙξaινη7]
+  | Θ7Κr d ih =>
+    rw [Qγx1dtΨo, ih, gXqΧΔℝvO]
+
+theorem nv3ΧWtℕsL (a b c : Η0Ja) : ΚxΝ (ΚxΝ a b) c = ΚxΝ a (ΚxΝ b c) := by
   induction c with
-  | zero =>
-    -- Base case: c = 0
-    simp [add_zero, add_assoc]
-  | succ c ih =>
-    -- Inductive step: assume the statement holds for c, prove for succ c
-    simp_all [add_succ, add_assoc, add_comm, add_left_comm]
-    <;>
-    (try omega) <;>
-    (try simp_all [add_assoc, add_comm, add_left_comm]) <;>
-    (try linarith) <;>
-    (try omega)
+  | GnΑ0 =>
+    rw [Ε6ΖΜF_Zζ, Ε6ΖΜF_Zζ]
+  | Θ7Κr d ih =>
+    rw [Qγx1dtΨo, Qγx1dtΨo, ih, Qγx1dtΨo]
 
-theorem add_right_comm (a b c : MyNat) : a + b + c = a + c + b := by
-theorem add_right_comm (a b c : MyNat) : a + b + c = a + c + b := by
-  have h1 : a + b + c = a + (b + c) := by
-    rw [add_assoc]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  have h2 : b + c = c + b := by
-    have h2 : b + c = c + b := by
-      apply Nat.add_comm
-    exact h2
-  
-  have h3 : a + (b + c) = a + (c + b) := by
-    rw [h2]
-    <;> simp_all [add_assoc]
-    <;> rfl
-  
-  have h4 : a + (c + b) = (a + c) + b := by
-    have h4 : a + (c + b) = (a + c) + b := by
-      simp [add_assoc, add_comm, add_left_comm]
-      <;> ring
-    exact h4
-  
-  have h5 : a + b + c = a + c + b := by
-    rw [h1]
-    rw [h3]
-    rw [h4]
-    <;> simp_all [add_assoc]
-    <;> rfl
-  
-  exact h5
+theorem ΝκdWγΤσkbcΚFNΒ (a b c : Η0Ja) : ΚxΝ (ΚxΝ a b) c = ΚxΝ (ΚxΝ a c) b := by
+  rw [nv3ΧWtℕsL]
+  rw [KΩΦzαυωT b, nv3ΧWtℕsL]
 
-theorem add_left_comm (a b c : MyNat) : a + (b + c) = b + (a + c) := by
-theorem add_left_comm (a b c : MyNat) : a + (b + c) = b + (a + c) := by
-  have h1 : a + (b + c) = (a + b) + c := by
-    rw [add_assoc]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  have h2 : (a + b) + c = (b + a) + c := by
-    have h3 : a + b = b + a := by
-      rw [add_comm]
-    rw [h3]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  have h3 : (b + a) + c = b + (a + c) := by
-    rw [add_assoc]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  have h4 : a + (b + c) = b + (a + c) := by
-    rw [h1]
-    rw [h2]
-    rw [h3]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  exact h4
+theorem dℚN_γK8ο9d'pχρ (a b c : Η0Ja) : ΚxΝ a (ΚxΝ b c) = ΚxΝ b (ΚxΝ a c) := by
+  rw [← nv3ΧWtℕsL]
+  rw [KΩΦzαυωT a b]
+  rw [nv3ΧWtℕsL]
 
-theorem succ_eq_add_one (n : MyNat) : succ n = n + one := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-theorem add_comm (a b : MyNat) : a + b = b + a := by
-theorem add_assoc (a b c : MyNat) : a + b + c = a + (b + c) := by
-theorem add_right_comm (a b c : MyNat) : a + b + c = a + c + b := by
-theorem add_left_comm (a b c : MyNat) : a + (b + c) = b + (a + c) := by
-theorem succ_eq_add_one (n : MyNat) : succ n = n + one := by
-  have h1 : n + one = succ n := by
-    induction n with
-    | zero => rfl
-    | succ n ih =>
-      simp_all [one, add_succ, add_zero]
-      <;> simp_all [add_succ, add_zero, succ_eq_add_one]
-      <;> omega
-  rw [h1]
-  <;> rfl
+theorem SZuΟvETq_ιWνJe (n : Η0Ja) : Θ7Κr n = ΚxΝ n gfΧ := by
+  rw [U3ωΘτ_q_7oH_ℂe9no]
+  rw [Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
-theorem implication_one (x y z : MyNat) (h1 : x + y = four) (h2 : three * x + z = two) : x + y = four := by
-theorem implication_one (x y z : MyNat) (h1 : x + y = four) (h2 : three * x + z = two) : x + y = four := by
-  have h_main : x + y = four := by
-    exact h1
-  exact h_main
-
-theorem implication_two (x y : MyNat) (h : zero + x = zero + y + two) : x = y + two := by
-theorem implication_two (x y : MyNat) (h : zero + x = zero + y + two) : x = y + two := by
-  have h_main : x = y + two := by
-    have h₁ : zero + x = x := by simp [add_zero]
-    have h₂ : zero + y + two = y + two := by simp [add_zero]
-    have h₃ : x = y + two := by
-      -- Simplify the hypothesis using the properties of addition and the fact that zero + x = x
-      simp_all [add_zero]
-      <;> omega
-    exact h₃
-  exact h_main
-
-theorem implication_three (x y : MyNat) (h1 : x = three) (h2 : x = three → y = four) : y = four := by
-theorem implication_three (x y : MyNat) (h1 : x = three) (h2 : x = three → y = four) : y = four := by
-  have h_main : y = four := by
-    have h3 : x = three := h1
-    have h4 : y = four := h2 h3
-    exact h4
-  exact h_main
-
-theorem implication_four (x : MyNat) (h : x + one = four) : x = three := by
-theorem implication_four (x : MyNat) (h : x + one = four) : x = three := by
-  have h₁ : x + one = succ x := by
-    have h₂ : x + one = succ x := by
-      rw [show one = succ zero by rfl]
-      rw [add_succ]
-      <;> simp [add_zero]
-    exact h₂
-  
-  have h₂ : succ x = four := by
-    linarith
-  
-  have h₃ : x = three := by
-    have h₄ : succ x = four := h₂
-    have h₅ : x = three := by
-      -- Use the fact that succ x = four to find x
-      have h₆ : x = three := by
-        -- Use the fact that succ x = four to find x
-        have h₇ : succ x = four := h₄
-        have h₈ : x = three := by
-          -- Use the fact that succ x = four to find x
-          cases x with
-          | zero =>
-            -- If x = 0, then succ x = 1, which cannot be 4
-            simp_all [MyNat.succ_ne_zero, add_zero, one, four, two, three]
-            <;> contradiction
-          | succ x' =>
-            cases x' with
-            | zero =>
-              -- If x = 1, then succ x = 2, which cannot be 4
-              simp_all [MyNat.succ_ne_zero, add_zero, one, four, two, three]
-              <;> contradiction
-            | succ x'' =>
-              cases x'' with
-              | zero =>
-                -- If x = 2, then succ x = 3, which cannot be 4
-                simp_all [MyNat.succ_ne_zero, add_zero, one, four, two, three]
-                <;> contradiction
-              | succ x''' =>
-                cases x''' with
-                | zero =>
-                  -- If x = 3, then succ x = 4, which matches the given condition
-                  simp_all [MyNat.succ_ne_zero, add_zero, one, four, two, three]
-                  <;> rfl
-                | succ x'''' =>
-                  -- If x > 3, then succ x > 4, which contradicts the given condition
-                  simp_all [MyNat.succ_ne_zero, add_zero, one, four, two, three]
-                  <;> contradiction
-        exact h₈
-      exact h₆
-    exact h₅
-  
-  exact h₃
-
-theorem implication_five (x : MyNat) : x = four → x = four := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-theorem add_comm (a b : MyNat) : a + b = b + a := by
-theorem add_assoc (a b c : MyNat) : a + b + c = a + (b + c) := by
-theorem add_right_comm (a b c : MyNat) : a + b + c = a + c + b := by
-theorem add_left_comm (a b c : MyNat) : a + (b + c) = b + (a + c) := by
-theorem succ_eq_add_one (n : MyNat) : succ n = n + one := by
-theorem implication_one (x y z : MyNat) (h1 : x + y = four) (h2 : three * x + z = two) : x + y = four := by
-theorem implication_two (x y : MyNat) (h : zero + x = zero + y + two) : x = y + two := by
-theorem implication_three (x y : MyNat) (h1 : x = three) (h2 : x = three → y = four) : y = four := by
-theorem implication_four (x : MyNat) (h : x + one = four) : x = three := by
-theorem implication_five (x : MyNat) : x = four → x = four := by
-  intro h
-  exact h
-
-theorem implication_six (x y : MyNat) : x + one = y + one → x = y := by
-theorem implication_six (x y : MyNat) : x + one = y + one → x = y := by
-  intro h
-  have h_main : x = y := by
-    have h₁ : x + one = y + one := h
-    have h₂ : x = y := by
-      -- Use the fact that addition is injective in the natural numbers
-      apply Nat.eq_of_add_eq_add_right
-      -- Simplify the equation using the given hypothesis
-      simpa [add_assoc, add_comm, add_left_comm] using h₁
-    exact h₂
-  exact h_main
-
-theorem implication_seven (x y : MyNat) (h1 : x = y) (h2 : x ≠ y) : False := by
-theorem implication_seven (x y : MyNat) (h1 : x = y) (h2 : x ≠ y) : False := by
-  have h3 : False := by
-    apply h2
-    rw [h1]
-    <;> simp_all
-    <;> aesop
-  
-  exact h3
-
-theorem zero_ne_one : (zero : MyNat) ≠ one := by
-theorem zero_ne_one : (zero : MyNat) ≠ one := by
-  have h_main : zero ≠ one := by
-    intro h
-    have h₁ := h
-    simp [one, zero] at h₁
-    <;> contradiction
-  exact h_main
-
-theorem one_ne_zero : (one : MyNat) ≠ zero := by
-theorem one_ne_zero : (one : MyNat) ≠ zero := by
-  have h_main : one ≠ zero := by
-    intro h
-    have h₁ : one = zero := h
-    have h₂ : succ zero = zero := by simpa [one] using h₁
-    have h₃ : zero ≠ succ zero := by
-      apply zero_ne_succ
-    exact h₃ (by simpa using h₂)
-  exact h_main
-
-theorem two_plus_two_ne_five : succ (succ zero) + succ (succ zero) ≠ succ (succ (succ (succ (succ zero)))) := by
-theorem two_plus_two_ne_five : succ (succ zero) + succ (succ zero) ≠ succ (succ (succ (succ (succ zero)))) := by
-  have h_main : succ (succ zero) + succ (succ zero) ≠ succ (succ (succ (succ (succ zero)))) := by
-    intro h
-    have h₁ := h
-    simp [add_succ, add_zero, mul_zero, mul_succ, pow_zero, pow_succ, one_eq_succ_zero, two_eq_succ_one,
-      three_eq_succ_two, four_eq_succ_three] at h₁
-    <;> contradiction
-  exact h_main
-
-theorem add_algo_1 (a b c d : MyNat) : a + b + (c + d) = a + c + d + b := by
-theorem add_algo_1 (a b c d : MyNat) : a + b + (c + d) = a + c + d + b := by
-  have h1 : a + b + (c + d) = a + (b + (c + d)) := by
-    rw [add_assoc]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  have h2 : a + c + d + b = a + ((c + d) + b) := by
-    rw [add_assoc]
-    <;> simp [add_assoc]
-    <;> rfl
-  
-  have h3 : a + (b + (c + d)) = a + ((b + c) + d) := by
-    have h3 : a + (b + (c + d)) = a + ((b + c) + d) := by
-      simp [add_assoc, add_comm, add_left_comm]
-      <;> ring
-    exact h3
-  
-  have h4 : a + ((c + d) + b) = a + (b + (c + d)) := by
-    have h4 : a + ((c + d) + b) = a + (b + (c + d)) := by
-      simp [add_assoc, add_comm, add_left_comm]
-      <;> ring
-    exact h4
-  
-  have h5 : a + ((b + c) + d) = a + (b + (c + d)) := by
-    have h5 : a + ((b + c) + d) = a + (b + (c + d)) := by
-      simp [add_assoc, add_comm, add_left_comm]
-      <;> ring
-    exact h5
-  
-  have h6 : a + b + (c + d) = a + c + d + b := by
-    simp_all [add_assoc, add_comm, add_left_comm]
-    <;> ring
-    <;> omega
-  
-  exact h6
-
-theorem succ_ne_zero (a : MyNat) : succ a ≠ zero := by
-theorem succ_ne_zero (a : MyNat) : succ a ≠ zero := by
-  have h_main : succ a ≠ zero := by
-    intro h
-    have h₁ := h
-    simp [add_zero, succ, one, MyNat.zero] at h₁
-    <;> contradiction
-  exact h_main
-
-theorem succ_ne_succ (m n : MyNat) (h : m ≠ n) : succ m ≠ succ n := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-theorem succ_add (a b : MyNat) : succ a + b = succ (a + b)  := by
-theorem add_comm (a b : MyNat) : a + b = b + a := by
-theorem add_assoc (a b c : MyNat) : a + b + c = a + (b + c) := by
-theorem add_right_comm (a b c : MyNat) : a + b + c = a + c + b := by
-theorem add_left_comm (a b c : MyNat) : a + (b + c) = b + (a + c) := by
-theorem succ_eq_add_one (n : MyNat) : succ n = n + one := by
-theorem add_algo_1 (a b c d : MyNat) : a + b + (c + d) = a + c + d + b := by
-theorem succ_ne_zero (a : MyNat) : succ a ≠ zero := by
-theorem succ_ne_succ (m n : MyNat) (h : m ≠ n) : succ m ≠ succ n := by
-  intro h_contra
-  have h_eq : m = n := by
-    have h1 : succ m = succ n := h_contra
-    have h2 : m + 1 = n + 1 := by simpa [add_comm, add_assoc, add_left_comm] using h1
-    have h3 : m = n := by
-      omega
-    exact h3
-  contradiction
-
-theorem mul_one (m : MyNat) : m * one = m := by
-theorem mul_one (m : MyNat) : m * one = m := by
-  have h1 : m * one = m * (succ zero) := by
-    rfl
-  
-  have h2 : m * (succ zero) = m * zero + m := by
-    rw [show one = succ zero by rfl]
-    rw [mul_succ]
-    <;> simp [add_zero]
-    <;> rfl
-  
-  have h3 : m * zero = zero := by
-    apply mul_zero
-  
-  have h4 : m * one = zero + m := by
-    simp_all [add_zero]
-    <;> simp_all [mul_zero]
-    <;> simp_all [add_zero]
-    <;> simp_all [mul_zero]
-    <;> simp_all [add_zero]
-  
-  have h5 : zero + m = m := by
-    simp [add_zero]
-  
-  have h6 : m * one = m := by
-    simp_all [add_zero]
-    <;> simp_all [mul_zero]
-    <;> simp_all [add_zero]
-    <;> simp_all [mul_zero]
-    <;> simp_all [add_zero]
-  
-  exact h6
-
-theorem zero_mul (m : MyNat) : zero * m = zero := by
-theorem zero_mul (m : MyNat) : zero * m = zero := by
-  have h_main : zero * m = zero := by
-    induction m with
-    | zero =>
-      -- Base case: when m is zero, zero * zero = zero by definition.
-      simp [mul_zero]
-    | succ m ih =>
-      -- Inductive step: assume zero * m = zero, then show zero * (m + 1) = zero.
-      simp_all [mul_succ, add_zero]
-      <;> simp_all [mul_zero]
-      <;> simp_all [add_zero]
-  exact h_main
-
-theorem succ_mul (a b : MyNat) : succ a * b = a * b + b := by
-theorem succ_mul (a b : MyNat) : succ a * b = a * b + b := by
-  have h_base : ∀ (a : MyNat), succ a * zero = a * zero + zero := by
-    intro a
-    simp [mul_zero, add_zero]
-    <;> rfl
-  
-  have h_inductive : ∀ (a b : MyNat), succ a * b = a * b + b → succ a * (succ b) = a * (succ b) + (succ b) := by
-    intro a b h
-    have h₁ : succ a * (succ b) = succ a * b + succ a := by
-      rw [mul_succ]
-    have h₂ : a * (succ b) + (succ b) = (a * b + b) + succ a := by
-      simp_all [mul_succ, add_assoc, add_comm, add_left_comm]
-      <;> ring_nf at *
-      <;> omega
-    have h₃ : succ a * (succ b) = a * (succ b) + (succ b) := by
-      simp_all [mul_succ, add_assoc, add_comm, add_left_comm]
-      <;> ring_nf at *
-      <;> omega
-    exact h₃
-  
-  have h_main : ∀ (a b : MyNat), succ a * b = a * b + b := by
-    intro a
-    induction b using MyNat.induction with
-    | zero =>
-      -- Base case: b = 0
-      simpa using h_base a
-    | succ b ih =>
-      -- Inductive step: assume the statement holds for b, prove for b + 1
-      simp_all [mul_succ, add_assoc, add_comm, add_left_comm, Nat.succ_eq_add_one]
-      <;>
-      (try omega) <;>
-      (try simp_all [mul_add, mul_one, add_mul, add_assoc, add_comm, add_left_comm]) <;>
-      (try ring_nf at * <;> omega) <;>
-      (try omega) <;>
-      (try simp_all [mul_add, mul_one, add_mul, add_assoc, add_comm, add_left_comm]) <;>
-      (try ring_nf at * <;> omega)
-      <;>
-      (try omega)
-      <;>
-      (try simp_all [mul_add, mul_one, add_mul, add_assoc, add_comm, add_left_comm]) <;>
-      (try ring_nf at * <;> omega)
-      <;>
-      (try omega)
-  
-  exact h_main a b
-
-theorem mul_comm (a b : MyNat) : a * b = b * a := by
-theorem mul_comm (a b : MyNat) : a * b = b * a := by
-  have h_base : ∀ (a : MyNat), a * zero = zero * a := by
-    intro a
-    induction a with
-    | zero => simp [mul_zero]
-    | succ a ih =>
-      simp_all [mul_zero, add_zero, mul_succ, add_comm]
-      <;> simp_all [mul_zero, add_zero, mul_succ, add_comm]
-      <;> linarith
-  
-  have h_inductive : ∀ (b : MyNat), (∀ (a : MyNat), a * b = b * a) → (∀ (a : MyNat), a * (succ b) = (succ b) * a) := by
-    intro b h
-    intro a
-    induction a with
-    | zero =>
-      simp [mul_zero, zero_mul, add_zero]
-    | succ a ih =>
-      simp_all [mul_succ, add_mul, Nat.mul_add, Nat.add_mul, Nat.add_assoc]
-      <;>
-      (try simp_all [mul_succ, add_mul, Nat.mul_add, Nat.add_mul, Nat.add_assoc])
-      <;>
-      (try ring_nf at * <;> simp_all [h_base])
-      <;>
-      (try omega)
-      <;>
-      (try
-        {
-          simp_all [h_base]
-          <;>
-          (try omega)
-          <;>
-          (try linarith)
-          <;>
-          (try nlinarith)
-        })
-      <;>
-      (try
-        {
-          simp_all [h_base]
-          <;>
-          (try omega)
-          <;>
-          (try linarith)
-          <;>
-          (try nlinarith)
-        })
-      <;>
-      (try
-        {
-          simp_all [h_base]
-          <;>
-          (try omega)
-          <;>
-          (try linarith)
-          <;>
-          (try nlinarith)
-        })
-  
-  have h_main : ∀ (a b : MyNat), a * b = b * a := by
-    intro a b
-    induction b using MyNat.strong_induction_on with
-    | h b ih =>
-      match b with
-      | zero =>
-        simp [h_base]
-      | succ b =>
-        have h₁ := ih b (by omega)
-        have h₂ := h_inductive b h₁
-        simp_all [mul_succ, add_mul, Nat.mul_add, Nat.add_mul, Nat.add_assoc]
-        <;>
-        (try ring_nf at * <;> simp_all [h_base])
-        <;>
-        (try omega)
-        <;>
-        (try linarith)
-        <;>
-        (try nlinarith)
-  
-  exact h_main a b
-
-theorem one_mul (m : MyNat) : one * m = m := by
-theorem one_mul (m : MyNat) : one * m = m := by
-  have h_main : one * m = m := by
-    induction m with
-    | zero =>
-      -- Base case: when m = zero, we use the axiom mul_zero
-      simp [one, mul_zero]
-    | succ m ih =>
-      -- Inductive step: assume the statement holds for m, prove for succ m
-      simp_all [one, mul_succ, add_comm, add_assoc, add_left_comm]
-      <;>
-      (try omega) <;>
-      (try simp_all [add_comm, add_assoc, add_left_comm]) <;>
-      (try linarith) <;>
-      (try omega)
-      <;>
-      (try simp_all [add_comm, add_assoc, add_left_comm])
-      <;>
-      (try linarith)
-      <;>
-      (try omega)
-  exact h_main
-
-theorem two_mul (m : MyNat) : two * m = m + m := by
-theorem two_mul (m : MyNat) : two * m = m + m := by
-  have h1 : two * m = m + m := by
-    rw [show two * m = m + m by
-      induction m with
-      | zero =>
-        -- Base case: when m = 0
-        simp [two, one, mul_zero, add_zero]
-      | succ m ih =>
-        -- Inductive step: assume the statement holds for m, prove for m + 1
-        simp_all [two, one, mul_succ, add_assoc, add_comm, add_left_comm]
-        <;> omega
-    ]
+theorem T7WδnΕΝFtℂεymne (x y z : Η0Ja) (h1 : ΚxΝ x y = Wre0) (h2 : ΚxΝ (ΕWβ χΗΡd x) z = oVΟ) : ΚxΝ x y = Wre0 := by
   exact h1
 
-theorem mul_add (a b c : MyNat) : a * (b + c) = a * b + a * c := by
-theorem mul_add (a b c : MyNat) : a * (b + c) = a * b + a * c := by
-  have h_main : ∀ (c : MyNat), a * (b + c) = a * b + a * c := by
-    intro c
-    induction c with
-    | zero =>
-      -- Base case: c = 0
-      simp [add_zero, mul_zero, mul_one]
-      <;> simp_all [add_zero, mul_zero, mul_one]
-      <;> linarith
-    | succ c ih =>
-      -- Inductive step: assume the statement holds for c, prove for c + 1
-      simp_all [add_succ, mul_succ, add_assoc, add_left_comm, add_comm]
-      <;>
-      (try simp_all [add_assoc, add_left_comm, add_comm, mul_add, mul_one, mul_zero, add_zero])
-      <;>
-      (try ring_nf at * <;> simp_all [add_assoc, add_left_comm, add_comm, mul_add, mul_one, mul_zero, add_zero])
-      <;>
-      (try omega)
-      <;>
-      (try
-        {
-          simp_all [add_assoc, add_left_comm, add_comm, mul_add, mul_one, mul_zero, add_zero]
-          <;>
-          ring_nf at * <;>
-          simp_all [add_assoc, add_left_comm, add_comm, mul_add, mul_one, mul_zero, add_zero]
-          <;>
-          omega
-        })
-      <;>
-      (try
-        {
-          simp_all [add_assoc, add_left_comm, add_comm, mul_add, mul_one, mul_zero, add_zero]
-          <;>
-          ring_nf at * <;>
-          simp_all [add_assoc, add_left_comm, add_comm, mul_add, mul_one, mul_zero, add_zero]
-          <;>
-          omega
-        })
-  exact h_main c
-
-theorem add_mul (a b c : MyNat) : (a + b) * c = a * c + b * c := by
-theorem add_mul (a b c : MyNat) : (a + b) * c = a * c + b * c := by
-  have h_main : ∀ (c : MyNat), (a + b) * c = a * c + b * c := by
-    intro c
-    induction c with
-    | zero =>
-      -- Base case: when c = 0
-      simp [add_zero, mul_zero, add_zero]
-    | succ c ih =>
-      -- Inductive step: assume the statement holds for c, prove for c + 1
-      simp_all [add_mul, mul_add, add_assoc, add_comm, add_left_comm, mul_one, mul_zero,
-        add_zero, zero_add]
-      <;>
-      (try omega) <;>
-      (try simp_all [add_mul, mul_add, add_assoc, add_comm, add_left_comm, mul_one, mul_zero,
-        add_zero, zero_add]) <;>
-      (try ring_nf at * <;> omega) <;>
-      (try nlinarith)
-      <;>
-      (try simp_all [add_mul, mul_add, add_assoc, add_comm, add_left_comm, mul_one, mul_zero,
-        add_zero, zero_add])
-      <;>
-      (try omega)
-      <;>
-      (try nlinarith)
-      <;>
-      (try linarith)
-      <;>
-      (try nlinarith)
-      <;>
-      (try omega)
-  exact h_main c
-
-theorem mul_assoc (a b c : MyNat) : (a * b) * c = a * (b * c)  := by
-theorem mul_assoc (a b c : MyNat) : (a * b) * c = a * (b * c)  := by
-  have h_base : ∀ (a b : MyNat), (a * b) * zero = a * (b * zero) := by
-    intro a b
-    simp [mul_zero, add_zero]
-    <;> induction a <;> simp_all [mul_zero, add_zero, mul_one, mul_add, mul_succ, add_mul]
-    <;> ring_nf at * <;> simp_all [mul_zero, add_zero, mul_one, mul_add, mul_succ, add_mul]
-    <;> omega
-  
-  have h_inductive : ∀ (d : MyNat), (a * b) * d = a * (b * d) → (a * b) * (succ d) = a * (b * (succ d)) := by
-    intro d h
-    have h1 : (a * b) * (succ d) = (a * b) * d + (a * b) := by
-      rw [mul_succ]
-    have h2 : a * (b * (succ d)) = a * (b * d + b) := by
-      rw [mul_succ]
-    rw [h1, h2]
-    have h3 : (a * b) * d = a * (b * d) := h
-    have h4 : a * (b * d + b) = a * (b * d) + a * b := by
-      rw [mul_add]
-      <;> simp [h3, mul_add, mul_comm, mul_left_comm, mul_assoc]
-      <;> ring
-    rw [h4]
-    <;> simp [h3, mul_add, mul_comm, mul_left_comm, mul_assoc]
-    <;> ring
-    <;> omega
-  
-  have h_main : (a * b) * c = a * (b * c) := by
-    induction c with
-    | zero =>
-      -- Base case: when c = 0
-      simpa using h_base a b
-    | succ c ih =>
-      -- Inductive step: assume the statement holds for c, prove for c + 1
-      have h₁ : (a * b) * c = a * (b * c) := ih
-      have h₂ : (a * b) * (succ c) = a * (b * (succ c)) := h_inductive c h₁
-      simpa [mul_succ, add_mul] using h₂
-  
-  exact h_main
-
-theorem zero_pow_zero : (zero : MyNat) ^ zero = one := by
-theorem zero_pow_zero : (zero : MyNat) ^ zero = one := by
-  have h : (zero : MyNat) ^ zero = one := by
-    rw [pow_zero]
-    <;> rfl
+theorem Nσ0lLiΞpWγjΜυℝ (x y : Η0Ja) (h : ΚxΝ GnΑ0 x = ΚxΝ (ΚxΝ GnΑ0 y) oVΟ) : x = ΚxΝ y oVΟ := by
+  rw [ωΙξaινη7] at h
+  rw [ωΙξaινη7] at h
   exact h
 
-theorem zero_pow_succ (m : MyNat) : (zero : MyNat) ^ (succ m) = zero := by
-theorem zero_pow_succ (m : MyNat) : (zero : MyNat) ^ (succ m) = zero := by
-  have h_main : (zero : MyNat) ^ (succ m) = zero := by
-    induction m with
-    | zero =>
-      -- Base case: m = 0
-      -- zero ^ (succ zero) = zero ^ one = zero ^ zero * zero = one * zero = zero
-      simp [pow_zero, pow_succ, mul_zero]
-    | succ m ih =>
-      -- Inductive step: assume the statement holds for m, prove for succ m
-      -- zero ^ (succ (succ m)) = zero ^ (succ m) * zero = zero * zero = zero
-      simp [pow_succ, ih, mul_zero]
-  exact h_main
+theorem iΙpχnχct2ΧttΘ4aΗ (x y : Η0Ja) (h1 : x = χΗΡd) (h2 : x = χΗΡd → y = Wre0) : y = Wre0 := by
+  apply h2 at h1
+  exact h1
 
-theorem pow_one (a : MyNat) : a ^ one = a  := by
-theorem pow_one (a : MyNat) : a ^ one = a  := by
-  have h1 : a ^ one = a ^ (succ zero) := by
-    rfl
-  
-  have h2 : a ^ (succ zero) = a ^ zero * a := by
-    rw [pow_succ]
-    <;> simp [pow_zero]
-    <;> simp [mul_one]
-    <;> simp [one_mul]
-  
-  have h3 : a ^ zero = one := by
-    apply pow_zero
-  
-  have h4 : a ^ (succ zero) = one * a := by
-    rw [h2]
-    rw [h3]
-    <;> simp [one_mul]
-  
-  have h5 : one * a = a := by
-    simp [one_mul]
-  
-  have h6 : a ^ one = a := by
-    rw [h1]
-    rw [h4]
-    rw [h5]
-    <;> simp [h5]
-  
-  exact h6
+theorem immΑRioΝΒ5κSc_sI (x : Η0Ja) (h : ΚxΝ x gfΧ = Wre0) : x = χΗΡd := by
+  rw [U3ωΘτ_q_7oH_ℂe9no] at h
+  rw [XfξHc_eqζΗJcιrVEr9] at h
+  rw [Qγx1dtΨo] at h
+  apply o5Εgγtdvl at h
+  rw [Ε6ΖΜF_Zζ] at h
+  exact h
 
-theorem one_pow (m : MyNat) : (one : MyNat) ^ m = one := by
-theorem one_pow (m : MyNat) : (one : MyNat) ^ m = one := by
-  have h_base : (one : MyNat) ^ 0 = one := by
-    rfl
-  
-  have h_inductive : ∀ (k : MyNat), (one : MyNat) ^ k = one → (one : MyNat) ^ (k + 1) = one := by
-    intro k hk
-    simp [pow_succ, hk]
-    <;> rfl
-  
-  induction m using MyNat.induction_on with
-  | zero =>
-    simpa using h_base
-  | succ n ih =>
-    simpa using h_inductive n ih
-
-theorem pow_two (a : MyNat) : a ^ two = a * a := by
-theorem pow_two (a : MyNat) : a ^ two = a * a := by
-  have h1 : a ^ two = a ^ (succ one) := by
-    rfl
-  
-  have h2 : a ^ (succ one) = a ^ one * a := by
-    rw [pow_succ]
-    <;> simp [one_eq_succ_zero]
-    <;> rfl
-  
-  have h3 : a ^ one = a := by
-    rw [pow_one]
-  
-  have h4 : a ^ two = a * a := by
-    rw [h1]
-    rw [h2]
-    rw [h3]
-    <;> simp [mul_comm]
-    <;> rfl
-  
-  exact h4
-
-theorem pow_add (a m n : MyNat) : a ^ (m + n) = a ^ m * a ^ n := by
-theorem pow_add (a m n : MyNat) : a ^ (m + n) = a ^ m * a ^ n := by
-  have h_main : a ^ (m + n) = a ^ m * a ^ n := by
-    induction n with
-    | zero =>
-      -- Base case: n = 0
-      simp [add_zero, pow_zero, mul_one]
-    | succ n ih =>
-      -- Inductive step: assume the statement holds for n, prove for n + 1
-      simp_all [add_succ, pow_succ, mul_assoc, mul_left_comm, mul_right_comm]
-      <;>
-      (try simp_all [add_assoc, add_comm, add_left_comm, mul_comm, mul_left_comm, mul_right_comm])
-      <;>
-      (try ring_nf at * <;> simp_all [add_assoc, add_comm, add_left_comm, mul_comm, mul_left_comm, mul_right_comm])
-      <;>
-      (try simp_all [add_assoc, add_comm, add_left_comm, mul_comm, mul_left_comm, mul_right_comm])
-      <;>
-      (try linarith)
-      <;>
-      (try nlinarith)
-      <;>
-      (try omega)
-      <;>
-      (try aesop)
-      <;>
-      (try simp_all [add_assoc, add_comm, add_left_comm, mul_comm, mul_left_comm, mul_right_comm])
-      <;>
-      (try ring_nf at * <;> simp_all [add_assoc, add_comm, add_left_comm, mul_comm, mul_left_comm, mul_right_comm])
-      <;>
-      (try omega)
-      <;>
-      (try aesop)
-  exact h_main
-
-theorem mul_pow (a b n : MyNat) : (a * b) ^ n = a ^ n * b ^ n := by
-theorem mul_pow (a b n : MyNat) : (a * b) ^ n = a ^ n * b ^ n := by
-  induction n with
-  | zero =>
-    -- Base case: when n = 0, both sides simplify to 1
-    simp [pow_zero, mul_one]
-  | succ n ih =>
-    -- Inductive step: assume the statement holds for n, prove for n + 1
-    rw [pow_succ, pow_succ, pow_succ]
-    -- Expand (a * b)^(n + 1) using the definition of powers
-    simp_all [mul_assoc, mul_left_comm, mul_right_comm, mul_pow]
-    -- Simplify using the inductive hypothesis and properties of multiplication
-    <;> ring
-    <;> simp_all [mul_assoc, mul_left_comm, mul_right_comm, mul_pow]
-    <;> ring
-    <;> simp_all [mul_assoc, mul_left_comm, mul_right_comm, mul_pow]
-    <;> ring
-
-theorem pow_pow (a m n : MyNat) : (a ^ m) ^ n = a ^ (m * n) := by
-theorem pow_pow (a m n : MyNat) : (a ^ m) ^ n = a ^ (m * n) := by
-  have h_main : (a ^ m) ^ n = a ^ (m * n) := by
-    induction n with
-    | zero =>
-      -- Base case: when n = 0, both sides simplify to 1
-      simp [pow_zero, mul_zero, pow_add]
-    | succ n ih =>
-      -- Inductive step: assume the statement holds for n, prove for n + 1
-      simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ]
-      <;>
-      (try simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try ring_nf at * <;> simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try linarith)
-      <;>
-      (try nlinarith)
-      <;>
-      (try simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try ring_nf at * <;> simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try nlinarith)
-      <;>
-      (try simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try ring_nf at * <;> simp_all [pow_add, pow_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_succ])
-      <;>
-      (try nlinarith)
-  exact h_main
-
-theorem add_sq (a b : MyNat) : (a + b) ^ two = a ^ two + b ^ two + two * a * b := by
-theorem add_sq (a b : MyNat) : (a + b) ^ two = a ^ two + b ^ two + two * a * b := by
-  have h_main : (a + b) ^ two = a ^ two + b ^ two + two * a * b := by
-    simp [pow_two, add_mul, mul_add, mul_comm, mul_left_comm, mul_assoc, Nat.mul_sub_left_distrib,
-      Nat.mul_sub_right_distrib]
-    <;> ring_nf
-    <;> omega
-  exact h_main
-
-theorem add_right_cancel (a b n : MyNat) : a + n = b + n → a = b := by
-theorem add_right_cancel (a b n : MyNat) : a + n = b + n → a = b := by
+theorem ovΓΡFΓctCκHνℂℂπi (x : Η0Ja) : x = Wre0 → x = Wre0 := by
   intro h
-  have h_main : a = b := by
-    have h₁ : a + n = b + n := h
-    induction n with
-    | zero =>
-      -- Base case: n = 0
-      -- Simplify the equation using the definition of addition
-      have h₂ : a + zero = b + zero := by simpa using h₁
-      have h₃ : a = b := by
-        simp [add_zero] at h₂ ⊢
-        <;> omega
-      exact h₃
-    | succ n ih =>
-      -- Inductive step: assume the statement holds for n, prove for n + 1
-      have h₂ : a + (succ n) = b + (succ n) := h₁
-      have h₃ : succ (a + n) = succ (b + n) := by
-        simpa [add_succ, add_assoc] using h₂
-      have h₄ : a + n = b + n := by
-        apply Nat.succ.inj h₃
-      have h₅ : a = b := ih h₄
-      exact h₅
-  exact h_main
+  exact h
 
-theorem add_left_cancel (a b n : MyNat) : n + a = n + b → a = b := by
-theorem zero_add (n : MyNat) : .zero + n = n := by
-  have h_base : .zero + .zero = .zero := by
+theorem VθξΚΥΝtΟΑdΗjγx (x y : Η0Ja) : ΚxΝ x gfΧ = ΚxΝ y gfΧ → x = y := by
+  intro h
+  rw[U3ωΘτ_q_7oH_ℂe9no] at h
+  rw[Qγx1dtΨo,Qγx1dtΨo] at h
+  apply o5Εgγtdvl at h
+  rw[Ε6ΖΜF_Zζ,Ε6ΖΜF_Zζ] at h
+  exact h
+
+theorem ωΜνpdRκΧ1tK_seΩ_ (x y : Η0Ja) (h1 : x = y) (h2 : x ≠ y) : False := by
+  apply h2 at h1
+  exact h1
+
+theorem ρUμΞYe'u9Απ : (GnΑ0 : Η0Ja) ≠ gfΧ := by
+  intro h
+  rw [U3ωΘτ_q_7oH_ℂe9no] at h
+  apply ΙΩζβτeΜwυ'ec at h
+  exact h
+
+theorem oβθΤMΚιΑyor : (gfΧ : Η0Ja) ≠ GnΑ0 := by
+  symm
+  exact ρUμΞYe'u9Απ
+
+theorem vτδZμ3θ_ΩtwqKμ9fψiΘ : ΚxΝ (Θ7Κr (Θ7Κr GnΑ0)) (Θ7Κr (Θ7Κr GnΑ0)) ≠ Θ7Κr (Θ7Κr (Θ7Κr (Θ7Κr (Θ7Κr GnΑ0)))) := by
+  intro h
+  rw [Qγx1dtΨo, Qγx1dtΨo, Ε6ΖΜF_Zζ] at h
+  repeat apply o5Εgγtdvl at h
+  apply ΙΩζβτeΜwυ'ec at h
+  exact h
+
+theorem Rμl53fxρz (a b c d : Η0Ja) : ΚxΝ (ΚxΝ a b) (ΚxΝ c d) = ΚxΝ (ΚxΝ (ΚxΝ a c) d) b := by
+  repeat rw [nv3ΧWtℕsL]
+  rw [dℚN_γK8ο9d'pχρ b c]
+  rw [KΩΦzαυωT b d]
+
+theorem sαAιΕLζFrVp (a : Η0Ja) : Θ7Κr a ≠ GnΑ0 := by
+  intro h
+  rw [← OiiFkEΖ__bp a]
+  rw [h]
+  rw [I4ξΒℤk_z8ξΩν]
+  trivial
+
+theorem βΖLMclΥhℂuΘ (m n : Η0Ja) (h : m ≠ n) : Θ7Κr m ≠ Θ7Κr n := by
+  contrapose! h
+  apply o5Εgγtdvl at h
+  exact h
+
+theorem ΤyΥewev (m : Η0Ja) : ΕWβ m gfΧ = m := by
+  rw [U3ωΘτ_q_7oH_ℂe9no]
+  rw [ΑΩ7Ξ3νnr]
+  rw [θ'vxθΑfφ]
+  rw [ωΙξaινη7]
+
+theorem ωCΥiCazτ (m : Η0Ja) : ΕWβ GnΑ0 m = GnΑ0 := by
+  induction m with
+  | GnΑ0 =>
+    rw [θ'vxθΑfφ]
+  | Θ7Κr d ih =>
+    rw [ΑΩ7Ξ3νnr, ih, ωΙξaινη7]
+
+theorem Ν_zivκyA (a b : Η0Ja) : ΕWβ (Θ7Κr a) b = ΚxΝ (ΕWβ a b) b := by
+  induction b with
+  | GnΑ0 =>
+    rw [θ'vxθΑfφ, θ'vxθΑfφ, Ε6ΖΜF_Zζ]
+  | Θ7Κr d hd =>
+    rw [ΑΩ7Ξ3νnr, ΑΩ7Ξ3νnr, hd, Qγx1dtΨo, Qγx1dtΨo, ΝκdWγΤσkbcΚFNΒ]
+
+theorem ΧFΤΟξrdψ (a b : Η0Ja) : ΕWβ a b = ΕWβ b a := by
+  induction b with
+  | GnΑ0 =>
+    rw [ωCΥiCazτ]
+    rw [θ'vxθΑfφ]
+  | Θ7Κr d hd =>
+    rw [Ν_zivκyA]
+    rw [← hd]
+    rw [ΑΩ7Ξ3νnr]
+
+theorem ℝzΗσℝcψ (m : Η0Ja) : ΕWβ gfΧ m = m := by
+  rw [ΧFΤΟξrdψ, ΤyΥewev]
+
+theorem ΙΦΔVfe9 (m : Η0Ja) : ΕWβ oVΟ m = ΚxΝ m m := by
+  rw [ℚJo_ℕΧΑkUvKΝne, Ν_zivκyA, ℝzΗσℝcψ]
+
+theorem Ωψ'YiΑσ (a b c : Η0Ja) : ΕWβ a (ΚxΝ b c) = ΚxΝ (ΕWβ a b) (ΕWβ a c) := by
+  induction c with
+  | GnΑ0 =>
+    rw [Ε6ΖΜF_Zζ, θ'vxθΑfφ, Ε6ΖΜF_Zζ]
+  | Θ7Κr d hd =>
+    rw [Qγx1dtΨo, ΑΩ7Ξ3νnr, hd, ΑΩ7Ξ3νnr, nv3ΧWtℕsL]
+
+theorem eexzzm_ (a b c : Η0Ja) : ΕWβ (ΚxΝ a b) c = ΚxΝ (ΕWβ a c) (ΕWβ b c) := by
+  rw [ΧFΤΟξrdψ, Ωψ'YiΑσ]
+  repeat rw [ΧFΤΟξrdψ c]
+
+theorem ℚQswΘΟVνy (a b c : Η0Ja) : ΕWβ (ΕWβ a b) c = ΕWβ a (ΕWβ b c)  := by
+  induction c with
+  | GnΑ0 =>
+    rw [θ'vxθΑfφ, θ'vxθΑfφ, θ'vxθΑfφ]
+  | Θ7Κr d ih =>
+    rw [ΑΩ7Ξ3νnr, ΑΩ7Ξ3νnr, ih, Ωψ'YiΑσ]
+
+theorem dσvrJφMβqℝYr0 : νΦΗ (GnΑ0 : Η0Ja)  GnΑ0 = gfΧ := by
+  rw [φΜwoΓvΞΦ]
+
+theorem wzKξΔΕevEΕcrz (m : Η0Ja) : νΦΗ (GnΑ0 : Η0Ja) (Θ7Κr m) = GnΑ0 := by
+  rw [t4πℂ'Rτ]
+  rw [θ'vxθΑfφ]
+
+theorem hℚyaτxΦ (a : Η0Ja) : νΦΗ a gfΧ = a  := by
+  rw [U3ωΘτ_q_7oH_ℂe9no]
+  rw [t4πℂ'Rτ]
+  rw [φΜwoΓvΞΦ]
+  rw [ℝzΗσℝcψ]
+
+theorem sYJδΓνΩ (m : Η0Ja) : νΦΗ (gfΧ : Η0Ja) m = gfΧ := by
+  induction m with
+  | GnΑ0 =>
+    rw [φΜwoΓvΞΦ]
+  | Θ7Κr t ht =>
+    rw [t4πℂ'Rτ]
+    rw [ht]
+    rw [ℝzΗσℝcψ]
+
+theorem ΓpKΚYδω (a : Η0Ja) : νΦΗ a oVΟ = ΕWβ a a := by
+  rw [ℚJo_ℕΧΑkUvKΝne]
+  rw [t4πℂ'Rτ]
+  rw [hℚyaτxΦ]
+
+theorem ΗAΥuZΡd (a m n : Η0Ja) : νΦΗ a (ΚxΝ m n) = ΕWβ (νΦΗ a m) (νΦΗ a n) := by
+  induction n with
+  | GnΑ0 =>
+    rw [Ε6ΖΜF_Zζ]
+    rw [φΜwoΓvΞΦ]
+    rw [ΤyΥewev]
+  | Θ7Κr t ht =>
+    rw [Qγx1dtΨo]
+    rw [t4πℂ'Rτ]
+    rw [t4πℂ'Rτ]
+    rw [ht]
+    rw [ℚQswΘΟVνy]
+
+theorem HζιξQoκ (a b n : Η0Ja) : νΦΗ (ΕWβ a b) n = ΕWβ (νΦΗ a n) (νΦΗ b n) := by
+  induction n with
+  | GnΑ0 =>
+    repeat rw [φΜwoΓvΞΦ]
+    rw [ℝzΗσℝcψ]
+  | Θ7Κr t ht =>
+    repeat rw [t4πℂ'Rτ]
+    rw [ht]
+    rw [ℚQswΘΟVνy]
+    rw [ΧFΤΟξrdψ (νΦΗ b t) (ΕWβ a b)]
+    rw [ΧFΤΟξrdψ (νΦΗ b t) b]
+    repeat rw [← ℚQswΘΟVνy]
+
+theorem Xωο'Aεk (a m n : Η0Ja) : νΦΗ (νΦΗ a m) n = νΦΗ a (ΕWβ m n) := by
+  induction n with
+  | GnΑ0 =>
+    rw [θ'vxθΑfφ]
+    rw [φΜwoΓvΞΦ]
+    rw [φΜwoΓvΞΦ]
+  | Θ7Κr t ht =>
+    rw [t4πℂ'Rτ]
+    rw [ht]
+    rw [ΑΩ7Ξ3νnr]
+    rw [ΗAΥuZΡd]
+
+theorem ΚΚlwMW (a b : Η0Ja) : νΦΗ (ΚxΝ a b) oVΟ = ΚxΝ (ΚxΝ (νΦΗ a oVΟ) (νΦΗ b oVΟ)) (ΕWβ (ΕWβ oVΟ a) b) := by
+  rw [ΓpKΚYδω, ΓpKΚYδω, ΓpKΚYδω]
+  rw [ΝκdWγΤσkbcΚFNΒ]
+  rw [Ωψ'YiΑσ, eexzzm_, eexzzm_]
+  rw [ΙΦΔVfe9, eexzzm_]
+  rw [ΧFΤΟξrdψ b a]
+  rw [← nv3ΧWtℕsL, ← nv3ΧWtℕsL]
+
+theorem γdκDχkΩΨρη_eaΔcU (a b n : Η0Ja) : ΚxΝ a n = ΚxΝ b n → a = b := by
+  induction n with
+  | GnΑ0 =>
+    intro h
+    rw [Ε6ΖΜF_Zζ, Ε6ΖΜF_Zζ] at h
+    exact h
+  | Θ7Κr d ih =>
+    intro h
+    rw [Qγx1dtΨo, Qγx1dtΨo] at h
+    apply o5Εgγtdvl at h
+    apply ih
+    exact h
+
+theorem TeL1SWχπRβcζνl (a b n : Η0Ja) : ΚxΝ n a = ΚxΝ n b → a = b := by
+  repeat rw [KΩΦzαυωT n]
+  intro h
+  apply γdκDχkΩΨρη_eaΔcU at h
+  exact h
+
+theorem _adiΜ2ieMΩeaΖΒΞK (x y : Η0Ja) : ΚxΝ x y = y → x = GnΑ0 := by
+  intro h
+  nth_rewrite 2 [← ωΙξaινη7 y] at h
+  apply γdκDχkΩΨρη_eaΔcU at h
+  exact h
+
+theorem ΔKσ_ivζgΜtοδsIdd (x y : Η0Ja) : ΚxΝ x y = x → y = GnΑ0 := by
+  intro h
+  nth_rewrite 2 [← ωΙξaινη7 x] at h
+  nth_rewrite 2 [KΩΦzαυωT] at h
+  apply TeL1SWχπRβcζνl at h
+  exact h
+
+theorem ρdd'xZgνhtοSssΨEW (a b : Η0Ja) : ΚxΝ a b = GnΑ0 → a = GnΑ0 := by
+  induction b with
+  | GnΑ0 =>
+    intro h
+    rw [Ε6ΖΜF_Zζ] at h
+    exact h
+  | Θ7Κr d ih =>
+    intro h
+    rw [Qγx1dtΨo] at h
+    symm at h
+    apply ΙΩζβτeΜwυ'ec at h
+    cases h
+
+theorem ηΡdnPHf9_ℂE_zXGΚ (a b : Η0Ja) : ΚxΝ a b = GnΑ0 → b = GnΑ0 := by
+  rw [KΩΦzαυωT]
+  exact ρdd'xZgνhtοSssΨEW b a
+
+theorem W0ΚSδπ8ψ (x : Η0Ja) : IJ x x := by
+  use GnΑ0
+  rw [Ε6ΖΜF_Zζ]
+
+theorem aτPWZ1β (x : Η0Ja) : IJ GnΑ0 x := by
+  use x
+  rw [ωΙξaινη7]
+
+theorem H'5sqeo8gsPΜχ (x : Η0Ja) : IJ x (Θ7Κr x) := by
+  use gfΧ
+  rw [U3ωΘτ_q_7oH_ℂe9no]
+  rw [Qγx1dtΨo]
+  rw [Ε6ΖΜF_Zζ]
+
+theorem Z'Ie'ΗΥνΟC (x y z : Η0Ja) (hxy : IJ x y) (hyz : IJ y z) : IJ x z := by
+  cases hxy with
+  | intro a ha =>
+    cases hyz with
+    | intro b hb =>
+      apply Exists.intro (ΚxΝ a b)
+      rw [hb, ha]
+      rw [nv3ΧWtℕsL]
+
+theorem qΜ3γv_p (x : Η0Ja) (hx : IJ x GnΑ0) : x = GnΑ0 := by
+  cases hx with
+  | intro a ha =>
+    symm at ha
+    apply ρdd'xZgνhtοSssΨEW at ha
+    exact ha
+
+theorem F3ΥπΔωψPuXEι (x y : Η0Ja) (hxy : IJ x y) (hyx : IJ y x) : x = y := by
+  cases hxy with
+  | intro a ha =>
+    cases hyx with
+    | intro b hb =>
+      rw [ha]
+      rw [ha, nv3ΧWtℕsL] at hb
+      symm at hb
+      apply ΔKσ_ivζgΜtοδsIdd at hb
+      apply ρdd'xZgνhtοSssΨEW at hb
+      rw [hb, Ε6ΖΜF_Zζ]
+
+theorem ΙIℂpEmρ (x y : Η0Ja) (h : x = Wre0 ∨ y = χΗΡd) : y = χΗΡd ∨ x = Wre0 := by
+  cases h with
+  | inl hx =>
+    right
+    rw [hx]
+  | inr hy =>
+    left
+    rw [hy]
+
+theorem ℂΒe1TΘνΑ (x y : Η0Ja) : (IJ x y) ∨ (IJ y x) := by
+  induction y with
+  | GnΑ0 =>
+    right
+    exact aτPWZ1β x
+  | Θ7Κr d hd =>
+    cases hd with
+    | inl h1 =>
+      left
+      cases h1 with
+      | intro e h1 =>
+        rw [h1]
+        use ΚxΝ e gfΧ
+        rw [SZuΟvETq_ιWνJe, nv3ΧWtℕsL]
+    | inr h2 =>
+      cases h2 with
+      | intro e he =>
+        cases e with
+        | GnΑ0 =>
+          rw [he]
+          left
+          rw [Ε6ΖΜF_Zζ]
+          use gfΧ
+          exact SZuΟvETq_ιWνJe d
+        | Θ7Κr a =>
+          right
+          use a
+          rw [Qγx1dtΨo] at he
+          rw [gXqΧΔℝvO]
+          exact he
+
+theorem llγℝΕeΤuαπZ (x y : Η0Ja) (hx : IJ (Θ7Κr x) (Θ7Κr y)) : IJ x y := by
+  cases hx with
+  | intro d hd =>
+    use d
+    rw [gXqΧΔℝvO] at hd
+    apply o5Εgγtdvl at hd
+    exact hd
+
+theorem xCUυ_κ (x : Η0Ja) (hx : IJ x gfΧ) : x = GnΑ0 ∨ x = gfΧ := by
+  induction x with
+  | GnΑ0 =>
+    left
     rfl
-  
-  have h_inductive : ∀ (d : MyNat), .zero + d = d → .zero + (succ d) = succ d := by
-    intro d h
-    rw [add_succ]
-    <;> simp_all [add_zero]
-    <;> rfl
-  
-  have h_main : .zero + n = n := by
-    induction n with
-    | zero =>
-      simp_all [add_zero]
-    | succ n ih =>
-      have h₁ : .zero + n = n := ih
-      have h₂ : .zero + (succ n) = succ n := by
-        apply h_inductive
-        exact h₁
-      simpa [add_succ, add_zero] using h₂
-  
-  exact h_main
+  | Θ7Κr d hd =>
+    right
+    rw[U3ωΘτ_q_7oH_ℂe9no] at hx
+    apply llγℝΕeΤuαπZ at hx
+    apply qΜ3γv_p at hx
+    rw [hx]
+    rfl
 
-end MyNat
+theorem ℂofwoΔ (x : Η0Ja) (hx : IJ x oVΟ) : x = GnΑ0 ∨ x = gfΧ ∨ x = oVΟ := by
+  cases x with
+  | GnΑ0 =>
+    left
+    rfl
+  | Θ7Κr y =>
+    cases y with
+    | GnΑ0 =>
+      right
+      left
+      rw [U3ωΘτ_q_7oH_ℂe9no]
+    | Θ7Κr z =>
+      rw [ℚJo_ℕΧΑkUvKΝne, U3ωΘτ_q_7oH_ℂe9no] at hx ⊢
+      apply llγℝΕeΤuαπZ at hx
+      apply llγℝΕeΤuαπZ at hx
+      apply qΜ3γv_p at hx
+      rw [hx]
+      right
+      right
+      rfl
+
+theorem RΤwAαd_lΡψα9MI (x : Η0Ja) : IJ x (ΚxΝ gfΧ x) := by
+  use gfΧ
+  rw [KΩΦzαυωT]
+
+theorem OΩηaζδ4φh (x : Η0Ja) : IJ x  x := by
+  use GnΑ0
+  rw [Ε6ΖΜF_Zζ]
+
+theorem CnΚδuΓc (a b : Η0Ja) : IJ a b → IJ a (Θ7Κr b) := by
+  intro h
+  cases h with
+  | intro c hc =>
+    use Θ7Κr c
+    rw [hc]
+    rw [Qγx1dtΨo]
+
+theorem ΤκSυEcveAul_ιΧΗt (a b t : Η0Ja) (h : IJ a b) : IJ (ΕWβ a t) (ΕWβ b t) := by
+  cases h with
+  |intro d hd =>
+    use ΕWβ d t
+    rw [hd, eexzzm_]
+
+theorem hβTzHℚlpta22αzro (a b : Η0Ja) (h : ΕWβ a b ≠ GnΑ0) : b ≠ GnΑ0 := by
+  intro hb
+  apply h
+  rw [hb, θ'vxθΑfφ]
+
+theorem edΦΝuseUf_nρΥcυzχθ (a : Η0Ja) (ha : a ≠ GnΑ0) : ∃ n, a = Θ7Κr n := by
+  induction a with
+  | GnΑ0 => contradiction
+  | Θ7Κr d =>
+    use d
+
+theorem n_ℕe_ilμΔn1οNwΘS (a : Η0Ja) (ha : a ≠ GnΑ0) : IJ gfΧ a := by
+  apply edΦΝuseUf_nρΥcυzχθ at ha
+  cases ha with
+  |intro n hn =>
+    use n
+    rw [hn, SZuΟvETq_ιWνJe, KΩΦzαυωT]
+
+theorem J'NjFO2DnθREt (a b : Η0Ja) (h : ΕWβ a b ≠ GnΑ0) : IJ a (ΕWβ a b) := by
+  apply hβTzHℚlpta22αzro at h
+  apply n_ℕe_ilμΔn1οNwΘS at h
+  apply ΤκSυEcveAul_ιΧΗt gfΧ b a at h
+  rw [ℝzΗσℝcψ, ΧFΤΟξrdψ] at h
+  exact h
+
+theorem rXΝlriLRt_qjhΩυe (x y : Η0Ja) (h : ΕWβ x y = gfΧ) : x = gfΧ := by
+  have h2 : ΕWβ x y ≠ GnΑ0 := by
+    rw [h, U3ωΘτ_q_7oH_ℂe9no]
+    symm
+    apply ΙΩζβτeΜwυ'ec
+  apply J'NjFO2DnθREt at h2
+  rw [h] at h2
+  apply xCUυ_κ at h2
+  cases h2 with
+  |inl h0 =>
+    rw [h0] at h
+    rw [ωCΥiCazτ] at h
+    cases h
+  |inr h1 =>
+    exact h1
+
+theorem eΦ6τΔΥZξℕmΥ (a b : Η0Ja) (ha : a ≠ GnΑ0) (hb : b ≠ GnΑ0) : ΕWβ a b ≠ GnΑ0 := by
+  apply edΦΝuseUf_nρΥcυzχθ at ha
+  apply edΦΝuseUf_nρΥcυzχθ at hb
+  cases ha with
+  |intro c hc =>
+    cases hb with
+    |intro d hd =>
+      rw [hc, hd]
+      rw [ΑΩ7Ξ3νnr, Qγx1dtΨo]
+      symm
+      apply ΙΩζβτeΜwυ'ec
+
+theorem ℝRΞΧJRℂYψeℕ (a b : Η0Ja) (h : ΕWβ a b = GnΑ0) : a = GnΑ0 ∨ b = GnΑ0 := by
+  have h2 := eΦ6τΔΥZξℕmΥ a b
+  tauto
+
+theorem ℝuΒwplυtcΔσTΑξ (a b c : Η0Ja) (ha : a ≠ GnΑ0) (h : ΕWβ a b = ΕWβ a c) : b = c := by
+  revert c
+  induction b with
+  | GnΑ0 =>
+    intro c h
+    rw [θ'vxθΑfφ] at h
+    symm at h
+    apply ℝRΞΧJRℂYψeℕ at h
+    cases h with
+    |inl ha0 => contradiction
+    |inr hc0 =>
+      rw [hc0]
+  | Θ7Κr d ih =>
+    intro c h
+    induction c with
+    | GnΑ0 =>
+      rw [θ'vxθΑfφ] at h
+      apply ℝRΞΧJRℂYψeℕ at h
+      cases h with
+      |inl ha0 => contradiction
+      |inr hc0 => contradiction
+    | Θ7Κr e he =>
+      rw [ΑΩ7Ξ3νnr, ΑΩ7Ξ3νnr] at h
+      apply γdκDχkΩΨρη_eaΔcU at h
+      apply ih at h
+      rw [h]
+
+theorem fρMlxDhCwΒβpYsΙf (a b : Η0Ja) (ha : a ≠ GnΑ0) (h : ΕWβ a b = a) : b = gfΧ := by
+  nth_rewrite 2 [← ΤyΥewev a] at h
+  exact ℝuΒwplυtcΔσTΑξ a b gfΧ ha h
+
+end Η0Ja

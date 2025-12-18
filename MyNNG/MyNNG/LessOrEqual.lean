@@ -2,37 +2,37 @@ import MyNNG.AdvAddition
 
 open MyNat
 
-theorem le_refl (x : MyNat) : x ≤ x := by
+theorem le_refl (x : MyNat) : le x x := by
   use zero
   rw [add_zero]
 
-theorem zero_le (x : MyNat) : zero ≤ x := by
+theorem zero_le (x : MyNat) : le zero x := by
   use x
   rw [zero_add]
 
-theorem le_succ_self (x : MyNat) : x ≤ succ x := by
+theorem le_succ_self (x : MyNat) : le x (succ x) := by
   use one
   rw [one_eq_succ_zero]
   rw [add_succ]
   rw [add_zero]
 
-theorem le_trans (x y z : MyNat) (hxy : x ≤ y) (hyz : y ≤ z) : x ≤ z := by
+theorem le_trans (x y z : MyNat) (hxy : le x y) (hyz : le y z) : le x z := by
   cases hxy with
   | intro a ha =>
     cases hyz with
     | intro b hb =>
-      apply Exists.intro (a + b)
+      apply Exists.intro (add a b)
       rw [hb, ha]
       rw [add_assoc]
 
-theorem le_zero (x : MyNat) (hx : x ≤ zero) : x = zero := by
+theorem le_zero (x : MyNat) (hx : le x zero) : x = zero := by
   cases hx with
   | intro a ha =>
     symm at ha
     apply add_right_eq_zero at ha
     exact ha
 
-theorem le_antisymm (x y : MyNat) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
+theorem le_antisymm (x y : MyNat) (hxy : le x y) (hyx : le y x) : x = y := by
   cases hxy with
   | intro a ha =>
     cases hyx with
@@ -52,7 +52,7 @@ theorem or_symm (x y : MyNat) (h : x = four ∨ y = three) : y = three ∨ x = f
     left
     rw [hy]
 
-theorem le_total (x y : MyNat) : x ≤ y ∨ y ≤ x := by
+theorem le_total (x y : MyNat) : (le x y) ∨ (le y x) := by
   induction y with
   | zero =>
     right
@@ -64,7 +64,7 @@ theorem le_total (x y : MyNat) : x ≤ y ∨ y ≤ x := by
       cases h1 with
       | intro e h1 =>
         rw [h1]
-        use e + one
+        use add e one
         rw [succ_eq_add_one, add_assoc]
     | inr h2 =>
       cases h2 with
@@ -83,7 +83,7 @@ theorem le_total (x y : MyNat) : x ≤ y ∨ y ≤ x := by
           rw [succ_add]
           exact he
 
-theorem succ_le_succ (x y : MyNat) (hx : succ x ≤ succ y) : x ≤ y := by
+theorem succ_le_succ (x y : MyNat) (hx : le (succ x) (succ y)) : le x y := by
   cases hx with
   | intro d hd =>
     use d
@@ -91,7 +91,7 @@ theorem succ_le_succ (x y : MyNat) (hx : succ x ≤ succ y) : x ≤ y := by
     apply succ_inj at hd
     exact hd
 
-theorem le_one (x : MyNat) (hx : x ≤ one) : x = zero ∨ x = one := by
+theorem le_one (x : MyNat) (hx : le x one) : x = zero ∨ x = one := by
   induction x with
   | zero =>
     left
@@ -104,7 +104,7 @@ theorem le_one (x : MyNat) (hx : x ≤ one) : x = zero ∨ x = one := by
     rw [hx]
     rfl
 
-theorem le_two (x : MyNat) (hx : x ≤ two) : x = zero ∨ x = one ∨ x = two := by
+theorem le_two (x : MyNat) (hx : le x two) : x = zero ∨ x = one ∨ x = two := by
   cases x with
   | zero =>
     left
@@ -125,15 +125,15 @@ theorem le_two (x : MyNat) (hx : x ≤ two) : x = zero ∨ x = one ∨ x = two :
       right
       rfl
 
-theorem one_add_le_self (x : MyNat) : x ≤ one + x := by
+theorem one_add_le_self (x : MyNat) : le x (add one x) := by
   use one
   rw [add_comm]
 
-theorem reflexive (x : MyNat) : x ≤  x := by
+theorem reflexive (x : MyNat) : le x  x := by
   use zero
   rw [add_zero]
 
-theorem le_succ (a b : MyNat) : a ≤ b → a ≤ (succ b) := by
+theorem le_succ (a b : MyNat) : le a b → le a (succ b) := by
   intro h
   cases h with
   | intro c hc =>

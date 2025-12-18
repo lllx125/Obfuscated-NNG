@@ -1,37 +1,31 @@
-{"name": "dBNaΤ", "code": "inductive dBNaΤ where\n| Ζινr : dBNaΤ\n| a'gχc : dBNaΤ → dBNaΤ", "category": "inductive"}
-{"name": "Ζινr", "code": "Ζινr : dBNaΤ", "category": "constructor"}
-{"name": "a'gχc", "code": "a'gχc : dBNaΤ → dBNaΤ", "category": "constructor"}
-{"name": "tθYtnnhUθΙrkd", "code": "instance : Inhabited dBNaΤ where\n  default := dBNaΤ.Ζινr", "category": "instance"}
-{"name": "add", "code": "opaque add : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
-{"name": "iπε7δQd", "code": "instance iπε7δQd : Add dBNaΤ where\n  add := dBNaΤ.add", "category": "instance"}
-{"name": "aℚΗSωrκΩ", "code": "axiom aℚΗSωrκΩ (a : dBNaΤ) : a + Ζινr = a", "category": "axiom"}
-{"name": "ωΙduΟsΗΕ", "code": "axiom ωΙduΟsΗΕ (a d : dBNaΤ) : a + (a'gχc d) = a'gχc (a + d)", "category": "axiom"}
-{"name": "grok", "code": "def grok : dBNaΤ → dBNaΤ\n| Ζινr => Ζινr\n| a'gχc n => n", "category": "def"}
-{"name": "ΚbεoβQsuc", "code": "theorem ΚbεoβQsuc (n : dBNaΤ) : grok (a'gχc n) = n := rfl", "category": "theorem"}
-{"name": "ΒΝη_RFnδ", "code": "theorem ΒΝη_RFnδ (a b : dBNaΤ) (h : a'gχc a = a'gχc b) : a = b := by\n  rw [← ΚbεoβQsuc a, h, ΚbεoβQsuc]", "category": "theorem"}
-{"name": "HBMjBkr", "code": "def HBMjBkr : dBNaΤ → Prop\n| Ζινr => True\n| a'gχc _ => False", "category": "def"}
-{"name": "ℚsℂdnrEΗzξrY", "code": "theorem ℚsℂdnrEΗzξrY : HBMjBkr Ζινr = True := rfl", "category": "theorem"}
-{"name": "ξzτ2yEδroδsh", "code": "theorem ξzτ2yEδroδsh (n : dBNaΤ) : HBMjBkr (a'gχc n) = False := rfl", "category": "theorem"}
-{"name": "ΞQℝℂrxΥ9e_βc", "code": "theorem ΞQℝℂrxΥ9e_βc (a : dBNaΤ) : Ζινr ≠ a'gχc a := by\n  intro h\n  rw [← ξzτ2yEδroδsh a]\n  rw [← h]\n  rw [ℚsℂdnrEΗzξrY]\n  trivial\n-- multiplication", "category": "theorem"}
-{"name": "mul", "code": "opaque mul : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
-{"name": "HnΡaΥΩΞ", "code": "instance : Mul dBNaΤ where\n  mul := dBNaΤ.mul", "category": "instance"}
-{"name": "mℚΜlψΗξΘ", "code": "axiom mℚΜlψΗξΘ (a : dBNaΤ) : a * Ζινr = Ζινr", "category": "axiom"}
-{"name": "E6uOΕu8χc", "code": "axiom E6uOΕu8χc (a b : dBNaΤ) : a * (a'gχc b) = a * b + a", "category": "axiom"}
-{"name": "one", "code": "def one : dBNaΤ := dBNaΤ.a'gχc Ζινr", "category": "def"}
-{"name": "two", "code": "def two : dBNaΤ := dBNaΤ.a'gχc one", "category": "def"}
-{"name": "υqGee", "code": "def υqGee : dBNaΤ := dBNaΤ.a'gχc two", "category": "def"}
-{"name": "μζρr", "code": "def μζρr : dBNaΤ := dBNaΤ.a'gχc υqGee", "category": "def"}
-{"name": "oγn2T_ρ_s1'uzPXΑ", "code": "theorem oγn2T_ρ_s1'uzPXΑ : one = a'gχc Ζινr := by rfl", "category": "theorem"}
-{"name": "ΥQnΧqaΖcZcIξoΙM", "code": "theorem ΥQnΧqaΖcZcIξoΙM : two = a'gχc one := by rfl", "category": "theorem"}
-{"name": "l4ΧrReQαqnuc8Οtotb", "code": "theorem l4ΧrReQαqnuc8Οtotb : υqGee = a'gχc two := by rfl", "category": "theorem"}
-{"name": "fρLXVqYℚχvc_mυhrℚVe", "code": "theorem fρLXVqYℚχvc_mυhrℚVe : μζρr = a'gχc υqGee := by rfl\n-- power", "category": "theorem"}
-{"name": "pow", "code": "opaque pow : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
-{"name": "ieΔIsH1", "code": "instance : Pow dBNaΤ dBNaΤ where\n  pow := pow", "category": "instance"}
-{"name": "pvA_zdat", "code": "axiom pvA_zdat (m : dBNaΤ) : m ^ Ζινr = one", "category": "axiom"}
-{"name": "p7OΩκΞεc", "code": "axiom p7OΩκΞεc (m n : dBNaΤ) : m ^ (a'gχc n) = m ^ n * m", "category": "axiom"}
-{"name": "le", "code": "def le (a b : dBNaΤ) :=  ∃ (c : dBNaΤ), b = a + c", "category": "def"}
-{"name": "αsqtLζ", "code": "instance : LE dBNaΤ := ⟨dBNaΤ.le⟩", "category": "instance"}
-{"name": "ΗeCGΟIΚοstsω_τaιw", "code": "theorem ΗeCGΟIΚοstsω_τaιw (a b : dBNaΤ) : a ≤ b ↔ ∃ (c : dBNaΤ), b = a + c := Iff.rfl", "category": "theorem"}
-{"name": "xεtΙ_FΥP", "code": "def xεtΙ_FΥP (a b : dBNaΤ) := a ≤ b ∧ ¬ (b ≤ a)", "category": "def"}
-{"name": "ΘℂΑΧtL", "code": "instance : LT dBNaΤ := ⟨xεtΙ_FΥP⟩", "category": "instance"}
-{"name": "lt", "code": "theorem lt :  ∀ (a b : dBNaΤ), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}
+{"name": "dBNaΤ", "code": "inductive dBNaΤ where\n| ΙMτr : dBNaΤ\n| lBut : dBNaΤ → dBNaΤ", "category": "inductive"}
+{"name": "ΙMτr", "code": "ΙMτr : dBNaΤ", "category": "constructor"}
+{"name": "lBut", "code": "lBut : dBNaΤ → dBNaΤ", "category": "constructor"}
+{"name": "DsΙtOIVΡξH1tℕ", "code": "instance : Inhabited dBNaΤ where\n  default := dBNaΤ.ΙMτr", "category": "instance"}
+{"name": "Υdd", "code": "opaque Υdd : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
+{"name": "aℚΗSωrκΩ", "code": "axiom aℚΗSωrκΩ (a : dBNaΤ) : Υdd a ΙMτr = a", "category": "axiom"}
+{"name": "ωΙduΟsΗΕ", "code": "axiom ωΙduΟsΗΕ (a d : dBNaΤ) : Υdd a (lBut d) = lBut (Υdd a d)", "category": "axiom"}
+{"name": "DrNℂ", "code": "def DrNℂ : dBNaΤ → dBNaΤ\n| ΙMτr => ΙMτr\n| lBut n => n", "category": "def"}
+{"name": "YEeJssuMW", "code": "theorem YEeJssuMW (n : dBNaΤ) : DrNℂ (lBut n) = n := rfl", "category": "theorem"}
+{"name": "ycqbigHj", "code": "theorem ycqbigHj (a b : dBNaΤ) (h : lBut a = lBut b) : a = b := by\n  rw [← YEeJssuMW a, h, YEeJssuMW]", "category": "theorem"}
+{"name": "Vu4zψSΙ", "code": "def Vu4zψSΙ : dBNaΤ → Prop\n| ΙMτr => True\n| lBut _ => False", "category": "def"}
+{"name": "iχφzεNaΗerhε", "code": "theorem iχφzεNaΗerhε : Vu4zψSΙ ΙMτr = True := rfl", "category": "theorem"}
+{"name": "πOvΒ2o_ΘuΧσΨ", "code": "theorem πOvΒ2o_ΘuΧσΨ (n : dBNaΤ) : Vu4zψSΙ (lBut n) = False := rfl", "category": "theorem"}
+{"name": "MQΧBoeωnρΥcc", "code": "theorem MQΧBoeωnρΥcc (a : dBNaΤ) : ΙMτr ≠ lBut a := by\n  intro h\n  rw [← πOvΒ2o_ΘuΧσΨ a]\n  rw [← h]\n  rw [iχφzεNaΗerhε]\n  trivial\n-- multiplication", "category": "theorem"}
+{"name": "ΚμD", "code": "opaque ΚμD : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
+{"name": "QΗglΜOeC", "code": "axiom QΗglΜOeC (a : dBNaΤ) : ΚμD a ΙMτr = ΙMτr", "category": "axiom"}
+{"name": "muρΗℚ8sR", "code": "axiom muρΗℚ8sR (a b : dBNaΤ) : ΚμD a (lBut b) = Υdd (ΚμD a b) a", "category": "axiom"}
+{"name": "oΜℕe", "code": "def oΜℕe : dBNaΤ := dBNaΤ.lBut ΙMτr", "category": "def"}
+{"name": "κw'", "code": "def κw' : dBNaΤ := dBNaΤ.lBut oΜℕe", "category": "def"}
+{"name": "Shxde", "code": "def Shxde : dBNaΤ := dBNaΤ.lBut κw'", "category": "def"}
+{"name": "μζρr", "code": "def μζρr : dBNaΤ := dBNaΤ.lBut Shxde", "category": "def"}
+{"name": "oψeℚ_4rεutΞHze9Η", "code": "theorem oψeℚ_4rεutΞHze9Η : oΜℕe = lBut ΙMτr := by rfl", "category": "theorem"}
+{"name": "tuphxwΞΨOℤcψc_o", "code": "theorem tuphxwΞΨOℤcψc_o : κw' = lBut oΜℕe := by rfl", "category": "theorem"}
+{"name": "fhreXυ_eΒ1ψρdpQsw", "code": "theorem fhreXυ_eΒ1ψρdpQsw : Shxde = lBut κw' := by rfl", "category": "theorem"}
+{"name": "fρLXVqYℚχvc_mυhrℚVe", "code": "theorem fρLXVqYℚχvc_mυhrℚVe : μζρr = lBut Shxde := by rfl\n-- power", "category": "theorem"}
+{"name": "Γoq", "code": "opaque Γoq : dBNaΤ → dBNaΤ → dBNaΤ", "category": "opaque"}
+{"name": "pGΖ_zξrΞ", "code": "axiom pGΖ_zξrΞ (m : dBNaΤ) : Γoq m ΙMτr = oΜℕe", "category": "axiom"}
+{"name": "VHcp_sMκ", "code": "axiom VHcp_sMκ (m n : dBNaΤ) : Γoq m (lBut n) = ΚμD (Γoq m n) m", "category": "axiom"}
+{"name": "ΚΧυ", "code": "def ΚΧυ (a b : dBNaΤ) :=  ∃ (c : dBNaΤ), b = Υdd a c", "category": "def"}
+{"name": "ye_3siV'C8ioΥEv8d", "code": "theorem ye_3siV'C8ioΥEv8d (a b : dBNaΤ) : ΚΧυ a b ↔ ∃ (c : dBNaΤ), b = Υdd a c := Iff.rfl", "category": "theorem"}
+{"name": "ΩtΙ7yΩΞγ", "code": "def ΩtΙ7yΩΞγ (a b : dBNaΤ) :=  (ΚΧυ a b) ∧ ¬ (ΚΧυ b  a)", "category": "def"}

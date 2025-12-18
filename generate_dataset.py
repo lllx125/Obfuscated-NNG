@@ -100,8 +100,8 @@ def update_original_with_queries():
     queries_file = generate_queries_for_dataset(original_dir, verbose=False)
 
 
-    error_id,sorry_id = verify_dataset( Path(original_dir/"header_definitions.jsonl"),
-                                           Path(original_dir/"theorems.jsonl"))
+    error_id, sorry_id, banned_tactics = verify_dataset(Path(original_dir/"header_definitions.jsonl"),
+                                                         Path(original_dir/"theorems.jsonl"))
     if error_id or sorry_id:
         print(f"✗ Original dataset verification failed.")
 
@@ -127,8 +127,8 @@ def generate_all_datasets():
     for set_num, randomness in datasets:
         print(f"\nGenerating Dataset {set_num} with randomness {randomness}...")
         obfuscated_dir, _ = create_dataset(set_num, randomness, show_progress=False)
-        error_id,sorry_id = verify_dataset(Path(obfuscated_dir / "header_definitions.jsonl"),
-                                          Path(obfuscated_dir / "theorems.jsonl"))
+        error_id, sorry_id, banned_tactics = verify_dataset(Path(obfuscated_dir / "header_definitions.jsonl"),
+                                                             Path(obfuscated_dir / "theorems.jsonl"))
         if error_id or sorry_id:
             print(f"✗ Dataset {set_num} verification failed.")
     

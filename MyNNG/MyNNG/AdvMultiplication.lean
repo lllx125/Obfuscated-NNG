@@ -3,13 +3,13 @@ import MyNNG.Multiplication
 
 open MyNat
 
-theorem mul_le_mul_right (a b t : MyNat) (h : a ≤ b) : a * t ≤ b * t := by
+theorem mul_le_mul_right (a b t : MyNat) (h : le a b) : le (mul a t) (mul b t) := by
   cases h with
   |intro d hd =>
-    use d * t
+    use mul d t
     rw [hd, add_mul]
 
-theorem mul_left_ne_zero (a b : MyNat) (h : a * b ≠ zero) : b ≠ zero := by
+theorem mul_left_ne_zero (a b : MyNat) (h : mul a b ≠ zero) : b ≠ zero := by
   intro hb
   apply h
   rw [hb, mul_zero]
@@ -20,22 +20,22 @@ theorem eq_succ_of_ne_zero (a : MyNat) (ha : a ≠ zero) : ∃ n, a = succ n := 
   | succ d =>
     use d
 
-theorem one_le_of_ne_zero (a : MyNat) (ha : a ≠ zero) : one ≤ a := by
+theorem one_le_of_ne_zero (a : MyNat) (ha : a ≠ zero) : le one a := by
   apply eq_succ_of_ne_zero at ha
   cases ha with
   |intro n hn =>
     use n
     rw [hn, succ_eq_add_one, add_comm]
 
-theorem le_mul_right (a b : MyNat) (h : a * b ≠ zero) : a ≤ a * b := by
+theorem le_mul_right (a b : MyNat) (h : mul a b ≠ zero) : le a (mul a b) := by
   apply mul_left_ne_zero at h
   apply one_le_of_ne_zero at h
   apply mul_le_mul_right one b a at h
   rw [one_mul, mul_comm] at h
   exact h
 
-theorem mul_right_eq_one (x y : MyNat) (h : x * y = one) : x = one := by
-  have h2 : x * y ≠ zero := by
+theorem mul_right_eq_one (x y : MyNat) (h : mul x y = one) : x = one := by
+  have h2 : mul x y ≠ zero := by
     rw [h, one_eq_succ_zero]
     symm
     apply zero_ne_succ
@@ -50,7 +50,7 @@ theorem mul_right_eq_one (x y : MyNat) (h : x * y = one) : x = one := by
   |inr h1 =>
     exact h1
 
-theorem mul_ne_zero (a b : MyNat) (ha : a ≠ zero) (hb : b ≠ zero) : a * b ≠ zero := by
+theorem mul_ne_zero (a b : MyNat) (ha : a ≠ zero) (hb : b ≠ zero) : mul a b ≠ zero := by
   apply eq_succ_of_ne_zero at ha
   apply eq_succ_of_ne_zero at hb
   cases ha with
@@ -62,11 +62,11 @@ theorem mul_ne_zero (a b : MyNat) (ha : a ≠ zero) (hb : b ≠ zero) : a * b �
       symm
       apply zero_ne_succ
 
-theorem mul_eq_zero (a b : MyNat) (h : a * b = zero) : a = zero ∨ b = zero := by
+theorem mul_eq_zero (a b : MyNat) (h : mul a b = zero) : a = zero ∨ b = zero := by
   have h2 := mul_ne_zero a b
   tauto
 
-theorem mul_left_cancel (a b c : MyNat) (ha : a ≠ zero) (h : a * b = a * c) : b = c := by
+theorem mul_left_cancel (a b c : MyNat) (ha : a ≠ zero) (h : mul a b = mul a c) : b = c := by
   revert c
   induction b with
   | zero =>
@@ -93,6 +93,6 @@ theorem mul_left_cancel (a b c : MyNat) (ha : a ≠ zero) (h : a * b = a * c) : 
       apply ih at h
       rw [h]
 
-theorem mul_right_eq_self (a b : MyNat) (ha : a ≠ zero) (h : a * b = a) : b = one := by
+theorem mul_right_eq_self (a b : MyNat) (ha : a ≠ zero) (h : mul a b = a) : b = one := by
   nth_rewrite 2 [← mul_one a] at h
   exact mul_left_cancel a b one ha h

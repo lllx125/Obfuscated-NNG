@@ -17,13 +17,10 @@ instance : Inhabited MyNat where
 -- addition
 opaque add : MyNat → MyNat → MyNat
 
-instance instAdd : Add MyNat where
-  add := MyNat.add
-
 @[simp]
-axiom add_zero (a : MyNat) : a + zero = a
+axiom add_zero (a : MyNat) : add a zero = a
 
-axiom add_succ (a d : MyNat) : a + (succ d) = succ (a + d)
+axiom add_succ (a d : MyNat) : add a (succ d) = succ (add a d)
 
 -- Peano axioms
 def pred : MyNat → MyNat
@@ -52,12 +49,9 @@ theorem zero_ne_succ (a : MyNat) : zero ≠ succ a := by
 -- multiplication
 opaque mul : MyNat → MyNat → MyNat
 
-instance : Mul MyNat where
-  mul := MyNat.mul
+axiom mul_zero (a : MyNat) : mul a zero = zero
 
-axiom mul_zero (a : MyNat) : a * zero = zero
-
-axiom mul_succ (a b : MyNat) : a * (succ b) = a * b + a
+axiom mul_succ (a b : MyNat) : mul a (succ b) = add (mul a b) a
 
 -- some numerals
 def one : MyNat := MyNat.succ zero
@@ -73,25 +67,15 @@ theorem four_eq_succ_three : four = succ three := by rfl
 -- power
 opaque pow : MyNat → MyNat → MyNat
 
-instance : Pow MyNat MyNat where
-  pow := pow
+axiom pow_zero (m : MyNat) : pow m zero = one
 
-axiom pow_zero (m : MyNat) : m ^ zero = one
-
-axiom pow_succ (m n : MyNat) : m ^ (succ n) = m ^ n * m
+axiom pow_succ (m n : MyNat) : pow m (succ n) = mul (pow m n) m
 
 
 -- inequality
-def le (a b : MyNat) :=  ∃ (c : MyNat), b = a + c
+def le (a b : MyNat) :=  ∃ (c : MyNat), b = add a c
 
-instance : LE MyNat := ⟨MyNat.le⟩
-
-theorem le_iff_exists_add (a b : MyNat) : a ≤ b ↔ ∃ (c : MyNat), b = a + c := Iff.rfl
-
-def lt_myNat (a b : MyNat) := a ≤ b ∧ ¬ (b ≤ a)
-
-instance : LT MyNat := ⟨lt_myNat⟩
-
-theorem lt :  ∀ (a b : MyNat), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl
+theorem le_iff_exists_add (a b : MyNat) : le a b ↔ ∃ (c : MyNat), b = add a c := Iff.rfl
+def lt_myNat (a b : MyNat) :=  (le a b) ∧ ¬ (le b  a)
 
 end MyNat

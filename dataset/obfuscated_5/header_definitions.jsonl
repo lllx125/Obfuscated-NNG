@@ -1,37 +1,31 @@
-{"name": "Η0Ja", "code": "inductive Η0Ja where\n| ΓnYL : Η0Ja\n| ℝΒΝγ : Η0Ja → Η0Ja", "category": "inductive"}
-{"name": "ΓnYL", "code": "ΓnYL : Η0Ja", "category": "constructor"}
-{"name": "ℝΒΝγ", "code": "ℝΒΝγ : Η0Ja → Η0Ja", "category": "constructor"}
-{"name": "ℂi'sΙFΗZζTJtex", "code": "instance : Inhabited Η0Ja where\n  default := Η0Ja.ΓnYL", "category": "instance"}
-{"name": "add", "code": "opaque add : Η0Ja → Η0Ja → Η0Ja", "category": "opaque"}
-{"name": "f2NpΗi4", "code": "instance f2NpΗi4 : Add Η0Ja where\n  add := Η0Ja.add", "category": "instance"}
-{"name": "Ε6ΖΜF_Zζ", "code": "axiom Ε6ΖΜF_Zζ (a : Η0Ja) : a + ΓnYL = a", "category": "axiom"}
-{"name": "Qγx1dtΨo", "code": "axiom Qγx1dtΨo (a d : Η0Ja) : a + (ℝΒΝγ d) = ℝΒΝγ (a + d)", "category": "axiom"}
-{"name": "FPtG", "code": "def FPtG : Η0Ja → Η0Ja\n| ΓnYL => ΓnYL\n| ℝΒΝγ n => n", "category": "def"}
-{"name": "jγy47Ey6u", "code": "theorem jγy47Ey6u (n : Η0Ja) : FPtG (ℝΒΝγ n) = n := rfl", "category": "theorem"}
-{"name": "LΝ1ΡΤxyΘ", "code": "theorem LΝ1ΡΤxyΘ (a b : Η0Ja) (h : ℝΒΝγ a = ℝΒΝγ b) : a = b := by\n  rw [← jγy47Ey6u a, h, jγy47Ey6u]", "category": "theorem"}
-{"name": "T4skpΞ2φ", "code": "def T4skpΞ2φ : Η0Ja → Prop\n| ΓnYL => True\n| ℝΒΝγ _ => False", "category": "def"}
-{"name": "onμAEυ'αρXy", "code": "theorem onμAEυ'αρXy : T4skpΞ2φ ΓnYL = True := rfl", "category": "theorem"}
-{"name": "ζ3aOeoΝMEOK", "code": "theorem ζ3aOeoΝMEOK (n : Η0Ja) : T4skpΞ2φ (ℝΒΝγ n) = False := rfl", "category": "theorem"}
-{"name": "pJΝz_cCΔuDi", "code": "theorem pJΝz_cCΔuDi (a : Η0Ja) : ΓnYL ≠ ℝΒΝγ a := by\n  intro h\n  rw [← ζ3aOeoΝMEOK a]\n  rw [← h]\n  rw [onμAEυ'αρXy]\n  trivial\n-- multiplication", "category": "theorem"}
-{"name": "mul", "code": "opaque mul : Η0Ja → Η0Ja → Η0Ja", "category": "opaque"}
-{"name": "ΤΟmφωuτ", "code": "instance : Mul Η0Ja where\n  mul := Η0Ja.mul", "category": "instance"}
-{"name": "xrγοΧNΟS", "code": "axiom xrγοΧNΟS (a : Η0Ja) : a * ΓnYL = ΓnYL", "category": "axiom"}
-{"name": "οmπΘ'e6Ζ", "code": "axiom οmπΘ'e6Ζ (a b : Η0Ja) : a * (ℝΒΝγ b) = a * b + a", "category": "axiom"}
-{"name": "one", "code": "def one : Η0Ja := Η0Ja.ℝΒΝγ ΓnYL", "category": "def"}
-{"name": "two", "code": "def two : Η0Ja := Η0Ja.ℝΒΝγ one", "category": "def"}
-{"name": "ηCΧε", "code": "def ηCΧε : Η0Ja := Η0Ja.ℝΒΝγ two", "category": "def"}
-{"name": "Wre0", "code": "def Wre0 : Η0Ja := Η0Ja.ℝΒΝγ ηCΧε", "category": "def"}
-{"name": "oΥuκfIν_3ΓpxzM1f", "code": "theorem oΥuκfIν_3ΓpxzM1f : one = ℝΒΝγ ΓnYL := by rfl", "category": "theorem"}
-{"name": "G1o4aAξφPu8_oωΘ", "code": "theorem G1o4aAξφPu8_oωΘ : two = ℝΒΝγ one := by rfl", "category": "theorem"}
-{"name": "ΩZ3rK9Cσ_sclcΖυK", "code": "theorem ΩZ3rK9Cσ_sclcΖυK : ηCΧε = ℝΒΝγ two := by rfl", "category": "theorem"}
-{"name": "XfξHc_eqζΗJcιrVEr9", "code": "theorem XfξHc_eqζΗJcιrVEr9 : Wre0 = ℝΒΝγ ηCΧε := by rfl\n-- power", "category": "theorem"}
-{"name": "pow", "code": "opaque pow : Η0Ja → Η0Ja → Η0Ja", "category": "opaque"}
-{"name": "fcDξΥW4", "code": "instance : Pow Η0Ja Η0Ja where\n  pow := pow", "category": "instance"}
-{"name": "bhkΜκξΨl", "code": "axiom bhkΜκξΨl (m : Η0Ja) : m ^ ΓnYL = one", "category": "axiom"}
-{"name": "MACoOΤγf", "code": "axiom MACoOΤγf (m n : Η0Ja) : m ^ (ℝΒΝγ n) = m ^ n * m", "category": "axiom"}
-{"name": "le", "code": "def le (a b : Η0Ja) :=  ∃ (c : Η0Ja), b = a + c", "category": "def"}
-{"name": "nwΒNpi", "code": "instance : LE Η0Ja := ⟨Η0Ja.le⟩", "category": "instance"}
-{"name": "l8ziY4_μυsρνΚdCd", "code": "theorem l8ziY4_μυsρνΚdCd (a b : Η0Ja) : a ≤ b ↔ ∃ (c : Η0Ja), b = a + c := Iff.rfl", "category": "theorem"}
-{"name": "qψ'κΧιM", "code": "def qψ'κΧιM (a b : Η0Ja) := a ≤ b ∧ ¬ (b ≤ a)", "category": "def"}
-{"name": "πbΑΩtΓ", "code": "instance : LT Η0Ja := ⟨qψ'κΧιM⟩", "category": "instance"}
-{"name": "lt", "code": "theorem lt :  ∀ (a b : Η0Ja), a < b ↔ a ≤ b ∧ ¬b ≤ a := fun _ _ => Iff.rfl", "category": "theorem"}
+{"name": "Η0Ja", "code": "inductive Η0Ja where\n| GnΑ0 : Η0Ja\n| Θ7Κr : Η0Ja → Η0Ja", "category": "inductive"}
+{"name": "GnΑ0", "code": "GnΑ0 : Η0Ja", "category": "constructor"}
+{"name": "Θ7Κr", "code": "Θ7Κr : Η0Ja → Η0Ja", "category": "constructor"}
+{"name": "βNΒδIQοΒbuwb5", "code": "instance : Inhabited Η0Ja where\n  default := Η0Ja.GnΑ0", "category": "instance"}
+{"name": "ΚxΝ", "code": "opaque ΚxΝ : Η0Ja → Η0Ja → Η0Ja", "category": "opaque"}
+{"name": "Ε6ΖΜF_Zζ", "code": "axiom Ε6ΖΜF_Zζ (a : Η0Ja) : ΚxΝ a GnΑ0 = a", "category": "axiom"}
+{"name": "Qγx1dtΨo", "code": "axiom Qγx1dtΨo (a d : Η0Ja) : ΚxΝ a (Θ7Κr d) = Θ7Κr (ΚxΝ a d)", "category": "axiom"}
+{"name": "gkDΞ", "code": "def gkDΞ : Η0Ja → Η0Ja\n| GnΑ0 => GnΑ0\n| Θ7Κr n => n", "category": "def"}
+{"name": "O0ℝΒΝDΨℕ2", "code": "theorem O0ℝΒΝDΨℕ2 (n : Η0Ja) : gkDΞ (Θ7Κr n) = n := rfl", "category": "theorem"}
+{"name": "o5Εgγtdvl", "code": "theorem o5Εgγtdvl (a b : Η0Ja) (h : Θ7Κr a = Θ7Κr b) : a = b := by\n  rw [← O0ℝΒΝDΨℕ2 a, h, O0ℝΒΝDΨℕ2]", "category": "theorem"}
+{"name": "ℂy'tΒγ", "code": "def ℂy'tΒγ : Η0Ja → Prop\n| GnΑ0 => True\n| Θ7Κr _ => False", "category": "def"}
+{"name": "I4ξΒℤk_z8ξΩν", "code": "theorem I4ξΒℤk_z8ξΩν : ℂy'tΒγ GnΑ0 = True := rfl", "category": "theorem"}
+{"name": "OiiFkEΖ__bp", "code": "theorem OiiFkEΖ__bp (n : Η0Ja) : ℂy'tΒγ (Θ7Κr n) = False := rfl", "category": "theorem"}
+{"name": "ΙΩζβτeΜwυ'ec", "code": "theorem ΙΩζβτeΜwυ'ec (a : Η0Ja) : GnΑ0 ≠ Θ7Κr a := by\n  intro h\n  rw [← OiiFkEΖ__bp a]\n  rw [← h]\n  rw [I4ξΒℤk_z8ξΩν]\n  trivial\n-- multiplication", "category": "theorem"}
+{"name": "ΕWβ", "code": "opaque ΕWβ : Η0Ja → Η0Ja → Η0Ja", "category": "opaque"}
+{"name": "θ'vxθΑfφ", "code": "axiom θ'vxθΑfφ (a : Η0Ja) : ΕWβ a GnΑ0 = GnΑ0", "category": "axiom"}
+{"name": "ΑΩ7Ξ3νnr", "code": "axiom ΑΩ7Ξ3νnr (a b : Η0Ja) : ΕWβ a (Θ7Κr b) = ΚxΝ (ΕWβ a b) a", "category": "axiom"}
+{"name": "gfΧ", "code": "def gfΧ : Η0Ja := Η0Ja.Θ7Κr GnΑ0", "category": "def"}
+{"name": "oVΟ", "code": "def oVΟ : Η0Ja := Η0Ja.Θ7Κr gfΧ", "category": "def"}
+{"name": "χΗΡd", "code": "def χΗΡd : Η0Ja := Η0Ja.Θ7Κr oVΟ", "category": "def"}
+{"name": "Wre0", "code": "def Wre0 : Η0Ja := Η0Ja.Θ7Κr χΗΡd", "category": "def"}
+{"name": "U3ωΘτ_q_7oH_ℂe9no", "code": "theorem U3ωΘτ_q_7oH_ℂe9no : gfΧ = Θ7Κr GnΑ0 := by rfl", "category": "theorem"}
+{"name": "ℚJo_ℕΧΑkUvKΝne", "code": "theorem ℚJo_ℕΧΑkUvKΝne : oVΟ = Θ7Κr gfΧ := by rfl", "category": "theorem"}
+{"name": "hNX_eqΓoXβα6BΗOw", "code": "theorem hNX_eqΓoXβα6BΗOw : χΗΡd = Θ7Κr oVΟ := by rfl", "category": "theorem"}
+{"name": "XfξHc_eqζΗJcιrVEr9", "code": "theorem XfξHc_eqζΗJcιrVEr9 : Wre0 = Θ7Κr χΗΡd := by rfl\n-- power", "category": "theorem"}
+{"name": "νΦΗ", "code": "opaque νΦΗ : Η0Ja → Η0Ja → Η0Ja", "category": "opaque"}
+{"name": "φΜwoΓvΞΦ", "code": "axiom φΜwoΓvΞΦ (m : Η0Ja) : νΦΗ m GnΑ0 = gfΧ", "category": "axiom"}
+{"name": "t4πℂ'Rτ", "code": "axiom t4πℂ'Rτ (m n : Η0Ja) : νΦΗ m (Θ7Κr n) = ΕWβ (νΦΗ m n) m", "category": "axiom"}
+{"name": "IJ", "code": "def IJ (a b : Η0Ja) :=  ∃ (c : Η0Ja), b = ΚxΝ a c", "category": "def"}
+{"name": "_iΝf'_εfApyη9tGD", "code": "theorem _iΝf'_εfApyη9tGD (a b : Η0Ja) : IJ a b ↔ ∃ (c : Η0Ja), b = ΚxΝ a c := Iff.rfl", "category": "theorem"}
+{"name": "sXΝηkΞNΨ", "code": "def sXΝηkΞNΨ (a b : Η0Ja) :=  (IJ a b) ∧ ¬ (IJ b  a)", "category": "def"}

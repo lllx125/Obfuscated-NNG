@@ -43,8 +43,6 @@ RESERVED_NAMES = {
     'where', 'import', 'namespace', 'open', 'end', 'def', 'theorem',
     'axiom', 'instance', 'inductive', 'opaque', 'Inhabited', 'default',
     'Add', 'Mul', 'Pow', 'LE', 'LT', 'Iff', 'HPow',
-    # Structure field names that must match Lean stdlib (can't be obfuscated)
-    'add', 'mul', 'pow', 'le', 'lt'
 }
 
 
@@ -89,6 +87,36 @@ class NameObfuscator:
             aug_word_p=1.0
         )
 
+    def _obfuscate_short_name(self, name: str) -> str:
+        """
+        Manually obfuscate very short names (< 4 chars) that nlpaug can't handle.
+
+        Args:
+            name: The short name to obfuscate
+
+        Returns:
+            Obfuscated version of the name
+        """
+        result = list(name)
+        p_score = self.randomness_level ** 2.5
+
+        # Substitute characters based on probability
+        for i in range(len(result)):
+            if random.random() < p_score:
+                result[i] = random.choice(ALL_CHARS)
+
+        # Optionally insert characters
+        if random.random() < p_score * 0.4:
+            insert_pos = random.randint(0, len(result))
+            result.insert(insert_pos, random.choice(ALL_CHARS))
+
+        # Optionally delete characters (but keep at least 1 char)
+        if len(result) > 1 and random.random() < p_score * 0.3:
+            del_pos = random.randint(0, len(result) - 1)
+            del result[del_pos]
+
+        return ''.join(result)
+
     def obfuscate(self, original_name: str, used_names: Set[str]) -> str:
         """
         Obfuscate a name using nlpaug augmenters.
@@ -105,21 +133,26 @@ class NameObfuscator:
 
         name = original_name
 
-        # Apply augmentations in sequence: substitute -> insert -> delete
-        try:
-            # Step 1: Substitute characters
-            name = self.sub_aug.augment(name)[0] if isinstance(self.sub_aug.augment(name), list) else self.sub_aug.augment(name)
+        # Special handling for very short names (nlpaug requires minimum 4 chars)
+        if len(original_name) < 4:
+            # Manually obfuscate short names using character-level changes
+            name = self._obfuscate_short_name(original_name)
+        else:
+            # Apply augmentations in sequence: substitute -> insert -> delete
+            try:
+                # Step 1: Substitute characters
+                name = self.sub_aug.augment(name)[0] if isinstance(self.sub_aug.augment(name), list) else self.sub_aug.augment(name)
 
-            # Step 2: Insert characters
-            name = self.ins_aug.augment(name)[0] if isinstance(self.ins_aug.augment(name), list) else self.ins_aug.augment(name)
+                # Step 2: Insert characters
+                name = self.ins_aug.augment(name)[0] if isinstance(self.ins_aug.augment(name), list) else self.ins_aug.augment(name)
 
-            # Step 3: Delete characters
-            name = self.del_aug.augment(name)[0] if isinstance(self.del_aug.augment(name), list) else self.del_aug.augment(name)
+                # Step 3: Delete characters
+                name = self.del_aug.augment(name)[0] if isinstance(self.del_aug.augment(name), list) else self.del_aug.augment(name)
 
-        except Exception as e:
-            # If augmentation fails, fall back to original name with a suffix
-            print(f"Warning: Augmentation failed for '{original_name}': {e}")
-            name = original_name
+            except Exception as e:
+                # If augmentation fails, fall back to original name with a suffix
+                print(f"Warning: Augmentation failed for '{original_name}': {e}")
+                name = original_name
 
         # Ensure name is not empty
         if not name or len(name.strip()) == 0:
