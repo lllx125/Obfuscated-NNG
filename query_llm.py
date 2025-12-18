@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 from tqdm import tqdm
 from llm_interface import ModelInterface
-from discord_notify import DiscordProgress, send_msg
+from discord_notify import DiscordProgress, send_msg, build_progress_message
 
 # ============================================================================
 # GLOBAL CONFIGURATION
@@ -19,12 +19,12 @@ from discord_notify import DiscordProgress, send_msg
 # LLM Selection: 
 # "deepseek-prover-v2", "goedel-prover-v2"
 # "deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash"
-LLM_NAME = "deepseek-prover-v2-local"
+LLM_NAME = os.getenv("LLM_NAME")
 
 # Experiment Settings
-MAX_RETRY = 3       # Max retries if output format is wrong
-NUM_RUNS = 2        # How many full passes to run
-START_RUN = 1       # Start index for run filenames (e.g., result_0.jsonl)
+MAX_RETRY = int(os.getenv("MAX_RETRY", "3"))       # Max retries if output format is wrong
+NUM_RUNS = int(os.getenv("NUM_RUNS", "2"))        # How many full passes to run
+START_RUN = int(os.getenv("START_RUN", "1"))       # Start index for run filenames (e.g., result_0.jsonl)
 
 # Dataset folders to process
 TARGET_DATASETS = [
@@ -50,10 +50,28 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
     # Calculate total steps for progress tracking
     total_datasets = len(target_datasets)
     total_runs = num_runs
+    total_queries = num_runs * len(target_datasets) * 68  # Each dataset has 68 queries
+    completed_queries = 0
+    experiment_start_time = time.time()
 
     for run_idx in range(start_run, start_run + num_runs):
         print(f"\n{'#'*60}\nStarting Global RUN {run_idx}\n{'#'*60}\n")
-        send_msg(f"📊 **Starting Run {run_idx}** of {start_run + num_runs - 1} | Model: `{llm_name}`")
+
+        run_info = {
+            'current_run': run_idx - start_run + 1,
+            'total_runs': num_runs
+        }
+        time_info = {
+            'elapsed_time': time.time() - experiment_start_time,
+            'completed_queries': completed_queries,
+            'total_queries': total_queries
+        }
+        msg = build_progress_message(
+            f"📊 **Starting Run {run_idx}** of {start_run + num_runs - 1}",
+            run_info=run_info,
+            time_info=time_info
+        )
+        send_msg(msg)
 
         for dataset_idx, ds_name in enumerate(target_datasets, 1):
             ds_path = dataset_base / ds_name
@@ -77,7 +95,22 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
                 queries = [json.loads(line) for line in f if line.strip()]
 
             print(f"--> Processing: {ds_name} | Queries: {len(queries)}")
-            send_msg(f"🔄 **Processing**: `{ds_name}` ({dataset_idx}/{total_datasets}) | {len(queries)} queries")
+
+            run_info = {
+                'current_run': run_idx - start_run + 1,
+                'total_runs': num_runs
+            }
+            time_info = {
+                'elapsed_time': time.time() - experiment_start_time,
+                'completed_queries': completed_queries,
+                'total_queries': total_queries
+            }
+            msg = build_progress_message(
+                f"🔄 **Processing**: `{ds_name}` ({dataset_idx}/{total_datasets}) | {len(queries)} queries",
+                run_info=run_info,
+                time_info=time_info
+            )
+            send_msg(msg)
 
             times_buffer = [] # We keep this in memory to dump the full list every time
             first_write_done = False  # Track if we've successfully written the first result
@@ -112,14 +145,46 @@ def run_experiment(llm_name: str, max_retry: int, num_runs: int, start_run: int,
                 with open(time_file_path, "w", encoding="utf-8") as f_time:
                     json.dump(times_buffer, f_time, indent=4)
 
+                # Increment completed queries counter
+                completed_queries += 1
+
                 # Send progress update every 10%
                 if query_idx % progress_interval == 0:
                     progress_pct = int((query_idx / len(queries)) * 100)
-                    send_msg(f"⏳ **Progress**: `{ds_name}` - {query_idx}/{len(queries)} ({progress_pct}%) queries completed")
+                    run_info = {
+                        'current_run': run_idx - start_run + 1,
+                        'total_runs': num_runs
+                    }
+                    time_info = {
+                        'elapsed_time': time.time() - experiment_start_time,
+                        'completed_queries': completed_queries,
+                        'total_queries': total_queries
+                    }
+                    msg = build_progress_message(
+                        f"⏳ **Progress**: `{ds_name}` - {query_idx}/{len(queries)} ({progress_pct}%) queries completed",
+                        run_info=run_info,
+                        time_info=time_info
+                    )
+                    send_msg(msg)
 
             # End of Dataset Loop
             print(f"    ✓ Completed {ds_name}. Saved to {result_file_path}")
-            send_msg(f"✅ **Completed**: `{ds_name}` - All {len(queries)} queries processed")
+
+            run_info = {
+                'current_run': run_idx - start_run + 1,
+                'total_runs': num_runs
+            }
+            time_info = {
+                'elapsed_time': time.time() - experiment_start_time,
+                'completed_queries': completed_queries,
+                'total_queries': total_queries
+            }
+            msg = build_progress_message(
+                f"✅ **Completed**: `{ds_name}` - All {len(queries)} queries processed",
+                run_info=run_info,
+                time_info=time_info
+            )
+            send_msg(msg)
 
 
             # Cool-down Period if running on local models
