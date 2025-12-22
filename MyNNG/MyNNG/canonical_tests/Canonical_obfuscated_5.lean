@@ -84,39 +84,39 @@ open Η0Ja
 
 -- Theorem 1: ωΙξaινη7
 theorem ωΙξaινη7 (n : Η0Ja) : ΚxΝ GnΑ0 n = n := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 2: gXqΧΔℝvO
 theorem gXqΧΔℝvO (a b : Η0Ja) : ΚxΝ (Θ7Κr a) b = Θ7Κr (ΚxΝ a b)  := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 3: KΩΦzαυωT
 theorem KΩΦzαυωT (a b : Η0Ja) : ΚxΝ a b = ΚxΝ b a := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ωΙξaινη7, gXqΧΔℝvO]
 
 -- Theorem 4: nv3ΧWtℕsL
 theorem nv3ΧWtℕsL (a b c : Η0Ja) : ΚxΝ (ΚxΝ a b) c = ΚxΝ a (ΚxΝ b c) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 5: ΝκdWγΤσkbcΚFNΒ
 theorem ΝκdWγΤσkbcΚFNΒ (a b c : Η0Ja) : ΚxΝ (ΚxΝ a b) c = ΚxΝ (ΚxΝ a c) b := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, KΩΦzαυωT, nv3ΧWtℕsL]
 
 -- Theorem 6: dℚN_γK8ο9d'pχρ
 theorem dℚN_γK8ο9d'pχρ (a b c : Η0Ja) : ΚxΝ a (ΚxΝ b c) = ΚxΝ b (ΚxΝ a c) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, KΩΦzαυωT, nv3ΧWtℕsL]
 
 -- Theorem 7: SZuΟvETq_ιWνJe
 theorem SZuΟvETq_ιWνJe (n : Η0Ja) : Θ7Κr n = ΚxΝ n gfΧ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 8: T7WδnΕΝFtℂεymne
 theorem T7WδnΕΝFtℂεymne (x y z : Η0Ja) (h1 : ΚxΝ x y = Wre0) (h2 : ΚxΝ (ΕWβ χΗΡd x) z = oVΟ) : ΚxΝ x y = Wre0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ]
 
 -- Theorem 9: Nσ0lLiΞpWγjΜυℝ
 theorem Nσ0lLiΞpWγjΜυℝ (x y : Η0Ja) (h : ΚxΝ GnΑ0 x = ΚxΝ (ΚxΝ GnΑ0 y) oVΟ) : x = ΚxΝ y oVΟ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ωΙξaινη7]
 
 -- Theorem 10: iΙpχnχct2ΧttΘ4aΗ
 theorem iΙpχnχct2ΧttΘ4aΗ (x y : Η0Ja) (h1 : x = χΗΡd) (h2 : x = χΗΡd → y = Wre0) : y = Wre0 := by
@@ -124,7 +124,7 @@ theorem iΙpχnχct2ΧttΘ4aΗ (x y : Η0Ja) (h1 : x = χΗΡd) (h2 : x = χΗΡ
 
 -- Theorem 11: immΑRioΝΒ5κSc_sI
 theorem immΑRioΝΒ5κSc_sI (x : Η0Ja) (h : ΚxΝ x gfΧ = Wre0) : x = χΗΡd := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 12: ovΓΡFΓctCκHνℂℂπi
 theorem ovΓΡFΓctCκHνℂℂπi (x : Η0Ja) : x = Wre0 → x = Wre0 := by
@@ -132,7 +132,7 @@ theorem ovΓΡFΓctCκHνℂℂπi (x : Η0Ja) : x = Wre0 → x = Wre0 := by
 
 -- Theorem 13: VθξΚΥΝtΟΑdΗjγx
 theorem VθξΚΥΝtΟΑdΗjγx (x y : Η0Ja) : ΚxΝ x gfΧ = ΚxΝ y gfΧ → x = y := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 14: ωΜνpdRκΧ1tK_seΩ_
 theorem ωΜνpdRκΧ1tK_seΩ_ (x y : Η0Ja) (h1 : x = y) (h2 : x ≠ y) : False := by
@@ -144,15 +144,15 @@ theorem ρUμΞYe'u9Απ : (GnΑ0 : Η0Ja) ≠ gfΧ := by
 
 -- Theorem 16: oβθΤMΚιΑyor
 theorem oβθΤMΚιΑyor : (gfΧ : Η0Ja) ≠ GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec, ρUμΞYe'u9Απ]
 
 -- Theorem 17: vτδZμ3θ_ΩtwqKμ9fψiΘ
 theorem vτδZμ3θ_ΩtwqKμ9fψiΘ : ΚxΝ (Θ7Κr (Θ7Κr GnΑ0)) (Θ7Κr (Θ7Κr GnΑ0)) ≠ Θ7Κr (Θ7Κr (Θ7Κr (Θ7Κr (Θ7Κr GnΑ0)))) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, False.rec, ΙΩζβτeΜwυ'ec]
 
 -- Theorem 18: Rμl53fxρz
 theorem Rμl53fxρz (a b c d : Η0Ja) : ΚxΝ (ΚxΝ a b) (ΚxΝ c d) = ΚxΝ (ΚxΝ (ΚxΝ a c) d) b := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, KΩΦzαυωT, nv3ΧWtℕsL, dℚN_γK8ο9d'pχρ]
 
 -- Theorem 19: sαAιΕLζFrVp
 theorem sαAιΕLζFrVp (a : Η0Ja) : Θ7Κr a ≠ GnΑ0 := by
@@ -164,123 +164,123 @@ theorem βΖLMclΥhℂuΘ (m n : Η0Ja) (h : m ≠ n) : Θ7Κr m ≠ Θ7Κr n :=
 
 -- Theorem 21: ΤyΥewev
 theorem ΤyΥewev (m : Η0Ja) : ΕWβ m gfΧ = m := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ωΙξaινη7]
 
 -- Theorem 22: ωCΥiCazτ
 theorem ωCΥiCazτ (m : Η0Ja) : ΕWβ GnΑ0 m = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ωΙξaινη7]
 
 -- Theorem 23: Ν_zivκyA
 theorem Ν_zivκyA (a b : Η0Ja) : ΕWβ (Θ7Κr a) b = ΚxΝ (ΕWβ a b) b := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ΝκdWγΤσkbcΚFNΒ]
 
 -- Theorem 24: ΧFΤΟξrdψ
 theorem ΧFΤΟξrdψ (a b : Η0Ja) : ΕWβ a b = ΕWβ b a := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ωCΥiCazτ, Ν_zivκyA]
 
 -- Theorem 25: ℝzΗσℝcψ
 theorem ℝzΗσℝcψ (m : Η0Ja) : ΕWβ gfΧ m = m := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ΤyΥewev, ΧFΤΟξrdψ]
 
 -- Theorem 26: ΙΦΔVfe9
 theorem ΙΦΔVfe9 (m : Η0Ja) : ΕWβ oVΟ m = ΚxΝ m m := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ, Ν_zivκyA, ℝzΗσℝcψ]
 
 -- Theorem 27: Ωψ'YiΑσ
 theorem Ωψ'YiΑσ (a b c : Η0Ja) : ΕWβ a (ΚxΝ b c) = ΚxΝ (ΕWβ a b) (ΕWβ a c) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ, nv3ΧWtℕsL]
 
 -- Theorem 28: eexzzm_
 theorem eexzzm_ (a b c : Η0Ja) : ΕWβ (ΚxΝ a b) c = ΚxΝ (ΕWβ a c) (ΕWβ b c) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ΧFΤΟξrdψ, Ωψ'YiΑσ]
 
 -- Theorem 29: ℚQswΘΟVνy
 theorem ℚQswΘΟVνy (a b c : Η0Ja) : ΕWβ (ΕWβ a b) c = ΕWβ a (ΕWβ b c)  := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, Ωψ'YiΑσ]
 
 -- Theorem 30: dσvrJφMβqℝYr0
 theorem dσvrJφMβqℝYr0 : νΦΗ (GnΑ0 : Η0Ja)  GnΑ0 = gfΧ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, t4πℂ'Rτ, φΜwoΓvΞΦ]
 
 -- Theorem 31: wzKξΔΕevEΕcrz
 theorem wzKξΔΕevEΕcrz (m : Η0Ja) : νΦΗ (GnΑ0 : Η0Ja) (Θ7Κr m) = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, t4πℂ'Rτ, φΜwoΓvΞΦ]
 
 -- Theorem 32: hℚyaτxΦ
 theorem hℚyaτxΦ (a : Η0Ja) : νΦΗ a gfΧ = a  := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, t4πℂ'Rτ, φΜwoΓvΞΦ, ℝzΗσℝcψ]
 
 -- Theorem 33: sYJδΓνΩ
 theorem sYJδΓνΩ (m : Η0Ja) : νΦΗ (gfΧ : Η0Ja) m = gfΧ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, t4πℂ'Rτ, φΜwoΓvΞΦ, ℝzΗσℝcψ]
 
 -- Theorem 34: ΓpKΚYδω
 theorem ΓpKΚYδω (a : Η0Ja) : νΦΗ a oVΟ = ΕWβ a a := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, t4πℂ'Rτ, φΜwoΓvΞΦ, hℚyaτxΦ]
 
 -- Theorem 35: ΗAΥuZΡd
 theorem ΗAΥuZΡd (a m n : Η0Ja) : νΦΗ a (ΚxΝ m n) = ΕWβ (νΦΗ a m) (νΦΗ a n) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ, t4πℂ'Rτ, φΜwoΓvΞΦ, ΤyΥewev, ℚQswΘΟVνy]
 
 -- Theorem 36: HζιξQoκ
 theorem HζιξQoκ (a b n : Η0Ja) : νΦΗ (ΕWβ a b) n = ΕWβ (νΦΗ a n) (νΦΗ b n) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, t4πℂ'Rτ, φΜwoΓvΞΦ, ΧFΤΟξrdψ, ℝzΗσℝcψ, ℚQswΘΟVνy]
 
 -- Theorem 37: Xωο'Aεk
 theorem Xωο'Aεk (a m n : Η0Ja) : νΦΗ (νΦΗ a m) n = νΦΗ a (ΕWβ m n) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, t4πℂ'Rτ, φΜwoΓvΞΦ, ΗAΥuZΡd]
 
 -- Theorem 38: ΚΚlwMW
 theorem ΚΚlwMW (a b : Η0Ja) : νΦΗ (ΚxΝ a b) oVΟ = ΚxΝ (ΚxΝ (νΦΗ a oVΟ) (νΦΗ b oVΟ)) (ΕWβ (ΕWβ oVΟ a) b) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ΑΩ7Ξ3νnr, θ'vxθΑfφ, t4πℂ'Rτ, φΜwoΓvΞΦ, nv3ΧWtℕsL, ΝκdWγΤσkbcΚFNΒ, ΧFΤΟξrdψ, ΙΦΔVfe9, Ωψ'YiΑσ, eexzzm_, ΓpKΚYδω]
 
 -- Theorem 39: γdκDχkΩΨρη_eaΔcU
 theorem γdκDχkΩΨρη_eaΔcU (a b n : Η0Ja) : ΚxΝ a n = ΚxΝ b n → a = b := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 40: TeL1SWχπRβcζνl
 theorem TeL1SWχπRβcζνl (a b n : Η0Ja) : ΚxΝ n a = ΚxΝ n b → a = b := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, KΩΦzαυωT, γdκDχkΩΨρη_eaΔcU]
 
 -- Theorem 41: _adiΜ2ieMΩeaΖΒΞK
 theorem _adiΜ2ieMΩeaΖΒΞK (x y : Η0Ja) : ΚxΝ x y = y → x = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ωΙξaινη7, γdκDχkΩΨρη_eaΔcU]
 
 -- Theorem 42: ΔKσ_ivζgΜtοδsIdd
 theorem ΔKσ_ivζgΜtοδsIdd (x y : Η0Ja) : ΚxΝ x y = x → y = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, ωΙξaινη7, KΩΦzαυωT, TeL1SWχπRβcζνl]
 
 -- Theorem 43: ρdd'xZgνhtοSssΨEW
 theorem ρdd'xZgνhtοSssΨEW (a b : Η0Ja) : ΚxΝ a b = GnΑ0 → a = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ]
 
 -- Theorem 44: ηΡdnPHf9_ℂE_zXGΚ
 theorem ηΡdnPHf9_ℂE_zXGΚ (a b : Η0Ja) : ΚxΝ a b = GnΑ0 → b = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, KΩΦzαυωT, ρdd'xZgνhtοSssΨEW]
 
 -- Theorem 45: W0ΚSδπ8ψ
 theorem W0ΚSδπ8ψ (x : Η0Ja) : IJ x x := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ]
 
 -- Theorem 46: aτPWZ1β
 theorem aτPWZ1β (x : Η0Ja) : IJ GnΑ0 x := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, ωΙξaινη7]
 
 -- Theorem 47: H'5sqeo8gsPΜχ
 theorem H'5sqeo8gsPΜχ (x : Η0Ja) : IJ x (Θ7Κr x) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ]
 
 -- Theorem 48: Z'Ie'ΗΥνΟC
 theorem Z'Ie'ΗΥνΟC (x y z : Η0Ja) (hxy : IJ x y) (hyz : IJ y z) : IJ x z := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, nv3ΧWtℕsL]
 
 -- Theorem 49: qΜ3γv_p
 theorem qΜ3γv_p (x : Η0Ja) (hx : IJ x GnΑ0) : x = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, ρdd'xZgνhtοSssΨEW]
 
 -- Theorem 50: F3ΥπΔωψPuXEι
 theorem F3ΥπΔωψPuXEι (x y : Η0Ja) (hxy : IJ x y) (hyx : IJ y x) : x = y := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, nv3ΧWtℕsL, ΔKσ_ivζgΜtοδsIdd, ρdd'xZgνhtοSssΨEW]
 
 -- Theorem 51: ΙIℂpEmρ
 theorem ΙIℂpEmρ (x y : Η0Ja) (h : x = Wre0 ∨ y = χΗΡd) : y = χΗΡd ∨ x = Wre0 := by
@@ -288,39 +288,39 @@ theorem ΙIℂpEmρ (x y : Η0Ja) (h : x = Wre0 ∨ y = χΗΡd) : y = χΗΡd �
 
 -- Theorem 52: ℂΒe1TΘνΑ
 theorem ℂΒe1TΘνΑ (x y : Η0Ja) : (IJ x y) ∨ (IJ y x) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, gXqΧΔℝvO, nv3ΧWtℕsL, SZuΟvETq_ιWνJe, aτPWZ1β]
 
 -- Theorem 53: llγℝΕeΤuαπZ
 theorem llγℝΕeΤuαπZ (x y : Η0Ja) (hx : IJ (Θ7Κr x) (Θ7Κr y)) : IJ x y := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, gXqΧΔℝvO]
 
 -- Theorem 54: xCUυ_κ
 theorem xCUυ_κ (x : Η0Ja) (hx : IJ x gfΧ) : x = GnΑ0 ∨ x = gfΧ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, qΜ3γv_p, llγℝΕeΤuαπZ]
 
 -- Theorem 55: ℂofwoΔ
 theorem ℂofwoΔ (x : Η0Ja) (hx : IJ x oVΟ) : x = GnΑ0 ∨ x = gfΧ ∨ x = oVΟ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, qΜ3γv_p, llγℝΕeΤuαπZ]
 
 -- Theorem 56: RΤwAαd_lΡψα9MI
 theorem RΤwAαd_lΡψα9MI (x : Η0Ja) : IJ x (ΚxΝ gfΧ x) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Qγx1dtΨo, Ε6ΖΜF_Zζ, Exists.intro, Exists.elim, IJ, KΩΦzαυωT]
 
 -- Theorem 57: OΩηaζδ4φh
 theorem OΩηaζδ4φh (x : Η0Ja) : IJ x  x := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ]
 
 -- Theorem 58: CnΚδuΓc
 theorem CnΚδuΓc (a b : Η0Ja) : IJ a b → IJ a (Θ7Κr b) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ]
 
 -- Theorem 59: ΤκSυEcveAul_ιΧΗt
 theorem ΤκSυEcveAul_ιΧΗt (a b t : Η0Ja) (h : IJ a b) : IJ (ΕWβ a t) (ΕWβ b t) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, eexzzm_]
 
 -- Theorem 60: hβTzHℚlpta22αzro
 theorem hβTzHℚlpta22αzro (a b : Η0Ja) (h : ΕWβ a b ≠ GnΑ0) : b ≠ GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, False.rec, ΙΩζβτeΜwυ'ec]
 
 -- Theorem 61: edΦΝuseUf_nρΥcυzχθ
 theorem edΦΝuseUf_nρΥcυzχθ (a : Η0Ja) (ha : a ≠ GnΑ0) : ∃ n, a = Θ7Κr n := by
@@ -328,30 +328,30 @@ theorem edΦΝuseUf_nρΥcυzχθ (a : Η0Ja) (ha : a ≠ GnΑ0) : ∃ n, a = Θ
 
 -- Theorem 62: n_ℕe_ilμΔn1οNwΘS
 theorem n_ℕe_ilμΔn1οNwΘS (a : Η0Ja) (ha : a ≠ GnΑ0) : IJ gfΧ a := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, KΩΦzαυωT, SZuΟvETq_ιWνJe, edΦΝuseUf_nρΥcυzχθ]
 
 -- Theorem 63: J'NjFO2DnθREt
 theorem J'NjFO2DnθREt (a b : Η0Ja) (h : ΕWβ a b ≠ GnΑ0) : IJ a (ΕWβ a b) := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, False.rec, ΙΩζβτeΜwυ'ec, Exists.intro, Exists.elim, Qγx1dtΨo, Ε6ΖΜF_Zζ, IJ, ΧFΤΟξrdψ, ℝzΗσℝcψ, ΤκSυEcveAul_ιΧΗt, hβTzHℚlpta22αzro, n_ℕe_ilμΔn1οNwΘS]
 
 -- Theorem 64: rXΝlriLRt_qjhΩυe
 theorem rXΝlriLRt_qjhΩυe (x y : Η0Ja) (h : ΕWβ x y = gfΧ) : x = gfΧ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, ωCΥiCazτ, xCUυ_κ, J'NjFO2DnθREt]
 
 -- Theorem 65: eΦ6τΔΥZξℕmΥ
 theorem eΦ6τΔΥZξℕmΥ (a b : Η0Ja) (ha : a ≠ GnΑ0) (hb : b ≠ GnΑ0) : ΕWβ a b ≠ GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, False.rec, ΙΩζβτeΜwυ'ec, edΦΝuseUf_nρΥcυzχθ]
 
 -- Theorem 66: ℝRΞΧJRℂYψeℕ
 theorem ℝRΞΧJRℂYψeℕ (a b : Η0Ja) (h : ΕWβ a b = GnΑ0) : a = GnΑ0 ∨ b = GnΑ0 := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, Or.inl, Or.inr, Or.elim]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, Or.inl, Or.inr, Or.elim, eΦ6τΔΥZξℕmΥ]
 
 -- Theorem 67: ℝuΒwplυtcΔσTΑξ
 theorem ℝuΒwplυtcΔσTΑξ (a b c : Η0Ja) (ha : a ≠ GnΑ0) (h : ΕWβ a b = ΕWβ a c) : b = c := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, False.rec, ΙΩζβτeΜwυ'ec, γdκDχkΩΨρη_eaΔcU, ℝRΞΧJRℂYψeℕ]
 
 -- Theorem 68: fρMlxDhCwΒβpYsΙf
 theorem fρMlxDhCwΒβpYsΙf (a b : Η0Ja) (ha : a ≠ GnΑ0) (h : ΕWβ a b = a) : b = gfΧ := by
-  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, False.rec, ΙΩζβτeΜwυ'ec]
+  canonical 15 [Η0Ja.rec, Eq.refl, Eq.rec, o5Εgγtdvl, ΑΩ7Ξ3νnr, θ'vxθΑfφ, False.rec, ΙΩζβτeΜwυ'ec, ΤyΥewev, ℝuΒwplυtcΔσTΑξ]
 
 end Η0Ja

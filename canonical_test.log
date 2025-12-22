@@ -1,0 +1,130 @@
+Canonical Tactic Ability Test
+Canonical timeout: 15 seconds per theorem
+============================================================
+
+Step 1: Generating premises from ORIGINAL dataset...
+Loaded 68 original theorems
+Generated premise lists for 68 theorems
+
+============================================================
+Step 2: Generating all Lean files...
+============================================================
+
+============================================================
+Generating file for dataset: original
+============================================================
+Loaded 31 header definitions
+Loaded 68 theorems
+Created Lean file: /home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_original.lean
+
+============================================================
+Generating file for dataset: obfuscated_1
+============================================================
+Loaded 31 header definitions
+Loaded 68 theorems
+Created Lean file: /home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_1.lean
+
+============================================================
+Generating file for dataset: obfuscated_2
+============================================================
+Loaded 31 header definitions
+Loaded 68 theorems
+Created Lean file: /home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_2.lean
+
+============================================================
+Generating file for dataset: obfuscated_3
+============================================================
+Loaded 31 header definitions
+Loaded 68 theorems
+Created Lean file: /home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_3.lean
+
+============================================================
+Generating file for dataset: obfuscated_4
+============================================================
+Loaded 31 header definitions
+Loaded 68 theorems
+Created Lean file: /home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_4.lean
+
+============================================================
+Generating file for dataset: obfuscated_5
+============================================================
+Loaded 31 header definitions
+Loaded 68 theorems
+Created Lean file: /home/ubuntu/Obfuscated-NNG/MyNNG/MyNNG/canonical_tests/Canonical_obfuscated_5.lean
+
+============================================================
+Step 3: Verifying all generated files...
+This will take approximately 1020 seconds per dataset
+============================================================
+
+============================================================
+Verifying dataset: original
+============================================================
+  Running Lean with timeout of 1140s (15s * 68 theorems + 120s buffer)...
+All theorems passed!
+
+============================================================
+Verifying dataset: obfuscated_1
+============================================================
+  Running Lean with timeout of 1140s (15s * 68 theorems + 120s buffer)...
+All theorems passed!
+
+============================================================
+Verifying dataset: obfuscated_2
+============================================================
+  Running Lean with timeout of 1140s (15s * 68 theorems + 120s buffer)...
+All theorems passed!
+
+============================================================
+Verifying dataset: obfuscated_3
+============================================================
+  Running Lean with timeout of 1140s (15s * 68 theorems + 120s buffer)...
+All theorems passed!
+
+============================================================
+Verifying dataset: obfuscated_4
+============================================================
+  Running Lean with timeout of 1140s (15s * 68 theorems + 120s buffer)...
+All theorems passed!
+
+============================================================
+Verifying dataset: obfuscated_5
+============================================================
+  Running Lean with timeout of 1140s (15s * 68 theorems + 120s buffer)...
+All theorems passed!
+
+============================================================
+SUMMARY
+============================================================
+Dataset              Total      Failed     Success Rate   
+------------------------------------------------------------
+original             68         0          100.0%
+obfuscated_1         68         0          100.0%
+obfuscated_2         68         0          100.0%
+obfuscated_3         68         0          100.0%
+obfuscated_4         68         0          100.0%
+obfuscated_5         68         0          100.0%
+
+============================================================
+FAILED THEOREM IDs BY DATASET
+============================================================
+
+original: All theorems passed!
+
+obfuscated_1: All theorems passed!
+
+obfuscated_2: All theorems passed!
+
+obfuscated_3: All theorems passed!
+
+obfuscated_4: All theorems passed!
+
+obfuscated_5: All theorems passed!
+
+============================================================
+CONSISTENCY CHECK
+============================================================
+✅ All datasets have IDENTICAL failed theorem IDs
+
+
+Detailed results saved to: /home/ubuntu/Obfuscated-NNG/canonical_test_results.json

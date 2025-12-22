@@ -4,508 +4,602 @@ import Mathlib.Tactic.Contrapose
 import Mathlib.Tactic.Use
 import Mathlib.Tactic.Tauto
 
-inductive dBNaΤ where
-| ΙMτr : dBNaΤ
-| lBut : dBNaΤ → dBNaΤ
+inductive MΘNae where
+| eLao : MΘNae
+| sωDc : MΘNae → MΘNae
 
-namespace dBNaΤ
+namespace MΘNae
 
-instance : Inhabited dBNaΤ where
-  default := dBNaΤ.ΙMτr
+instance : Inhabited MΘNae where
+  default := MΘNae.eLao
 
-opaque Υdd : dBNaΤ → dBNaΤ → dBNaΤ
+opaque add : MΘNae → MΘNae → MΘNae
 
-axiom aℚΗSωrκΩ (a : dBNaΤ) : Υdd a ΙMτr = a
+axiom apd_zero (a : MΘNae) : add a eLao = a
 
-axiom ωΙduΟsΗΕ (a d : dBNaΤ) : Υdd a (lBut d) = lBut (Υdd a d)
+axiom addsNucA (a d : MΘNae) : add a (sωDc d) = sωDc (add a d)
 
-def DrNℂ : dBNaΤ → dBNaΤ
-| ΙMτr => ΙMτr
-| lBut n => n
+def Trid : MΘNae → MΘNae
+| eLao => eLao
+| sωDc n => n
 
-theorem YEeJssuMW (n : dBNaΤ) : DrNℂ (lBut n) = n := rfl
+theorem Ψpℂed_suc (n : MΘNae) : Trid (sωDc n) = n := rfl
 
-theorem ycqbigHj (a b : dBNaΤ) (h : lBut a = lBut b) : a = b := by
-  rw [← YEeJssuMW a, h, YEeJssuMW]
+theorem sucιin9j (a b : MΘNae) (h : sωDc a = sωDc b) : a = b := by
+  rw [← Ψpℂed_suc a, h, Ψpℂed_suc]
 
-def Vu4zψSΙ : dBNaΤ → Prop
-| ΙMτr => True
-| lBut _ => False
+def isurero : MΘNae → Prop
+| eLao => True
+| sωDc _ => False
 
-theorem iχφzεNaΗerhε : Vu4zψSΙ ΙMτr = True := rfl
+theorem iszY9ol_zero : isurero eLao = True := rfl
 
-theorem πOvΒ2o_ΘuΧσΨ (n : dBNaΤ) : Vu4zψSΙ (lBut n) = False := rfl
+theorem is_Υℂηro_suc (n : MΘNae) : isurero (sωDc n) = False := rfl
 
-theorem MQΧBoeωnρΥcc (a : dBNaΤ) : ΙMτr ≠ lBut a := by
+theorem zγoεne_sMucc (a : MΘNae) : eLao ≠ sωDc a := by
   intro h
-  rw [← πOvΒ2o_ΘuΧσΨ a]
+  rw [← is_Υℂηro_suc a]
   rw [← h]
-  rw [iχφzεNaΗerhε]
+  rw [iszY9ol_zero]
   trivial
 -- multiplication
 
-opaque ΚμD : dBNaΤ → dBNaΤ → dBNaΤ
+opaque mul : MΘNae → MΘNae → MΘNae
 
-axiom QΗglΜOeC (a : dBNaΤ) : ΚμD a ΙMτr = ΙMτr
+axiom ul_Ξeρro (a : MΘNae) : mul a eLao = eLao
 
-axiom muρΗℚ8sR (a b : dBNaΤ) : ΚμD a (lBut b) = Υdd (ΚμD a b) a
+axiom muτl_ssc (a b : MΘNae) : mul a (sωDc b) = add (mul a b) a
 
-def oΜℕe : dBNaΤ := dBNaΤ.lBut ΙMτr
+def one : MΘNae := MΘNae.sωDc eLao
 
-def κw' : dBNaΤ := dBNaΤ.lBut oΜℕe
+def Bwo : MΘNae := MΘNae.sωDc one
 
-def Shxde : dBNaΤ := dBNaΤ.lBut κw'
+def hωrge : MΘNae := MΘNae.sωDc Bwo
 
-def μζρr : dBNaΤ := dBNaΤ.lBut Shxde
+def Υour : MΘNae := MΘNae.sωDc hωrge
 
-theorem oψeℚ_4rεutΞHze9Η : oΜℕe = lBut ΙMτr := by rfl
+theorem one_eq_ψsuΝc_zeo : one = sωDc eLao := by rfl
 
-theorem tuphxwΞΨOℤcψc_o : κw' = lBut oΜℕe := by rfl
+theorem δwo_peq_uccℕone : Bwo = sωDc one := by rfl
 
-theorem fhreXυ_eΒ1ψρdpQsw : Shxde = lBut κw' := by rfl
+theorem hreΒ_eq_succΨLtwo : hωrge = sωDc Bwo := by rfl
 
-theorem fρLXVqYℚχvc_mυhrℚVe : μζρr = lBut Shxde := by rfl
+theorem fouQrδq_succ_tKree : Υour = sωDc hωrge := by rfl
 -- power
 
-opaque Γoq : dBNaΤ → dBNaΤ → dBNaΤ
-
-axiom pGΖ_zξrΞ (m : dBNaΤ) : Γoq m ΙMτr = oΜℕe
-
-axiom VHcp_sMκ (m n : dBNaΤ) : Γoq m (lBut n) = ΚμD (Γoq m n) m
-
-def ΚΧυ (a b : dBNaΤ) :=  ∃ (c : dBNaΤ), b = Υdd a c
-
-theorem ye_3siV'C8ioΥEv8d (a b : dBNaΤ) : ΚΧυ a b ↔ ∃ (c : dBNaΤ), b = Υdd a c := Iff.rfl
-
-def ΩtΙ7yΩΞγ (a b : dBNaΤ) :=  (ΚΧυ a b) ∧ ¬ (ΚΧυ b  a)
-
-open dBNaΤ
-
-theorem ℂCs_ℝΥψd (n : dBNaΤ) : Υdd ΙMτr n = n := by
-  sorry
-
-theorem sokcΩΑdι (a b : dBNaΤ) : Υdd (lBut a) b = lBut (Υdd a b)  := by
-  sorry
-
-theorem μ4dA_c2o (a b : dBNaΤ) : Υdd a b = Υdd b a := by
-  sorry
-
-theorem apφQΞwLdc (a b c : dBNaΤ) : Υdd (Υdd a b) c = Υdd a (Υdd b c) := by
-  sorry
-
-theorem aΨ_rνykn8ΨcρΥT (a b c : dBNaΤ) : Υdd (Υdd a b) c = Υdd (Υdd a c) b := by
-  sorry
-
-theorem ΥdΝefetkℂcCηg (a b c : dBNaΤ) : Υdd a (Υdd b c) = Υdd b (Υdd a c) := by
-  sorry
-
-theorem φMhX_vsqasVYnae (n : dBNaΤ) : lBut n = Υdd n oΜℕe := by
-  sorry
-
-theorem Ξbα9PhiΔcaHκ_nκ (x y z : dBNaΤ) (h1 : Υdd x y = μζρr) (h2 : Υdd (ΚμD Shxde x) z = κw') : Υdd x y = μζρr := by
-  sorry
-
-theorem icplXRapGoHXRho (x y : dBNaΤ) (h : Υdd ΙMτr x = Υdd (Υdd ΙMτr y) κw') : x = Υdd y κw' := by
-  sorry
-
-theorem GΜvpΝiΝahqonV0Δre (x y : dBNaΤ) (h1 : x = Shxde) (h2 : x = Shxde → y = μζρr) : y = μζρr := by
-  sorry
-
-theorem HζΕιχ9ΝonξfxΡuΒr (x : dBNaΤ) (h : Υdd x oΜℕe = μζρr) : x = Shxde := by
-  sorry
-
-theorem I5WXliAΚdnℂRfiΤvq (x : dBNaΤ) : x = μζρr → x = μζρr := by
-  sorry
-
-theorem ξπ4piΦaμoβG3sΧΙ (x y : dBNaΤ) : Υdd x oΜℕe = Υdd y oΜℕe → x = y := by
-  sorry
-
-theorem υΟmmplΔΥuωβΞnysue (x y : dBNaΤ) (h1 : x = y) (h2 : x ≠ y) : False := by
-  sorry
-
-theorem V5_XMexℤoΥΘe : (ΙMτr : dBNaΤ) ≠ oΜℕe := by
-  sorry
-
-theorem onByxTzte5γ : (oΜℕe : dBNaΤ) ≠ ΙMτr := by
-  sorry
-
-theorem t8tpKuφ_wt'ΝφNe9Βvoe : Υdd (lBut (lBut ΙMτr)) (lBut (lBut ΙMτr)) ≠ lBut (lBut (lBut (lBut (lBut ΙMτr)))) := by
-  sorry
-
-theorem υ2_εlKγ351 (a b c d : dBNaΤ) : Υdd (Υdd a b) (Υdd c d) = Υdd (Υdd (Υdd a c) d) b := by
-  sorry
-
-theorem Εcyc_9ΦΩΝσZo (a : dBNaΤ) : lBut a ≠ ΙMτr := by
-  sorry
-
-theorem GnℂΩμne_φΗ6N (m n : dBNaΤ) (h : m ≠ n) : lBut m ≠ lBut n := by
-  sorry
-
-theorem εsLkovβ (m : dBNaΤ) : ΚμD m oΜℕe = m := by
-  sorry
-
-theorem Ο9rdLοul (m : dBNaΤ) : ΚμD ΙMτr m = ΙMτr := by
-  sorry
-
-theorem NΑℕ_ψmuΔ (a b : dBNaΤ) : ΚμD (lBut a) b = Υdd (ΚμD a b) b := by
-  sorry
-
-theorem mlP_Ocℚi (a b : dBNaΤ) : ΚμD a b = ΚμD b a := by
-  sorry
-
-theorem ΖθΔΗχKl (m : dBNaΤ) : ΚμD oΜℕe m = m := by
-  sorry
-
-theorem tkμΚΜWν (m : dBNaΤ) : ΚμD κw' m = Υdd m m := by
-  sorry
-
-theorem ApΝℕιaΑ (a b c : dBNaΤ) : ΚμD a (Υdd b c) = Υdd (ΚμD a b) (ΚμD a c) := by
-  sorry
-
-theorem aKddνρb (a b c : dBNaΤ) : ΚμD (Υdd a b) c = Υdd (ΚμD a c) (ΚμD b c) := by
-  sorry
-
-theorem H1πlZsℕxΥc (a b c : dBNaΤ) : ΚμD (ΚμD a b) c = ΚμD a (ΚμD b c)  := by
-  sorry
-
-theorem zℕ_ozΝDzHKΒσo : Γoq (ΙMτr : dBNaΤ)  ΙMτr = oΜℕe := by
-  sorry
-
-theorem σwro_pℝπts1vv (m : dBNaΤ) : Γoq (ΙMτr : dBNaΤ) (lBut m) = ΙMτr := by
-  sorry
-
-theorem zJDvnΗe (a : dBNaΤ) : Γoq a oΜℕe = a  := by
-  sorry
-
-theorem ΙγnεμBw (m : dBNaΤ) : Γoq (oΜℕe : dBNaΤ) m = oΜℕe := by
-  sorry
-
-theorem ηFw_ΓJκ (a : dBNaΤ) : Γoq a κw' = ΚμD a a := by
-  sorry
-
-theorem ραΩ4aAd (a m n : dBNaΤ) : Γoq a (Υdd m n) = ΚμD (Γoq a m) (Γoq a n) := by
-  sorry
-
-theorem o25pxΨw (a b n : dBNaΤ) : Γoq (ΚμD a b) n = ΚμD (Γoq a n) (Γoq b n) := by
-  sorry
-
-theorem οJi_ZΙw (a m n : dBNaΤ) : Γoq (Γoq a m) n = Γoq a (ΚμD m n) := by
-  sorry
-
-theorem axysSρ (a b : dBNaΤ) : Γoq (Υdd a b) κw' = Υdd (Υdd (Γoq a κw') (Γoq b κw')) (ΚμD (ΚμD κw' a) b) := by
-  sorry
-
-theorem Ih9ℂυMrKℕBσcΓneΗ (a b n : dBNaΤ) : Υdd a n = Υdd b n → a = b := by
-  sorry
-
-theorem ℝddχHsefPgOιoeι (a b n : dBNaΤ) : Υdd n a = Υdd n b → a = b := by
-  sorry
-
-theorem Οa_9doeθeζqVℝulw (x y : dBNaΤ) : Υdd x y = y → x = ΙMτr := by
-theorem Οa_9doeθeζqVℝulw (x y : dBNaΤ) : x + y = y → x = Ζινr := by
-  intro h
-  induction y with
-  | Ζινr =>
-      rw [aℚΗSωrκΩ] at h
-      exact h
-  | a'gχc d ih =>
-      rw [ωΙduΟsΗΕ] at h
-      have h2 : x + d = d := ΒΝη_RFnδ (x + d) d h
-      exact ih x h2
-
-theorem ΦℤJXr3gοtZ9ewsel0 (x y : dBNaΤ) : Υdd x y = x → y = ΙMτr := by
-theorem ΦℤJXr3gοtZ9ewsel0 (x y : dBNaΤ) : x + y = x → y = Ζινr := by
-  intro h
-  rw [μ4dA_c2o] at h
-  exact Οa_9doeθeζqVℝulw y x h
-
-theorem ΤOuLℝrgighιμgχ_Ιo (a b : dBNaΤ) : Υdd a b = ΙMτr → a = ΙMτr := by
-theorem ΤOuLℝrgighιμgχ_Ιo (a b : dBNaΤ) : a + b = Ζινr → a = Ζινr := by
-  intro h
-  cases a with
-  | Ζινr =>
-      rfl
-  | a'gχc a0 =>
-      rw [LcDTV5d1] at h
-      exfalso
-      exact (ΞQℝℂrxΥ9e_βc (a0 + b)) (Eq.symm h)
-
-theorem a'κΡ_Sωftρμ_jZυw (a b : dBNaΤ) : Υdd a b = ΙMτr → b = ΙMτr := by
-theorem a'κΡ_Sωftρμ_jZυw (a b : dBNaΤ) : a + b = Ζινr → b = Ζινr := by
-  intro h
-  rw [μ4dA_c2o] at h
-  exact ΤOuLℝrgighιμgχ_Ιo b a h
-
-theorem ι'CKe0l (x : dBNaΤ) : ΚΧυ x x := by
-theorem lBqBθγΤ (x : dBNaΤ) : x ≤ x := by
-  exact ⟨Ζινr, (aℚΗSωrκΩ x).symm⟩
-
-theorem OΕ7Zglσ (x : dBNaΤ) : ΚΧυ ΙMτr x := by
-theorem keFΩmCv (x : dBNaΤ) : Ζινr ≤ x := by
-  exact ⟨x, (ℝ5QrγΞMa x).symm⟩
-
-theorem e5αsωJsΥAξmω (x : dBNaΤ) : ΚΧυ x (lBut x) := by
-theorem B9e_fqΜΕ_ΨlκZ (x : dBNaΤ) : x ≤ a'gχc x := by
-  use one
-  exact ΩuWΒcℚoqe_θd_lZ x
-
-theorem PD_κgeKs (x y z : dBNaΤ) (hxy : ΚΧυ x y) (hyz : ΚΧυ y z) : ΚΧυ x z := by
-theorem lbw_iBqs (x y z : dBNaΤ) (hxy : x ≤ y) (hyz : y ≤ z) : x ≤ z := by
-  cases hxy with
-  | intro c h1 =>
-    cases hyz with
-    | intro d h2 =>
-        use c + d
-        rw [h2, h1, apφQΞwLdc]
-
-theorem Wiκzf9o (x : dBNaΤ) (hx : ΚΧυ x ΙMτr) : x = ΙMτr := by
-theorem ωπqαzeΖ (x : dBNaΤ) (hx : x ≤ Ζινr) : x = Ζινr := by
-  cases hx with
-  | intro c h =>
-      apply ΤOuLℝrgighιμgχ_Ιo x c
-      symm
-      exact h
-
-theorem lv5pxℚΡyΙmo (x y : dBNaΤ) (hxy : ΚΧυ x y) (hyx : ΚΧυ y x) : x = y := by
-theorem ο1οCaILi9ym (x y : dBNaΤ) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
-  rcases hxy with ⟨c1, hc1⟩
-  rcases hyx with ⟨c2, hc2⟩
-  have h : y = y + (c2 + c1) :=
-    calc
-      y = x + c1 := hc1
-      _ = (y + c2) + c1 := by rw [hc2]
-      _ = y + (c2 + c1) := by rw [apφQΞwLdc]
-  have h' : c2 + c1 = Ζινr := by
-    apply ΦℤJXr3gοtZ9ewsel0 y (c2 + c1)
-    exact Eq.symm h
-  have hc2_zero : c2 = Ζινr := by
-    apply ΤOuLℝrgighιμgχ_Ιo c2 c1 h'
-  rw [hc2_zero] at hc2
-  rw [aℚΗSωrκΩ] at hc2
-  exact hc2
-
-theorem oψ7ℕεcm (x y : dBNaΤ) (h : x = μζρr ∨ y = Shxde) : y = Shxde ∨ x = μζρr := by
-theorem r_ΖrΥηK (x y : dBNaΤ) (h : x = μζρr ∨ y = υqGee) : y = υqGee ∨ x = μζρr := by
-  cases h with
-  | inl hx => right; exact hx
-  | inr hy => left; exact hy
-
-theorem νΕ_zL4gl (x y : dBNaΤ) : (ΚΧυ x y) ∨ (ΚΧυ y x) := by
-theorem lVδℝFozJ (x y : dBNaΤ) : x ≤ y ∨ y ≤ x := by
-  induction x with
-  | Ζινr =>
-      left
-      exact keFΩmCv y
-  | a'gχc x' ih =>
-      induction y with
-      | Ζινr =>
-          right
-          exact keFΩmCv (a'gχc x')
-      | a'gχc y' =>
-          rcases ih y' with (h | h)
-          · left
-            rcases h with ⟨c, hc⟩
-            use c
-            rw [LcDTV5d1, hc]
-          · right
-            rcases h with ⟨c, hc⟩
-            use c
-            rw [LcDTV5d1, hc]
-
-theorem sΖzΡ_E8δuιcΝ (x y : dBNaΤ) (hx : ΚΧυ (lBut x) (lBut y)) : ΚΧυ x y := by
-theorem ufcodηehℕuΜl (x y : dBNaΤ) (hx : a'gχc x ≤ a'gχc y) : x ≤ y := by
-  cases hx with
-  | intro c h =>
-      rw [LcDTV5d1 x c] at h
-      use c
-      exact ΒΝη_RFnδ y (x + c) h
-
-theorem jοsSne (x : dBNaΤ) (hx : ΚΧυ x oΜℕe) : x = ΙMτr ∨ x = oΜℕe := by
-theorem lΧπΩWδ (x : dBNaΤ) (hx : x ≤ one) : x = Ζινr ∨ x = one := by
-  cases x with
-  | Ζινr =>
-    left
-    rfl
-  | a'gχc y =>
-    right
-    rcases hx with ⟨c, hc⟩
-    rw [oγn2T_ρ_s1'uzPXΑ] at hc
-    rw [LcDTV5d1] at hc
-    have h_eq := ΒΝη_RFnδ Ζινr (y + c) hc
-    have h_sum : y + c = Ζινr := Eq.symm h_eq
-    have hy := ΤOuLℝrgighιμgχ_Ιo y c h_sum
-    rw [hy]
-    rfl
-
-theorem Ξk_ΟνΥ (x : dBNaΤ) (hx : ΚΧυ x κw') : x = ΙMτr ∨ x = oΜℕe ∨ x = κw' := by
-theorem eΖpο9o (x : dBNaΤ) (hx : x ≤ two) : x = Ζινr ∨ x = one ∨ x = two := by
-  cases x with
-  | Ζινr =>
-    left
-    rfl
-  | a'gχc n =>
-    rw [ΥQnΧqaΖcZcIξoΙM] at hx
-    have hle : n ≤ one := ufcodηehℕuΜl n one hx
-    cases (lΧπΩWδ n hle) with
-    | inl hn =>
-      right
-      left
-      rw [hn]
-      rfl
-    | inr hn =>
-      right
-      right
-      rw [hn]
-      rfl
-
-theorem oaΓ_MqqΡΨle_YΡs (x : dBNaΤ) : ΚΧυ x (Υdd oΜℕe x) := by
-theorem ΗH0aOυlDφΩ6eΒlf (x : dBNaΤ) : x ≤ one + x := by
-  rw [μ4dA_c2o, ΩuWΒcℚoqe_θd_lZ]
-  exact B9e_fqΜΕ_ΨlκZ x
-
-theorem JeorxΟνΔe (x : dBNaΤ) : ΚΧυ x  x := by
-theorem MΝlj0iζ7e (x : dBNaΤ) : x ≤ x := by
-  exact lBqBθγΤ x
-
-theorem lBτ_Οx0 (a b : dBNaΤ) : ΚΧυ a b → ΚΧυ a (lBut b) := by
-theorem xe'ℕVτc (a b : dBNaΤ) : a ≤ b → a ≤ (a'gχc b) := by
-  intro h
-  cases h with
-  | intro c h_eq =>
-      use a'gχc c
-      rw [h_eq, ← ωΙduΟsΗΕ]
-
-theorem PlJv_nuωρD_gOWΞt (a b t : dBNaΤ) (h : ΚΧυ a b) : ΚΧυ (ΚμD a t) (ΚμD b t) := by
-theorem Tuμ_bfrΙmΖ3gigTt (a b t : dBNaΤ) (h : a ≤ b) : a * t ≤ b * t := by
-  cases h with
-  | intro c hc =>
-    use c * t
-    rw [hc, aKddνρb]
-
-theorem μΟncΓιHnM_zherηT (a b : dBNaΤ) (h : ΚμD a b ≠ ΙMτr) : b ≠ ΙMτr := by
-theorem NmhΨlKlpβtS0XCΒo (a b : dBNaΤ) (h : a * b ≠ Ζινr) : b ≠ Ζινr := by
-  intro hb
-  have H : a * b = Ζινr := by
-    rw [hb]
-    exact mℚΜlψΗξΘ a
-  exact h H
-
-theorem lis2ℕUj_δoz3ne_ωkγr (a : dBNaΤ) (ha : a ≠ ΙMτr) : ∃ n, a = lBut n := by
-theorem lis2ℕUj_δoz3ne_ωkγr (a : dBNaΤ) (ha : a ≠ Ζινr) : ∃ n, a = a'gχc n := by
-  cases a with
-  | Ζινr => exact False.elim (ha rfl)
-  | a'gχc n => exact ⟨n, rfl⟩
-
-theorem Oe_υeℂℝφΩEWe_zΜiΡ (a : dBNaΤ) (ha : a ≠ ΙMτr) : ΚΧυ oΜℕe a := by
-theorem wΔn'WΟejBΙnΔ_9eIΒ (a : dBNaΤ) (ha : a ≠ Ζινr) : one ≤ a := by
-  have h : ∃ n, a = a'gχc n := lis2ℕUj_δoz3ne_ωkγr a ha
-  rcases h with ⟨n, hn⟩
-  rw [hn]
-  use n
-  rw [ΩuWΒcℚoqe_θd_lZ, μ4dA_c2o]
-
-theorem τξ_Ηd_ΧiK3Αt (a b : dBNaΤ) (h : ΚμD a b ≠ ΙMτr) : ΚΧυ a (ΚμD a b) := by
-theorem levmΚψ1tuSΤt (a b : dBNaΤ) (h : a * b ≠ Ζινr) : a ≤ a * b := by
-  have hb : b ≠ Ζινr := NmhΨlKlpβtS0XCΒo a b h
-  cases (lis2ℕUj_δoz3ne_ωkγr b hb) with
-  | intro b0 hb0 =>
-      rw [ΗeCGΟIΚοstsω_τaιw]
-      use a * b0
-      rw [hb0, E6uOΕu8χc, μ4dA_c2o]
-
-theorem ψe7lρiθhtψeΓφ5ℕP (x y : dBNaΤ) (h : ΚμD x y = oΜℕe) : x = oΜℕe := by
-theorem ΞuD_rgh30fgCqsσΘ (x y : dBNaΤ) (h : x * y = one) : x = one := by
-  have h_one_ne : one ≠ Ζινr := by
-    have h0 : Ζινr ≠ one := ΞQℝℂrxΥ9e_βc Ζινr
-    intro h_eq
-    apply h0
-    rw [h_eq]
-  have hne_prod : x * y ≠ Ζινr := by
-    rw [h]
-    exact h_one_ne
-  have hx_le : x ≤ one := by
-    have h1 : x ≤ x * y := levmΚψ1tuSΤt x y hne_prod
-    rw [h] at h1
-    exact h1
-  have hx_ne : x ≠ Ζινr := by
-    have h_comm : x * y = y * x := muΤc5jmO x y
-    have hne_prod' : y * x ≠ Ζινr := by
-      rw [← h_comm]
-      exact hne_prod
-    exact NmhΨlKlpβtS0XCΒo y x hne_prod'
-  have h_one_le_x : one ≤ x := wΔn'WΟejBΙnΔ_9eIΒ x hx_ne
-  exact ο1οCaILi9ym x one hx_le h_one_le_x
-
-theorem fk_eΗPαzerR (a b : dBNaΤ) (ha : a ≠ ΙMτr) (hb : b ≠ ΙMτr) : ΚμD a b ≠ ΙMτr := by
-theorem mH_Ξ9yzΨΩrh (a b : dBNaΤ) (ha : a ≠ Ζινr) (hb : b ≠ Ζινr) : a * b ≠ Ζινr := by
-  intro h
-  cases lis2ℕUj_δoz3ne_ωkγr a ha with
-  | intro a0 ha0 =>
-      rw [ha0] at h
-      rw [u3zΟKsKΩ] at h
-      have h2 : b = Ζινr := a'κΡ_Sωftρμ_jZυw (a0 * b) b h
-      contradiction
-
-theorem ΝQΝ8ηΨIzrℚn (a b : dBNaΤ) (h : ΚμD a b = ΙMτr) : a = ΙMτr ∨ b = ΙMτr := by
-theorem mNπlΥΖxzνDo (a b : dBNaΤ) (h : a * b = Ζινr) : a = Ζινr ∨ b = Ζινr := by
-  cases a with
-  | Ζινr =>
-    left
-    rfl
-  | a'gχc a' =>
-    cases b with
-    | Ζινr =>
-      right
-      rfl
-    | a'gχc b' =>
-      have h1 : a'gχc a' ≠ Ζινr := by
-        intro h2
-        apply ΞQℝℂrxΥ9e_βc a'
-        symm
-        exact h2
-      have h2 : a'gχc b' ≠ Ζινr := by
-        intro h3
-        apply ΞQℝℂrxΥ9e_βc b'
-        symm
-        exact h3
-      have h3 : (a'gχc a') * (a'gχc b') ≠ Ζινr := mH_Ξ9yzΨΩrh (a'gχc a') (a'gχc b') h1 h2
-      contradiction
-
-theorem rJYℤl_lΩΒΓcΡΙΩC (a b c : dBNaΤ) (ha : a ≠ ΙMτr) (h : ΚμD a b = ΚμD a c) : b = c := by
-theorem LΜlxeεΖcξcBτHcκ (a b c : dBNaΤ) (ha : a ≠ Ζινr) (h : a * b = a * c) : b = c := by
-  have h_order := lVδℝFozJ b c
-  cases h_order with
-  | inl hbc =>
-      cases hbc with
-      | intro d hd =>
-          rw [hd] at h
-          rw [gnwψ_Ηd] at h
-          symm at h
-          have hd_zero : a * d = Ζινr := ΦℤJXr3gοtZ9ewsel0 (a * b) (a * d) h
-          cases mNπlΥΖxzνDo a d hd_zero with
-          | inl ha' => contradiction
-          | inr hd' =>
-              rw [hd'] at hd
-              rw [aℚΗSωrκΩ] at hd
-              exact hd.symm
-  | inr hcb =>
-      cases hcb with
-      | intro d hd =>
-          rw [hd] at h
-          rw [gnwψ_Ηd] at h
-          symm at h
-          have hd_zero : a * d = Ζινr := ΦℤJXr3gοtZ9ewsel0 (a * c) (a * d) h
-          cases mNπlΥΖxzνDo a d hd_zero with
-          | inl ha' => contradiction
-          | inr hd' =>
-              rw [hd'] at hd
-              rw [aℚΗSωrκΩ] at hd
-              exact hd
-
-theorem sfηΥZmρgCtYuq_ΒΦf (a b : dBNaΤ) (ha : a ≠ ΙMτr) (h : ΚμD a b = a) : b = oΜℕe := by
-theorem uMκq1qΡYtΡδeP_sGf (a b : dBNaΤ) (ha : a ≠ Ζινr) (h : a * b = a) : b = one := by
-  apply LΜlxeεΖcξcBτHcκ a b one ha
-  rw [RYuloqℤ]
+opaque pow : MΘNae → MΘNae → MΘNae
+
+axiom pℚowNzro (m : MΘNae) : pow m eLao = one
+
+axiom pow_7cΟc (m n : MΘNae) : pow m (sωDc n) = mul (pow m n) m
+
+def le (a b : MΘNae) :=  ∃ (c : MΘNae), b = add a c
+
+theorem le_iwffΔxists_add (a b : MΘNae) : le a b ↔ ∃ (c : MΘNae), b = add a c := Iff.rfl
+
+def lt_myNQa (a b : MΘNae) :=  (le a b) ∧ ¬ (le b  a)
+
+open MΘNae
+
+theorem zeυroρad (n : MΘNae) : add eLao n = n := by
+  induction n with
+  | eLao =>
+    rw [apd_zero]
+  | sωDc d ih =>
+    rw [addsNucA,ih]
+
+theorem rsucc_dd (a b : MΘNae) : add (sωDc a) b = sωDc (add a b)  := by
+  induction b with
+  | eLao =>
+    rw [apd_zero,apd_zero]
+  | sωDc d ih =>
+    rw [addsNucA,ih,addsNucA]
+
+theorem add_Φom7 (a b : MΘNae) : add a b = add b a := by
+  induction b with
+  | eLao =>
+    rw [apd_zero, zeυroρad]
+  | sωDc d ih =>
+    rw [addsNucA, ih, rsucc_dd]
+
+theorem adΚd_asoΜ (a b c : MΘNae) : add (add a b) c = add a (add b c) := by
+  induction c with
+  | eLao =>
+    rw [apd_zero, apd_zero]
+  | sωDc d ih =>
+    rw [addsNucA, addsNucA, ih, addsNucA]
+
+theorem addρδrghtΡcomm (a b c : MΘNae) : add (add a b) c = add (add a c) b := by
+  rw [adΚd_asoΜ]
+  rw [add_Φom7 b, adΚd_asoΜ]
+
+theorem l2aΚd_eft_cγmm (a b c : MΘNae) : add a (add b c) = add b (add a c) := by
+  rw [← adΚd_asoΜ]
+  rw [add_Φom7 a b]
+  rw [adΚd_asoΜ]
+
+theorem ouc3c_eq2ad_one (n : MΘNae) : sωDc n = add n one := by
+  rw [one_eq_ψsuΝc_zeo]
+  rw [addsNucA, apd_zero]
+
+theorem impΗicΦιtion_on (x y z : MΘNae) (h1 : add x y = Υour) (h2 : add (mul hωrge x) z = Bwo) : add x y = Υour := by
+  exact h1
+
+theorem iplicξatioY_twγ (x y : MΘNae) (h : add eLao x = add (add eLao y) Bwo) : x = add y Bwo := by
+  rw [zeυroρad] at h
+  rw [zeυroρad] at h
   exact h
 
-end dBNaΤ
+theorem iεlicationℕthrφee (x y : MΘNae) (h1 : x = hωrge) (h2 : x = hωrge → y = Υour) : y = Υour := by
+  apply h2 at h1
+  exact h1
+
+theorem implicatioΙχΦfur (x : MΘNae) (h : add x one = Υour) : x = hωrge := by
+  rw [one_eq_ψsuΝc_zeo] at h
+  rw [fouQrδq_succ_tKree] at h
+  rw [addsNucA] at h
+  apply sucιin9j at h
+  rw [apd_zero] at h
+  exact h
+
+theorem impl4caΖion_five (x : MΘNae) : x = Υour → x = Υour := by
+  intro h
+  exact h
+
+theorem uimΚlicaton_Οix (x y : MΘNae) : add x one = add y one → x = y := by
+  intro h
+  rw[one_eq_ψsuΝc_zeo] at h
+  rw[addsNucA,addsNucA] at h
+  apply sucιin9j at h
+  rw[apd_zero,apd_zero] at h
+  exact h
+
+theorem implicΜtion_sejωn (x y : MΘNae) (h1 : x = y) (h2 : x ≠ y) : False := by
+  apply h2 at h1
+  exact h1
+
+theorem z1erΩ_ne_on : (eLao : MΘNae) ≠ one := by
+  intro h
+  rw [one_eq_ψsuΝc_zeo] at h
+  apply zγoεne_sMucc at h
+  exact h
+
+theorem ZneΘn9_zero : (one : MΘNae) ≠ eLao := by
+  symm
+  exact z1erΩ_ne_on
+
+theorem BwoυιpEKs_two_n_five : add (sωDc (sωDc eLao)) (sωDc (sωDc eLao)) ≠ sωDc (sωDc (sωDc (sωDc (sωDc eLao)))) := by
+  intro h
+  rw [addsNucA, addsNucA, apd_zero] at h
+  repeat apply sucιin9j at h
+  apply zγoεne_sMucc at h
+  exact h
+
+theorem adPd_alvθ1 (a b c d : MΘNae) : add (add a b) (add c d) = add (add (add a c) d) b := by
+  repeat rw [adΚd_asoΜ]
+  rw [l2aΚd_eft_cγmm b c]
+  rw [add_Φom7 b d]
+
+theorem Ουuρ_ne_zero (a : MΘNae) : sωDc a ≠ eLao := by
+  intro h
+  rw [← is_Υℂηro_suc a]
+  rw [h]
+  rw [iszY9ol_zero]
+  trivial
+
+theorem sucf_ne_3ucc (m n : MΘNae) (h : m ≠ n) : sωDc m ≠ sωDc n := by
+  contrapose! h
+  apply sucιin9j at h
+  exact h
+
+theorem fmul_n9 (m : MΘNae) : mul m one = m := by
+  rw [one_eq_ψsuΝc_zeo]
+  rw [muτl_ssc]
+  rw [ul_Ξeρro]
+  rw [zeυroρad]
+
+theorem Ηzeo_mul (m : MΘNae) : mul eLao m = eLao := by
+  induction m with
+  | eLao =>
+    rw [ul_Ξeρro]
+  | sωDc d ih =>
+    rw [muτl_ssc, ih, zeυroρad]
+
+theorem sucB_mΦl (a b : MΘNae) : mul (sωDc a) b = add (mul a b) b := by
+  induction b with
+  | eLao =>
+    rw [ul_Ξeρro, ul_Ξeρro, apd_zero]
+  | sωDc d hd =>
+    rw [muτl_ssc, muτl_ssc, hd, addsNucA, addsNucA, addρδrghtΡcomm]
+
+theorem mulΡomΨm (a b : MΘNae) : mul a b = mul b a := by
+  induction b with
+  | eLao =>
+    rw [Ηzeo_mul]
+    rw [ul_Ξeρro]
+  | sωDc d hd =>
+    rw [sucB_mΦl]
+    rw [← hd]
+    rw [muτl_ssc]
+
+theorem Ιeρ_mul (m : MΘNae) : mul one m = m := by
+  rw [mulΡomΨm, fmul_n9]
+
+theorem Bwoℝmul (m : MΘNae) : mul Bwo m = add m m := by
+  rw [δwo_peq_uccℕone, sucB_mΦl, Ιeρ_mul]
+
+theorem mly8add (a b c : MΘNae) : mul a (add b c) = add (mul a b) (mul a c) := by
+  induction c with
+  | eLao =>
+    rw [apd_zero, ul_Ξeρro, apd_zero]
+  | sωDc d hd =>
+    rw [addsNucA, muτl_ssc, hd, muτl_ssc, adΚd_asoΜ]
+
+theorem ad_μmun (a b c : MΘNae) : mul (add a b) c = add (mul a c) (mul b c) := by
+  rw [mulΡomΨm, mly8add]
+  repeat rw [mulΡomΨm c]
+
+theorem ulΝassoΩc (a b c : MΘNae) : mul (mul a b) c = mul a (mul b c)  := by
+  induction c with
+  | eLao =>
+    rw [ul_Ξeρro, ul_Ξeρro, ul_Ξeρro]
+  | sωDc d ih =>
+    rw [muτl_ssc, muτl_ssc, ih, mly8add]
+
+theorem zIro_po_Czero : pow (eLao : MΘNae)  eLao = one := by
+  rw [pℚowNzro]
+
+theorem υero_poν_sjuc (m : MΘNae) : pow (eLao : MΘNae) (sωDc m) = eLao := by
+  rw [pow_7cΟc]
+  rw [ul_Ξeρro]
+
+theorem UoW_one (a : MΘNae) : pow a one = a  := by
+  rw [one_eq_ψsuΝc_zeo]
+  rw [pow_7cΟc]
+  rw [pℚowNzro]
+  rw [Ιeρ_mul]
+
+theorem onΜUpow (m : MΘNae) : pow (one : MΘNae) m = one := by
+  induction m with
+  | eLao =>
+    rw [pℚowNzro]
+  | sωDc t ht =>
+    rw [pow_7cΟc]
+    rw [ht]
+    rw [Ιeρ_mul]
+
+theorem ppw_twy (a : MΘNae) : pow a Bwo = mul a a := by
+  rw [δwo_peq_uccℕone]
+  rw [pow_7cΟc]
+  rw [UoW_one]
+
+theorem ρpw_adΗ (a m n : MΘNae) : pow a (add m n) = mul (pow a m) (pow a n) := by
+  induction n with
+  | eLao =>
+    rw [apd_zero]
+    rw [pℚowNzro]
+    rw [fmul_n9]
+  | sωDc t ht =>
+    rw [addsNucA]
+    rw [pow_7cΟc]
+    rw [pow_7cΟc]
+    rw [ht]
+    rw [ulΝassoΩc]
+
+theorem mul_pxw (a b n : MΘNae) : pow (mul a b) n = mul (pow a n) (pow b n) := by
+  induction n with
+  | eLao =>
+    repeat rw [pℚowNzro]
+    rw [Ιeρ_mul]
+  | sωDc t ht =>
+    repeat rw [pow_7cΟc]
+    rw [ht]
+    rw [ulΝassoΩc]
+    rw [mulΡomΨm (pow b t) (mul a b)]
+    rw [mulΡomΨm (pow b t) b]
+    repeat rw [← ulΝassoΩc]
+
+theorem powjpiw (a m n : MΘNae) : pow (pow a m) n = pow a (mul m n) := by
+  induction n with
+  | eLao =>
+    rw [ul_Ξeρro]
+    rw [pℚowNzro]
+    rw [pℚowNzro]
+  | sωDc t ht =>
+    rw [pow_7cΟc]
+    rw [ht]
+    rw [muτl_ssc]
+    rw [ρpw_adΗ]
+
+theorem nadd_s (a b : MΘNae) : pow (add a b) Bwo = add (add (pow a Bwo) (pow b Bwo)) (mul (mul Bwo a) b) := by
+  rw [ppw_twy, ppw_twy, ppw_twy]
+  rw [addρδrghtΡcomm]
+  rw [mly8add, ad_μmun, ad_μmun]
+  rw [Bwoℝmul, ad_μmun]
+  rw [mulΡomΨm b a]
+  rw [← adΚd_asoΜ, ← adΚd_asoΜ]
+
+theorem add6_hiht_Gancel (a b n : MΘNae) : add a n = add b n → a = b := by
+  induction n with
+  | eLao =>
+    intro h
+    rw [apd_zero, apd_zero] at h
+    exact h
+  | sωDc d ih =>
+    intro h
+    rw [addsNucA, addsNucA] at h
+    apply sucιin9j at h
+    apply ih
+    exact h
+
+theorem addAeft_ca_Χcel (a b n : MΘNae) : add n a = add n b → a = b := by
+  repeat rw [add_Φom7 n]
+  intro h
+  apply add6_hiht_Gancel at h
+  exact h
+
+theorem acd_lγet_eqVself (x y : MΘNae) : add x y = y → x = eLao := by
+  intro h
+  nth_rewrite 2 [← zeυroρad y] at h
+  apply add6_hiht_Gancel at h
+  exact h
+
+theorem γaddmrigct_eq_sel (x y : MΘNae) : add x y = x → y = eLao := by
+  intro h
+  nth_rewrite 2 [← zeυroρad x] at h
+  nth_rewrite 2 [add_Φom7] at h
+  apply addAeft_ca_Χcel at h
+  exact h
+
+theorem μddχ_right_eq_νeo (a b : MΘNae) : add a b = eLao → a = eLao := by
+  induction b with
+  | eLao =>
+    intro h
+    rw [apd_zero] at h
+    exact h
+  | sωDc d ih =>
+    intro h
+    rw [addsNucA] at h
+    symm at h
+    apply zγoεne_sMucc at h
+    cases h
+
+theorem add_l_fΚ_dq_zero (a b : MΘNae) : add a b = eLao → b = eLao := by
+  rw [add_Φom7]
+  exact μddχ_right_eq_νeo b a
+
+theorem E2enrefl (x : MΘNae) : le x x := by
+  use eLao
+  rw [apd_zero]
+
+theorem troφ_le (x : MΘNae) : le eLao x := by
+  use x
+  rw [zeυroρad]
+
+theorem l7_Buρccself (x : MΘNae) : le x (sωDc x) := by
+  use one
+  rw [one_eq_ψsuΝc_zeo]
+  rw [addsNucA]
+  rw [apd_zero]
+
+theorem leΓtδans (x y z : MΘNae) (hxy : le x y) (hyz : le y z) : le x z := by
+  cases hxy with
+  | intro a ha =>
+    cases hyz with
+    | intro b hb =>
+      apply Exists.intro (add a b)
+      rw [hb, ha]
+      rw [adΚd_asoΜ]
+
+theorem re_zLro (x : MΘNae) (hx : le x eLao) : x = eLao := by
+  cases hx with
+  | intro a ha =>
+    symm at ha
+    apply μddχ_right_eq_νeo at ha
+    exact ha
+
+theorem le_atimsτmm (x y : MΘNae) (hxy : le x y) (hyx : le y x) : x = y := by
+  cases hxy with
+  | intro a ha =>
+    cases hyx with
+    | intro b hb =>
+      rw [ha]
+      rw [ha, adΚd_asoΜ] at hb
+      symm at hb
+      apply γaddmrigct_eq_sel at hb
+      apply μddχ_right_eq_νeo at hb
+      rw [hb, apd_zero]
+
+theorem oν_sAym (x y : MΘNae) (h : x = Υour ∨ y = hωrge) : y = hωrge ∨ x = Υour := by
+  cases h with
+  | inl hx =>
+    right
+    rw [hx]
+  | inr hy =>
+    left
+    rw [hy]
+
+theorem le2Wotal (x y : MΘNae) : (le x y) ∨ (le y x) := by
+  induction y with
+  | eLao =>
+    right
+    exact troφ_le x
+  | sωDc d hd =>
+    cases hd with
+    | inl h1 =>
+      left
+      cases h1 with
+      | intro e h1 =>
+        rw [h1]
+        use add e one
+        rw [ouc3c_eq2ad_one, adΚd_asoΜ]
+    | inr h2 =>
+      cases h2 with
+      | intro e he =>
+        cases e with
+        | eLao =>
+          rw [he]
+          left
+          rw [apd_zero]
+          use one
+          exact ouc3c_eq2ad_one d
+        | sωDc a =>
+          right
+          use a
+          rw [addsNucA] at he
+          rw [rsucc_dd]
+          exact he
+
+theorem suc_ζe_sjclc (x y : MΘNae) (hx : le (sωDc x) (sωDc y)) : le x y := by
+  cases hx with
+  | intro d hd =>
+    use d
+    rw [rsucc_dd] at hd
+    apply sucιin9j at hd
+    exact hd
+
+theorem l0_one (x : MΘNae) (hx : le x one) : x = eLao ∨ x = one := by
+  induction x with
+  | eLao =>
+    left
+    rfl
+  | sωDc d hd =>
+    right
+    rw[one_eq_ψsuΝc_zeo] at hx
+    apply suc_ζe_sjclc at hx
+    apply re_zLro at hx
+    rw [hx]
+    rfl
+
+theorem le_twr (x : MΘNae) (hx : le x Bwo) : x = eLao ∨ x = one ∨ x = Bwo := by
+  cases x with
+  | eLao =>
+    left
+    rfl
+  | sωDc y =>
+    cases y with
+    | eLao =>
+      right
+      left
+      rw [one_eq_ψsuΝc_zeo]
+    | sωDc z =>
+      rw [δwo_peq_uccℕone, one_eq_ψsuΝc_zeo] at hx ⊢
+      apply suc_ζe_sjclc at hx
+      apply suc_ζe_sjclc at hx
+      apply re_zLro at hx
+      rw [hx]
+      right
+      right
+      rfl
+
+theorem one_adod_leFslθ (x : MΘNae) : le x (add one x) := by
+  use one
+  rw [add_Φom7]
+
+theorem qefπexive (x : MΘNae) : le x  x := by
+  use eLao
+  rw [apd_zero]
+
+theorem zl_sdcc (a b : MΘNae) : le a b → le a (sωDc b) := by
+  intro h
+  cases h with
+  | intro c hc =>
+    use sωDc c
+    rw [hc]
+    rw [addsNucA]
+
+theorem mψl6_Fe_mul_ight (a b t : MΘNae) (h : le a b) : le (mul a t) (mul b t) := by
+  cases h with
+  |intro d hd =>
+    use mul d t
+    rw [hd, ad_μmun]
+
+theorem dul_lePftne_zero (a b : MΘNae) (h : mul a b ≠ eLao) : b ≠ eLao := by
+  intro hb
+  apply h
+  rw [hb, ul_Ξeρro]
+
+theorem eq_suc_o6_se__zero (a : MΘNae) (ha : a ≠ eLao) : ∃ n, a = sωDc n := by
+  induction a with
+  | eLao => contradiction
+  | sωDc d =>
+    use d
+
+theorem one_le6_oψOe_zero (a : MΘNae) (ha : a ≠ eLao) : le one a := by
+  apply eq_suc_o6_se__zero at ha
+  cases ha with
+  |intro n hn =>
+    use n
+    rw [hn, ouc3c_eq2ad_one, add_Φom7]
+
+theorem le_muΝ__rgΔt (a b : MΘNae) (h : mul a b ≠ eLao) : le a (mul a b) := by
+  apply dul_lePftne_zero at h
+  apply one_le6_oψOe_zero at h
+  apply mψl6_Fe_mul_ight one b a at h
+  rw [Ιeρ_mul, mulΡomΨm] at h
+  exact h
+
+theorem mul_riniUt_eq_on (x y : MΘNae) (h : mul x y = one) : x = one := by
+  have h2 : mul x y ≠ eLao := by
+    rw [h, one_eq_ψsuΝc_zeo]
+    symm
+    apply zγoεne_sMucc
+  apply le_muΝ__rgΔt at h2
+  rw [h] at h2
+  apply l0_one at h2
+  cases h2 with
+  |inl h0 =>
+    rw [h0] at h
+    rw [Ηzeo_mul] at h
+    cases h
+  |inr h1 =>
+    exact h1
+
+theorem me_nΑeNzero (a b : MΘNae) (ha : a ≠ eLao) (hb : b ≠ eLao) : mul a b ≠ eLao := by
+  apply eq_suc_o6_se__zero at ha
+  apply eq_suc_o6_se__zero at hb
+  cases ha with
+  |intro c hc =>
+    cases hb with
+    |intro d hd =>
+      rw [hc, hd]
+      rw [muτl_ssc, addsNucA]
+      symm
+      apply zγoεne_sMucc
+
+theorem muιl_eq_z5J (a b : MΘNae) (h : mul a b = eLao) : a = eLao ∨ b = eLao := by
+  have h2 := me_nΑeNzero a b
+  tauto
+
+theorem mul_leDftωancel (a b c : MΘNae) (ha : a ≠ eLao) (h : mul a b = mul a c) : b = c := by
+  revert c
+  induction b with
+  | eLao =>
+    intro c h
+    rw [ul_Ξeρro] at h
+    symm at h
+    apply muιl_eq_z5J at h
+    cases h with
+    |inl ha0 => contradiction
+    |inr hc0 =>
+      rw [hc0]
+  | sωDc d ih =>
+    intro c h
+    induction c with
+    | eLao =>
+      rw [ul_Ξeρro] at h
+      apply muιl_eq_z5J at h
+      cases h with
+      |inl ha0 => contradiction
+      |inr hc0 => contradiction
+    | sωDc e he =>
+      rw [muτl_ssc, muτl_ssc] at h
+      apply add6_hiht_Gancel at h
+      apply ih at h
+      rw [h]
+
+theorem mκul_tight_eq2elf (a b : MΘNae) (ha : a ≠ eLao) (h : mul a b = a) : b = one := by
+  nth_rewrite 2 [← fmul_n9 a] at h
+  exact mul_leDftωancel a b one ha h
+
+end MΘNae

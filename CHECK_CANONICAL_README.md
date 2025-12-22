@@ -160,14 +160,34 @@ The script will:
 - `verify_lean_file(lean_file)` - Run Lean and parse errors
 - `replace_failed_with_sorry(...)` - Replace failures with sorry
 
+## Critical Implementation Details
+
+### Premise Generation Order (Fixed Bug)
+
+**IMPORTANT**: The script follows this exact order to ensure all datasets get the same premises:
+
+1. **Generate premises from ORIGINAL dataset** - Analyze original theorem statements to determine which axioms are needed
+2. **For each dataset (including original)**:
+   - Load that dataset's name mapping
+   - **Obfuscate** the original premise list using the name mapping
+   - Inject the obfuscated premises into the Lean file
+
+This ensures that `obfuscated_5` gets the same premises as `original` (just with obfuscated names), preventing the bug where premises were generated from obfuscated statements.
+
+### Global Configuration
+
+- `CANONICAL_TIMEOUT = 15` - Seconds to wait for canonical tactic to finish (configurable)
+
 ## Current Status
 
-- ✅ Correctly detects operations and generates appropriate premises
+- ✅ Correctly detects operations from ORIGINAL statements
+- ✅ Generates identical premise lists for all datasets (before obfuscation)
 - ✅ Properly obfuscates premise names using name mappings
 - ✅ Uses correct namespace for each dataset
 - ✅ Generates syntactically correct standalone Lean files
 - ✅ Reuses verified code from jsonl_verifier.py
-- ⚠️ Verification reports 100% success (may need investigation)
+- ✅ Configurable timeout for canonical tactic
+- ⚠️ Verification reports 100% success (may need manual testing)
 
 ## Future Improvements
 

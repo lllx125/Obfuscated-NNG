@@ -12,9 +12,9 @@ from pathlib import Path
 
 
 # Configuration
-HEADER_PATH = Path("dataset/obfuscated_3/header_definitions.jsonl")
+HEADER_PATH = Path("dataset/obfuscated_2/header_definitions.jsonl")
 ##THEOREMS_PATH = Path("theorems_test.jsonl")
-THEOREMS_PATH = Path("dataset/obfuscated_3/theorems.jsonl")
+THEOREMS_PATH = Path("dataset/obfuscated_2/theorems.jsonl")
 OUTPUT_LEAN_FILE = Path("MyNNG/MyNNG/Generated_Verification.lean")
 
 # Lean code snippet to inject at the beginning of the generated file

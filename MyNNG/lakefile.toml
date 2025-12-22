@@ -20,3 +20,4 @@ scope = "chasenorman"
 
 [[lean_lib]]
 name = "MyNNG"
+supportInterpreter = true

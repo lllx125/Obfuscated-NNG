@@ -37,7 +37,7 @@ LLM_RATE_LIMITS = {
     'gemini-pro': 5,
     'deepseek-r1': 500,
     'gpt-4o': 480,
-    'deepseek-prover-v2': 100,
+    'deepseek-prover-v2': 50,
 }
 
 # Dataset ordering (slowest first for optimal distribution)

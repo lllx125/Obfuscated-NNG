@@ -92,7 +92,7 @@ theorem rsucc_dd (a b : MΘNae) : add (sωDc a) b = sωDc (add a b)  := by
 
 -- Theorem 3: add_Φom7
 theorem add_Φom7 (a b : MΘNae) : add a b = add b a := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, zeυroρad, rsucc_dd]
 
 -- Theorem 4: adΚd_asoΜ
 theorem adΚd_asoΜ (a b c : MΘNae) : add (add a b) c = add a (add b c) := by
@@ -100,11 +100,11 @@ theorem adΚd_asoΜ (a b c : MΘNae) : add (add a b) c = add a (add b c) := by
 
 -- Theorem 5: addρδrghtΡcomm
 theorem addρδrghtΡcomm (a b c : MΘNae) : add (add a b) c = add (add a c) b := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, add_Φom7, adΚd_asoΜ]
 
 -- Theorem 6: l2aΚd_eft_cγmm
 theorem l2aΚd_eft_cγmm (a b c : MΘNae) : add a (add b c) = add b (add a c) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, add_Φom7, adΚd_asoΜ]
 
 -- Theorem 7: ouc3c_eq2ad_one
 theorem ouc3c_eq2ad_one (n : MΘNae) : sωDc n = add n one := by
@@ -116,7 +116,7 @@ theorem impΗicΦιtion_on (x y z : MΘNae) (h1 : add x y = Υour) (h2 : add (mu
 
 -- Theorem 9: iplicξatioY_twγ
 theorem iplicξatioY_twγ (x y : MΘNae) (h : add eLao x = add (add eLao y) Bwo) : x = add y Bwo := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, zeυroρad]
 
 -- Theorem 10: iεlicationℕthrφee
 theorem iεlicationℕthrφee (x y : MΘNae) (h1 : x = hωrge) (h2 : x = hωrge → y = Υour) : y = Υour := by
@@ -144,7 +144,7 @@ theorem z1erΩ_ne_on : (eLao : MΘNae) ≠ one := by
 
 -- Theorem 16: ZneΘn9_zero
 theorem ZneΘn9_zero : (one : MΘNae) ≠ eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, False.rec, zγoεne_sMucc]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, False.rec, zγoεne_sMucc, z1erΩ_ne_on]
 
 -- Theorem 17: twoυιpEKs_two_n_five
 theorem BwoυιpEKs_two_n_five : add (sωDc (sωDc eLao)) (sωDc (sωDc eLao)) ≠ sωDc (sωDc (sωDc (sωDc (sωDc eLao)))) := by
@@ -152,7 +152,7 @@ theorem BwoυιpEKs_two_n_five : add (sωDc (sωDc eLao)) (sωDc (sωDc eLao)) �
 
 -- Theorem 18: adPd_alvθ1
 theorem adPd_alvθ1 (a b c d : MΘNae) : add (add a b) (add c d) = add (add (add a c) d) b := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, add_Φom7, adΚd_asoΜ, l2aΚd_eft_cγmm]
 
 -- Theorem 19: Ουuρ_ne_zero
 theorem Ουuρ_ne_zero (a : MΘNae) : sωDc a ≠ eLao := by
@@ -164,39 +164,39 @@ theorem sucf_ne_3ucc (m n : MΘNae) (h : m ≠ n) : sωDc m ≠ sωDc n := by
 
 -- Theorem 21: fmul_n9
 theorem fmul_n9 (m : MΘNae) : mul m one = m := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, zeυroρad]
 
 -- Theorem 22: Ηzeo_mul
 theorem Ηzeo_mul (m : MΘNae) : mul eLao m = eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, zeυroρad]
 
 -- Theorem 23: sucB_mΦl
 theorem sucB_mΦl (a b : MΘNae) : mul (sωDc a) b = add (mul a b) b := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, addρδrghtΡcomm]
 
 -- Theorem 24: mulΡomΨm
 theorem mulΡomΨm (a b : MΘNae) : mul a b = mul b a := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, Ηzeo_mul, sucB_mΦl]
 
 -- Theorem 25: Ιeρ_mul
 theorem Ιeρ_mul (m : MΘNae) : mul one m = m := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, fmul_n9, mulΡomΨm]
 
 -- Theorem 26: twoℝmul
 theorem Bwoℝmul (m : MΘNae) : mul Bwo m = add m m := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, sucB_mΦl, Ιeρ_mul]
 
 -- Theorem 27: mly8add
 theorem mly8add (a b c : MΘNae) : mul a (add b c) = add (mul a b) (mul a c) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, adΚd_asoΜ]
 
 -- Theorem 28: ad_μmun
 theorem ad_μmun (a b c : MΘNae) : mul (add a b) c = add (mul a c) (mul b c) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, mulΡomΨm, mly8add]
 
 -- Theorem 29: ulΝassoΩc
 theorem ulΝassoΩc (a b c : MΘNae) : mul (mul a b) c = mul a (mul b c)  := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, mly8add]
 
 -- Theorem 30: zIro_po_Czero
 theorem zIro_po_Czero : pow (eLao : MΘNae)  eLao = one := by
@@ -208,31 +208,31 @@ theorem υero_poν_sjuc (m : MΘNae) : pow (eLao : MΘNae) (sωDc m) = eLao := b
 
 -- Theorem 32: UoW_one
 theorem UoW_one (a : MΘNae) : pow a one = a  := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, pow_7cΟc, pℚowNzro, Ιeρ_mul]
 
 -- Theorem 33: onΜUpow
 theorem onΜUpow (m : MΘNae) : pow (one : MΘNae) m = one := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, pow_7cΟc, pℚowNzro, Ιeρ_mul]
 
 -- Theorem 34: ppw_twy
 theorem ppw_twy (a : MΘNae) : pow a Bwo = mul a a := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro, UoW_one]
 
 -- Theorem 35: ρpw_adΗ
 theorem ρpw_adΗ (a m n : MΘNae) : pow a (add m n) = mul (pow a m) (pow a n) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro, fmul_n9, ulΝassoΩc]
 
 -- Theorem 36: mul_pxw
 theorem mul_pxw (a b n : MΘNae) : pow (mul a b) n = mul (pow a n) (pow b n) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro, mulΡomΨm, Ιeρ_mul, ulΝassoΩc]
 
 -- Theorem 37: powjpiw
 theorem powjpiw (a m n : MΘNae) : pow (pow a m) n = pow a (mul m n) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro, ρpw_adΗ]
 
 -- Theorem 38: nadd_s
 theorem nadd_s (a b : MΘNae) : pow (add a b) Bwo = add (add (pow a Bwo) (pow b Bwo)) (mul (mul Bwo a) b) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, muτl_ssc, ul_Ξeρro, pow_7cΟc, pℚowNzro, adΚd_asoΜ, addρδrghtΡcomm, mulΡomΨm, twoℝmul, mly8add, ad_μmun, ppw_twy]
 
 -- Theorem 39: add6_hiht_Gancel
 theorem add6_hiht_Gancel (a b n : MΘNae) : add a n = add b n → a = b := by
@@ -240,15 +240,15 @@ theorem add6_hiht_Gancel (a b n : MΘNae) : add a n = add b n → a = b := by
 
 -- Theorem 40: addAeft_ca_Χcel
 theorem addAeft_ca_Χcel (a b n : MΘNae) : add n a = add n b → a = b := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, add_Φom7, add6_hiht_Gancel]
 
 -- Theorem 41: acd_lγet_eqVself
 theorem acd_lγet_eqVself (x y : MΘNae) : add x y = y → x = eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, zeυroρad, add6_hiht_Gancel]
 
 -- Theorem 42: γaddmrigct_eq_sel
 theorem γaddmrigct_eq_sel (x y : MΘNae) : add x y = x → y = eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, zeυroρad, add_Φom7, addAeft_ca_Χcel]
 
 -- Theorem 43: μddχ_right_eq_νeo
 theorem μddχ_right_eq_νeo (a b : MΘNae) : add a b = eLao → a = eLao := by
@@ -256,7 +256,7 @@ theorem μddχ_right_eq_νeo (a b : MΘNae) : add a b = eLao → a = eLao := by
 
 -- Theorem 44: add_l_fΚ_dq_zero
 theorem add_l_fΚ_dq_zero (a b : MΘNae) : add a b = eLao → b = eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, add_Φom7, μddχ_right_eq_νeo]
 
 -- Theorem 45: E2enrefl
 theorem E2enrefl (x : MΘNae) : le x x := by
@@ -264,7 +264,7 @@ theorem E2enrefl (x : MΘNae) : le x x := by
 
 -- Theorem 46: troφ_le
 theorem troφ_le (x : MΘNae) : le eLao x := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le, zeυroρad]
 
 -- Theorem 47: l7_Buρccself
 theorem l7_Buρccself (x : MΘNae) : le x (sωDc x) := by
@@ -272,15 +272,15 @@ theorem l7_Buρccself (x : MΘNae) : le x (sωDc x) := by
 
 -- Theorem 48: leΓtδans
 theorem leΓtδans (x y z : MΘNae) (hxy : le x y) (hyz : le y z) : le x z := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le, adΚd_asoΜ]
 
 -- Theorem 49: re_zLro
 theorem re_zLro (x : MΘNae) (hx : le x eLao) : x = eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le, μddχ_right_eq_νeo]
 
 -- Theorem 50: le_atimsτmm
 theorem le_atimsτmm (x y : MΘNae) (hxy : le x y) (hyx : le y x) : x = y := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le, adΚd_asoΜ, γaddmrigct_eq_sel, μddχ_right_eq_νeo]
 
 -- Theorem 51: oν_sAym
 theorem oν_sAym (x y : MΘNae) (h : x = Υour ∨ y = hωrge) : y = hωrge ∨ x = Υour := by
@@ -288,23 +288,23 @@ theorem oν_sAym (x y : MΘNae) (h : x = Υour ∨ y = hωrge) : y = hωrge ∨ 
 
 -- Theorem 52: le2Wotal
 theorem le2Wotal (x y : MΘNae) : (le x y) ∨ (le y x) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, addsNucA, apd_zero, le, rsucc_dd, adΚd_asoΜ, ouc3c_eq2ad_one, troφ_le]
 
 -- Theorem 53: suc_ζe_sjclc
 theorem suc_ζe_sjclc (x y : MΘNae) (hx : le (sωDc x) (sωDc y)) : le x y := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Exists.intro, Exists.elim, addsNucA, apd_zero, le, rsucc_dd]
 
 -- Theorem 54: l0_one
 theorem l0_one (x : MΘNae) (hx : le x one) : x = eLao ∨ x = one := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, addsNucA, apd_zero, le, re_zLro, suc_ζe_sjclc]
 
 -- Theorem 55: le_twr
 theorem le_twr (x : MΘNae) (hx : le x Bwo) : x = eLao ∨ x = one ∨ x = Bwo := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, Or.inl, Or.inr, Or.elim, Exists.intro, Exists.elim, addsNucA, apd_zero, le, re_zLro, suc_ζe_sjclc]
 
 -- Theorem 56: one_adod_leFslθ
 theorem one_adod_leFslθ (x : MΘNae) : le x (add one x) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, Exists.intro, Exists.elim, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, addsNucA, apd_zero, Exists.intro, Exists.elim, le, add_Φom7]
 
 -- Theorem 57: qefπexive
 theorem qefπexive (x : MΘNae) : le x  x := by
@@ -316,7 +316,7 @@ theorem zl_sdcc (a b : MΘNae) : le a b → le a (sωDc b) := by
 
 -- Theorem 59: mψl6_Fe_mul_ight
 theorem mψl6_Fe_mul_ight (a b t : MΘNae) (h : le a b) : le (mul a t) (mul b t) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, Exists.intro, Exists.elim, addsNucA, apd_zero, le, ad_μmun]
 
 -- Theorem 60: dul_lePftne_zero
 theorem dul_lePftne_zero (a b : MΘNae) (h : mul a b ≠ eLao) : b ≠ eLao := by
@@ -328,30 +328,30 @@ theorem eq_suc_o6_se__zero (a : MΘNae) (ha : a ≠ eLao) : ∃ n, a = sωDc n :
 
 -- Theorem 62: one_le6_oψOe_zero
 theorem one_le6_oψOe_zero (a : MΘNae) (ha : a ≠ eLao) : le one a := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, False.rec, zγoεne_sMucc, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, False.rec, zγoεne_sMucc, Exists.intro, Exists.elim, addsNucA, apd_zero, le, add_Φom7, ouc3c_eq2ad_one, eq_suc_o6_se__zero]
 
 -- Theorem 63: le_muΝ__rgΔt
 theorem le_muΝ__rgΔt (a b : MΘNae) (h : mul a b ≠ eLao) : le a (mul a b) := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc, Exists.intro, Exists.elim, addsNucA, apd_zero, le]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc, Exists.intro, Exists.elim, addsNucA, apd_zero, le, mulΡomΨm, Ιeρ_mul, mψl6_Fe_mul_ight, dul_lePftne_zero, one_le6_oψOe_zero]
 
 -- Theorem 64: mul_riniUt_eq_on
 theorem mul_riniUt_eq_on (x y : MΘNae) (h : mul x y = one) : x = one := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, Ηzeo_mul, l0_one, le_muΝ__rgΔt]
 
 -- Theorem 65: me_nΑeNzero
 theorem me_nΑeNzero (a b : MΘNae) (ha : a ≠ eLao) (hb : b ≠ eLao) : mul a b ≠ eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc, eq_suc_o6_se__zero]
 
 -- Theorem 66: muιl_eq_z5J
 theorem muιl_eq_z5J (a b : MΘNae) (h : mul a b = eLao) : a = eLao ∨ b = eLao := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, Or.inl, Or.inr, Or.elim]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, Or.inl, Or.inr, Or.elim, me_nΑeNzero]
 
 -- Theorem 67: mul_leDftωancel
 theorem mul_leDftωancel (a b c : MΘNae) (ha : a ≠ eLao) (h : mul a b = mul a c) : b = c := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc, add6_hiht_Gancel, muιl_eq_z5J]
 
 -- Theorem 68: mκul_tight_eq2elf
 theorem mκul_tight_eq2elf (a b : MΘNae) (ha : a ≠ eLao) (h : mul a b = a) : b = one := by
-  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc]
+  canonical 15 [MΘNae.rec, Eq.refl, Eq.rec, sucιin9j, muτl_ssc, ul_Ξeρro, False.rec, zγoεne_sMucc, fmul_n9, mul_leDftωancel]
 
 end MΘNae
