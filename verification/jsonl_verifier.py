@@ -12,9 +12,9 @@ from pathlib import Path
 
 
 # Configuration
-HEADER_PATH = Path("dataset/obfuscated_2/header_definitions.jsonl")
-##THEOREMS_PATH = Path("theorems_test.jsonl")
-THEOREMS_PATH = Path("dataset/obfuscated_2/theorems.jsonl")
+HEADER_PATH = Path("dataset/obfuscated_3/header_definitions.jsonl")
+THEOREMS_PATH = Path("theorems_test.jsonl")
+
 OUTPUT_LEAN_FILE = Path("MyNNG/MyNNG/Generated_Verification.lean")
 
 # Lean code snippet to inject at the beginning of the generated file
@@ -37,7 +37,17 @@ def fix_indentation(code: str) -> str:
 
     # 2. Fix 'by' structure: Ensure 'by' is on its own line or followed by a newline/space
     # This addresses cases like "theorem T := by exact H"
-    code = re.sub(r'(\s*:=\s*by\s*)([^\n])', r'\1\n  \2', code)
+    # FIXED: Calculate proper indentation by capturing leading whitespace and adding 2 spaces
+    def fix_by_indentation(match):
+        leading_ws = match.group(1)  # Capture any leading whitespace before :=
+        by_part = match.group(2)     # The ':= by ' part
+        tactic = match.group(3)      # The tactic after 'by'
+        # Calculate indentation: count spaces in leading_ws, add 2 more
+        indent_count = len(leading_ws)
+        new_indent = ' ' * (indent_count + 2)
+        return f'{leading_ws}{by_part}\n{new_indent}{tactic}'
+
+    code = re.sub(r'^(\s*)(:=\s*by\s+)([^\n])', fix_by_indentation, code, flags=re.MULTILINE)
 
     # 3. Add indentation after block starters (e.g., induction, cases, repeat)
     # Target: induction n with d hd => rw [h]
@@ -73,6 +83,39 @@ def fix_syntax(code: str) -> str:
 
     return code
 
+
+
+def strip_theorem_declaration(code: str) -> str:
+    """
+    Stage 0: Strip Theorem Declaration
+    Remove the theorem declaration line and all lines above it.
+    This should be done before all other normalizations.
+
+    Args:
+        code: Raw Lean code string potentially containing theorem declaration
+
+    Returns:
+        Code with theorem declaration and preceding lines removed
+    """
+    lines = code.split('\n')
+
+    # Find the line containing the theorem statement name
+    # Look for pattern: theorem <name> ... := by
+    theorem_line_idx = -1
+    for idx, line in enumerate(lines):
+        # Match theorem declaration (theorem keyword followed by name)
+        if "theorem " in line:
+            theorem_line_idx = idx
+
+    # If we found a theorem declaration, remove it and all lines above it
+    if theorem_line_idx >= 0:
+        
+        # Keep only lines after the theorem declaration
+        remaining_lines = lines[theorem_line_idx + 1:]
+        return '\n'.join(remaining_lines)
+
+    # If no theorem declaration found, return code as-is
+    return code
 
 def normalize_lean_code(code: str) -> str:
     """
@@ -137,6 +180,46 @@ def write_header_definitions_in_namespace(f, header_entries):
         f.write('\n\n')
 
 
+def parse_theorem_code(code):
+    """
+    Parse theorem code to extract statement, proof, and name.
+
+    Args:
+        code: Full theorem code including statement and proof
+
+    Returns:
+        Tuple of (name, statement, proof)
+    """
+    lines = code.split('\n')
+
+    # Find the theorem declaration line
+    theorem_line = None
+    for i, line in enumerate(lines):
+        if line.strip().startswith('theorem '):
+            theorem_line = i
+            break
+
+    if theorem_line is None:
+        raise ValueError(f"Could not find theorem declaration in code: {code[:100]}")
+
+    # Extract theorem name from declaration
+    # Pattern: theorem <name> ...
+    match = re.match(r'theorem\s+([\w\u0370-\u03FF\u2100-\u214F\']+)', lines[theorem_line].strip())
+    if not match:
+        raise ValueError(f"Could not parse theorem name from: {lines[theorem_line]}")
+
+    name = match.group(1)
+
+    # Statement is the theorem declaration line
+    statement = lines[theorem_line]
+
+    # Proof is everything after the theorem declaration
+    proof_lines = lines[theorem_line + 1:]
+    proof = '\n'.join(proof_lines)
+
+    return name, statement, proof
+
+
 def generate_lean_file(header_entries, theorems_entries, use_sorry_for=None, original_proofs=None):
     """
     Generate the Lean verification file.
@@ -174,9 +257,19 @@ def generate_lean_file(header_entries, theorems_entries, use_sorry_for=None, ori
 
         # Write all theorems in order (they're already in dependency order)
         for entry in theorems_entries:
-            statement = entry['statement']
-            proof = entry['proof']
-            name = entry['name']
+            # Handle both old format (statement/proof/name) and new format (code)
+            if 'statement' in entry:
+                statement = entry['statement']
+                proof = normalize_lean_code(entry['proof'])
+                name = entry['name']
+            elif 'code' in entry:
+                # Parse code to extract statement, proof, and name
+                name, statement, proof_raw = parse_theorem_code(entry['code'])
+                proof = normalize_lean_code(proof_raw)
+                # Store the name back in the entry for later use
+                entry['name'] = name
+            else:
+                raise ValueError(f"Entry missing both 'statement' and 'code' fields: {entry}")
 
             # Write the theorem statement
             f.write(statement)
@@ -313,9 +406,17 @@ def count_sorries_in_proofs(theorems_entries):
     sorry_ids = []
 
     # For each theorem, check if its proof contains 'sorry' keyword
-    for entry in theorems_entries:
-        proof = entry.get('proof', '')
-        theorem_id = entry['id']
+    for idx, entry in enumerate(theorems_entries):
+        # Handle both old format (proof field) and new format (code field)
+        if 'proof' in entry:
+            proof = entry.get('proof', '')
+        elif 'code' in entry:
+            proof = entry.get('code', '')
+        else:
+            proof = ''
+
+        # Use id if available, otherwise use index
+        theorem_id = entry.get('id', idx)
 
         # Check if 'sorry' exists as a keyword in the proof
         # Use word boundaries to match 'sorry' as a whole word
@@ -341,9 +442,17 @@ def detect_banned_tactics(theorems_entries, banned_tactics=None):
 
     banned_usage = {}
 
-    for entry in theorems_entries:
-        proof = entry.get('proof', '')
-        theorem_id = entry['id']
+    for idx, entry in enumerate(theorems_entries):
+        # Handle both old format (proof field) and new format (code field)
+        if 'proof' in entry:
+            proof = entry.get('proof', '')
+        elif 'code' in entry:
+            proof = entry.get('code', '')
+        else:
+            proof = ''
+
+        # Use id if available, otherwise use index
+        theorem_id = entry.get('id', idx)
         found_tactics = []
 
         for tactic in banned_tactics:
@@ -452,8 +561,19 @@ def verify_dataset(header_path, theorems_path, verbose=False):
 
             # Find and store the original proof
             for entry in theorems_entries:
-                if entry['name'] == first_failed:
-                    original_proofs[first_failed] = entry['proof']
+                # Get name - might already be set by generate_lean_file, or need to parse
+                entry_name = entry.get('name')
+                if not entry_name and 'code' in entry:
+                    entry_name, _, _ = parse_theorem_code(entry['code'])
+                    entry['name'] = entry_name
+
+                if entry_name == first_failed:
+                    # Get the proof - handle both formats
+                    if 'proof' in entry:
+                        original_proofs[first_failed] = entry['proof']
+                    elif 'code' in entry:
+                        _, _, proof_raw = parse_theorem_code(entry['code'])
+                        original_proofs[first_failed] = proof_raw
                     break
 
             incorrect_proofs.add(first_failed)
@@ -474,9 +594,16 @@ def verify_dataset(header_path, theorems_path, verbose=False):
     # Convert theorem names to IDs
     error_ids = []
     for name in incorrect_proofs:
-        for entry in theorems_entries:
-            if entry['name'] == name:
-                error_ids.append(entry['id'])
+        for idx, entry in enumerate(theorems_entries):
+            # Get name - might already be set by generate_lean_file, or need to parse
+            entry_name = entry.get('name')
+            if not entry_name and 'code' in entry:
+                entry_name, _, _ = parse_theorem_code(entry['code'])
+                entry['name'] = entry_name
+
+            if entry_name == name:
+                # Use id if available, otherwise use index
+                error_ids.append(entry.get('id', idx))
                 break
 
     # Count sorries in proofs (always check, even if there were errors)
@@ -493,9 +620,16 @@ def verify_dataset(header_path, theorems_path, verbose=False):
         if error_ids:
             print(f"\nFound {len(error_ids)} theorem(s) with incorrect proofs:\n")
             for name in sorted(incorrect_proofs):
-                for entry in theorems_entries:
-                    if entry['name'] == name:
-                        print(f"  - {name} (ID: {entry['id']})")
+                for idx, entry in enumerate(theorems_entries):
+                    # Get name - might already be set
+                    entry_name = entry.get('name')
+                    if not entry_name and 'code' in entry:
+                        entry_name, _, _ = parse_theorem_code(entry['code'])
+
+                    if entry_name == name:
+                        # Use id if available, otherwise use index
+                        theorem_id = entry.get('id', idx)
+                        print(f"  - {name} (ID: {theorem_id})")
                         break
         else:
             print("\n✓ All proofs are correct!")
@@ -509,9 +643,14 @@ def verify_dataset(header_path, theorems_path, verbose=False):
                 tactics_list = ', '.join(banned_tactics_usage[theorem_id])
                 # Find theorem name
                 theorem_name = None
-                for entry in theorems_entries:
-                    if entry['id'] == theorem_id:
-                        theorem_name = entry['name']
+                for idx, entry in enumerate(theorems_entries):
+                    # Use id if available, otherwise use index
+                    entry_id = entry.get('id', idx)
+                    if entry_id == theorem_id:
+                        # Get name - might already be set
+                        theorem_name = entry.get('name')
+                        if not theorem_name and 'code' in entry:
+                            theorem_name, _, _ = parse_theorem_code(entry['code'])
                         break
                 if theorem_name:
                     print(f"  - ID {theorem_id} ({theorem_name}): {tactics_list}")
@@ -549,34 +688,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-def strip_theorem_declaration(code: str) -> str:
-    """
-    Stage 0: Strip Theorem Declaration
-    Remove the theorem declaration line and all lines above it.
-    This should be done before all other normalizations.
-
-    Args:
-        code: Raw Lean code string potentially containing theorem declaration
-
-    Returns:
-        Code with theorem declaration and preceding lines removed
-    """
-    lines = code.split('\n')
-
-    # Find the line containing the theorem statement name
-    # Look for pattern: theorem <name> ... := by
-    theorem_line_idx = -1
-    for idx, line in enumerate(lines):
-        # Match theorem declaration (theorem keyword followed by name)
-        if "theorem " in line and ":= by" in line:
-            theorem_line_idx = idx
-
-    # If we found a theorem declaration, remove it and all lines above it
-    if theorem_line_idx >= 0:
-        # Keep only lines after the theorem declaration
-        remaining_lines = lines[theorem_line_idx + 1:]
-        return '\n'.join(remaining_lines)
-
-    # If no theorem declaration found, return code as-is
-    return code

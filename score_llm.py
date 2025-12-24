@@ -13,6 +13,7 @@ import numpy as np
 
 # Import the verifier
 from verification.jsonl_verifier import verify_dataset
+from utils.discord_notify import send_msg
 
 
 def load_jsonl(file_path: Path) -> List[Dict]:
@@ -157,6 +158,9 @@ def verify_all_runs(
             run_num = int(result_file.stem.split('_')[1])
             print(f"\nRun {run_num}:")
 
+            # Send notification for run start
+            send_msg(f"🔄 **Processing {dataset_name} - Run {run_num}/{len(result_files)}**")
+
             # Create generated_proofs file
             generated_proofs_file = dataset_folder / f"generated_proofs_{run_num}.jsonl"
             create_generated_proofs_file(result_file, theorems_file, generated_proofs_file)
@@ -242,8 +246,15 @@ def verify_all_runs(
                 dataset_stats["correct_rates"].append(correct_rate)
                 dataset_stats["avg_times"].append(avg_time)
 
+                # Send notification after each run
+                send_msg(
+                    f"✅ **{dataset_name} - Run {run_num} Complete**\n"
+                    f"Correct: {correct_count}/{total_proofs} ({correct_rate*100:.2f}%)\n"
+                    f"Avg time: {avg_time:.2f}s"
+                )
+
             except Exception as e:
-                print(f"  Error during verification: {e}")
+                send_msg(f"  Error during verification: {e}")
                 import traceback
                 traceback.print_exc()
 
@@ -258,6 +269,14 @@ def verify_all_runs(
 
             dataset_stats["avg_correct_rate"] = dataset_avg_correct
             dataset_stats["overall_avg_time"] = dataset_avg_time
+
+            # Send Discord notification for completed dataset
+            send_msg(
+                f"📊 **Dataset Completed: {dataset_name}**\n"
+                f"✅ Average correct rate: **{dataset_avg_correct*100:.2f}%**\n"
+                f"⏱️ Average time per proof: **{dataset_avg_time:.2f}s**\n"
+                f"🔄 Total runs: {len(dataset_stats['runs'])}"
+            )
 
         all_stats["datasets"][dataset_name] = dataset_stats
 
@@ -335,13 +354,14 @@ def plot_average_times(stats: Dict[str, Any], llm_name: str, results_base_dir: P
         print(f"Saved plot: {plot_file}")
 
 
-def main():
-    """Main function to score LLM results."""
-    llm_name = LLM_NAME
-
+def score_llm(llm_name: str):
+    """Score a single LLM."""
     print(f"{'='*60}")
     print(f"Scoring LLM: {llm_name}")
     print(f"{'='*60}")
+
+    # Send start notification
+    send_msg(f"🚀 **Scoring Started for {llm_name}**")
 
     # Verify all runs and collect statistics
     stats = verify_all_runs(llm_name)
@@ -367,6 +387,28 @@ def main():
     with open(stats_file, 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2)
     print(f"\nStatistics saved to: {stats_file}")
+
+    # Send final Discord notification
+    send_msg(
+        f"🎉 **All Datasets Completed**\n"
+        f"✅ Overall average correct rate: **{stats['overall_correct_rate']*100:.2f}%**\n"
+        f"⏱️ Overall average time per proof: **{stats['overall_avg_time']:.2f}s**\n"
+        f"📁 Total datasets processed: {len(stats['datasets'])}"
+    )
+
+
+def main():
+    """Main function to score LLM results."""
+    # Check if LLM_NAME is set, if so use it for single LLM mode
+    if LLM_NAME and LLM_NAME != "none":
+        score_llm(LLM_NAME)
+    else:
+        # Run multiple LLMs consecutively
+        llm_list = ["deepseek-r1", "deepseek-prover-v2","gpt-4o"]
+
+        for llm_name in llm_list:
+            score_llm(llm_name)
+            print("\n" * 3)  # Add spacing between LLMs
 
 
 # ============================================================================
