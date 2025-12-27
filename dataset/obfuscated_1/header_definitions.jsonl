@@ -10,7 +10,7 @@
 {"name": "uccΑΧinj", "code": "theorem uccΑΧinj (a b : Mmyat) (h : s0_c a = s0_c b) : a = b := by\n  rw [← pred_sΙcc a, h, pred_sΙcc]", "category": "theorem"}
 {"name": "is_zqco", "code": "def is_zqco : Mmyat → Prop\n| erΤW => True\n| s0_c _ => False", "category": "def"}
 {"name": "isΕero_zeCro", "code": "theorem isΕero_zeCro : is_zqco erΤW = True := rfl", "category": "theorem"}
-{"name": "is_ero_φsucc", "code": "theorem is_ero_φs0_c (n : Mmyat) : is_zqco (s0_c n) = False := rfl", "category": "theorem"}
+{"name": "is_ero_φs0_c", "code": "theorem is_ero_φs0_c (n : Mmyat) : is_zqco (s0_c n) = False := rfl", "category": "theorem"}
 {"name": "zeWro_e_suEc", "code": "theorem zeWro_e_suEc (a : Mmyat) : erΤW ≠ s0_c a := by\n  intro h\n  rw [← is_ero_φs0_c a]\n  rw [← h]\n  rw [isΕero_zeCro]\n  trivial\n-- multiplication", "category": "theorem"}
 {"name": "mul", "code": "opaque mul : Mmyat → Mmyat → Mmyat", "category": "opaque"}
 {"name": "mul_Ιzrn", "code": "axiom mul_Ιzrn (a : Mmyat) : mul a erΤW = erΤW", "category": "axiom"}

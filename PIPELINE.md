@@ -27,8 +27,12 @@ Parse Lean Files → Obfuscate Names → Generate Queries → Verify Datasets �
 │   └── generate_queries.py     # Create training queries from datasets
 │
 ├── verification/         # Stage 4: Verify proofs in Lean
-│   ├── jsonl_verifier.py       # Verify JSONL datasets by generating Lean files
-│   └── test_verifier.py        # Test script for verification
+│   ├── jsonl_generator.py      # Generate Lean files from JSONL datasets
+│   ├── code_normalize.py       # Normalize Lean code (indentation, syntax)
+│   ├── lean_analyzer.py        # Analyze Lean files for errors, sorry, banned tactics
+│   ├── verify_individual.py    # Verify individual result files
+│   ├── record_time.py          # Record and analyze timing data
+│   └── test_jsonl.py           # Test error detection with synthetic errors
 │
 ├── benchmark/            # Stage 5: Benchmark LLMs
 │   ├── llm_interface.py        # Unified interface for all LLMs (local + API)
@@ -115,9 +119,20 @@ Query format (each line is a JSON array):
 ```
 
 ### Stage 4: Verification
-**[jsonl_verifier.py](verification/jsonl_verifier.py)** - Verifies JSONL datasets by generating Lean files and running the Lean compiler. Sequentially identifies incorrect proofs, detects 'sorry' usage, and flags banned tactics.
 
-**[test_verifier.py](verification/test_verifier.py)** - Test script for the verifier with a sample dataset.
+The verification system is organized into modular components:
+
+**[jsonl_generator.py](verification/jsonl_generator.py)** - Generates Lean verification files from header and theorem JSONL files. Supports both theorems.jsonl and results_n.jsonl formats. Normalizes code before writing.
+
+**[code_normalize.py](verification/code_normalize.py)** - Normalizes Lean code by fixing indentation, syntax, and stripping theorem declarations. Handles LLM-generated code from different Lean versions.
+
+**[lean_analyzer.py](verification/lean_analyzer.py)** - Analyzes generated Lean files by running the Lean compiler. Iteratively identifies incorrect proofs, detects 'sorry' usage, and flags banned tactics. Returns detailed error reports with IDs and error messages.
+
+**[verify_individual.py](verification/verify_individual.py)** - Simplified interface for verifying individual result files. Creates generated_proofs_n.jsonl from result_n.jsonl, runs verification, and returns statistics.
+
+**[record_time.py](verification/record_time.py)** - Handles timing data: loading time_n.json files, computing statistics, and generating timing plots.
+
+**[test_jsonl.py](verification/test_jsonl.py)** - Test suite for error detection. Creates synthetic error datasets with swapped proofs, sorry usage, and banned tactics to verify detection accuracy.
 
 ### Stage 5: Benchmarking
 **[llm_interface.py](benchmark/llm_interface.py)** - Unified interface for all LLMs (local models like DeepSeek-Prover-V2, Goedel-Prover, and API models like GPT-4o, Gemini, DeepSeek-R1). Handles generation with retry logic and memory management.
@@ -129,7 +144,7 @@ Query format (each line is a JSON array):
 **[patch_results.py](benchmark/patch_results.py)** - Patch and analyze benchmark results.
 
 ### Stage 6: Scoring
-**[score_llm.py](score_llm.py)** - Scores LLM results by verifying generated proofs and computing statistics. Creates `generated_proofs_n.jsonl` files from results, verifies them, and generates plots and statistics.
+**[score_llm.py](score_llm.py)** - Main scoring script that verifies all LLM results across datasets and runs. Uses the verification module to check proofs, aggregates timing data, computes statistics, and generates plots. Outputs statistics.json and avg_times.png for each dataset.
 
 ### Utilities
 **[parse_output.py](utils/parse_output.py)** - Parses LLM outputs. Extracts JSON or Lean code from responses, handles malformed outputs, and validates schemas.

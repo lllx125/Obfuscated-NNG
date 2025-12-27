@@ -7,75 +7,12 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple, Any
-import matplotlib.pyplot as plt
-import numpy as np
+from typing import Dict, List, Any
 
-# Import the verifier
-from verification.jsonl_verifier import verify_dataset
+from verification.verify_individual import verify_individual_dataset
+from verification.jsonl_generator import load_jsonl
+from verification.record_time import load_time_data, compute_average_time, plot_average_times
 from utils.discord_notify import send_msg
-
-
-def load_jsonl(file_path: Path) -> List[Dict]:
-    """Load a JSONL file into a list of dictionaries."""
-    entries = []
-    with open(file_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            if line.strip():
-                entries.append(json.loads(line))
-    return entries
-
-
-def create_generated_proofs_file(
-    result_file: Path,
-    theorems_file: Path,
-    output_file: Path
-):
-    """
-    Create generated_proofs_n.jsonl file from result_n.jsonl and theorems.jsonl.
-
-    Does line-by-line matching: takes JSON from theorem and replaces the "proof"
-    property with "code" from result's JSON.
-
-    Args:
-        result_file: Path to result_n.jsonl
-        theorems_file: Path to theorems.jsonl
-        output_file: Path to output generated_proofs_n.jsonl
-    """
-    # Load results
-    results = load_jsonl(result_file)
-
-    # Load theorems
-    theorems = load_jsonl(theorems_file)
-
-    # If the lines don't match, use only the same number as the lines in result file
-    num_lines = len(results)
-
-    if len(results) != len(theorems):
-        print(f"Warning: Number of results ({len(results)}) doesn't match theorems ({len(theorems)})")
-        print(f"Using first {num_lines} entries")
-
-    # Create generated proofs by matching line-by-line
-    generated_proofs = []
-
-    for i in range(num_lines):
-        # Take JSON from theorem and replace "proof" property with "code" from result
-        theorem = theorems[i] if i < len(theorems) else {}
-        result = results[i]
-
-        # Copy theorem entry and replace proof
-        proof_entry = theorem.copy()
-        proof_entry["proof"] = result.get("code", "sorry")
-
-        generated_proofs.append(proof_entry)
-
-    # Write to output file (overwrite if exists)
-    with open(output_file, 'w', encoding='utf-8') as f:
-        for entry in generated_proofs:
-            f.write(json.dumps(entry, ensure_ascii=False))
-            f.write('\n')
-
-    print(f"Created {output_file} with {len(generated_proofs)} proofs")
 
 
 def verify_all_runs(
@@ -161,52 +98,38 @@ def verify_all_runs(
             # Send notification for run start
             send_msg(f"🔄 **Processing {dataset_name} - Run {run_num}/{len(result_files)}**")
 
-            # Create generated_proofs file
-            generated_proofs_file = dataset_folder / f"generated_proofs_{run_num}.jsonl"
-            create_generated_proofs_file(result_file, theorems_file, generated_proofs_file)
-
-            # Verify the generated proofs
-            print(f"Verifying {generated_proofs_file}...")
+            # Verify the result file
             try:
-                error_ids, sorry_ids, banned_tactics_usage = verify_dataset(
-                    str(header_file),
-                    str(generated_proofs_file),
-                    verbose=False
-                )
-
-                # Load generated proofs to count total
-                generated_proofs = load_jsonl(generated_proofs_file)
-                total_proofs = len(generated_proofs)
-                # Count unique incorrect IDs (some IDs may appear in both error_ids and sorry_ids)
-                incorrect_ids = set(error_ids) | set(sorry_ids)
-                incorrect_count = len(incorrect_ids)
-                correct_count = total_proofs - incorrect_count
-                correct_rate = correct_count / total_proofs if total_proofs > 0 else 0.0
-
-                # Count banned tactics usage
-                banned_count = len(banned_tactics_usage) if banned_tactics_usage else 0
+                run_stats = verify_individual_dataset(result_file, repo_folder)
 
                 # Load timing information
                 time_file = dataset_folder / f"time_{run_num}.json"
                 avg_time = 0.0
                 if time_file.exists():
-                    with open(time_file, 'r') as f:
-                        times = json.load(f)
-                        avg_time = np.mean(times) if times else 0.0
+                    times = load_time_data(time_file)
+                    avg_time = compute_average_time(times)
+
+                # Add avg_time to run_stats
+                run_stats["avg_time"] = avg_time
 
                 # Print results
-                print(f"  Total proofs: {total_proofs}")
-                print(f"  Correct: {correct_count}")
-                print(f"  Incorrect: {incorrect_count}")
-                print(f"  Correct rate: {correct_rate*100:.2f}%")
+                print(f"  Total proofs: {run_stats['total']}")
+                print(f"  Correct: {run_stats['correct']}")
+                print(f"  Incorrect: {run_stats['incorrect']}")
+                print(f"  Correct rate: {run_stats['correct_rate']*100:.2f}%")
                 print(f"  Average time: {avg_time:.2f}s")
-                if banned_count > 0:
-                    print(f"  ⚠ Using banned tactics: {banned_count}")
+                if run_stats['banned_count'] > 0:
+                    print(f"  ⚠ Using banned tactics: {run_stats['banned_count']}")
 
                 # Print incorrect proof details
+                incorrect_ids = set(run_stats['error_ids']) | set(run_stats['sorry_ids'])
                 if incorrect_ids:
                     print(f"\n  Incorrect proof IDs:")
                     all_incorrect = sorted(incorrect_ids)
+                    # Load generated proofs for detailed info
+                    generated_proofs_file = dataset_folder / f"generated_proofs_{run_num}.jsonl"
+                    generated_proofs = load_jsonl(generated_proofs_file)
+
                     for proof_id in all_incorrect:
                         # Find the proof in generated proofs
                         for proof in generated_proofs:
@@ -219,10 +142,13 @@ def verify_all_runs(
                                 break
 
                 # Print banned tactics details
-                if banned_tactics_usage:
+                if run_stats['banned_tactics_usage']:
                     print(f"\n  ⚠ Proofs using banned tactics:")
-                    for proof_id in sorted(banned_tactics_usage.keys()):
-                        tactics_list = ', '.join(banned_tactics_usage[proof_id])
+                    generated_proofs_file = dataset_folder / f"generated_proofs_{run_num}.jsonl"
+                    generated_proofs = load_jsonl(generated_proofs_file)
+
+                    for proof_id in sorted(run_stats['banned_tactics_usage'].keys()):
+                        tactics_list = ', '.join(run_stats['banned_tactics_usage'][proof_id])
                         # Find the proof in generated proofs
                         for proof in generated_proofs:
                             if proof['id'] == proof_id:
@@ -230,36 +156,25 @@ def verify_all_runs(
                                 break
 
                 # Store stats
-                run_stats = {
-                    "run": run_num,
-                    "total": total_proofs,
-                    "correct": correct_count,
-                    "incorrect": incorrect_count,
-                    "error_ids": error_ids,
-                    "sorry_ids": sorry_ids,
-                    "banned_tactics_usage": banned_tactics_usage,
-                    "banned_count": banned_count,
-                    "correct_rate": correct_rate,
-                    "avg_time": avg_time
-                }
                 dataset_stats["runs"].append(run_stats)
-                dataset_stats["correct_rates"].append(correct_rate)
+                dataset_stats["correct_rates"].append(run_stats['correct_rate'])
                 dataset_stats["avg_times"].append(avg_time)
 
                 # Send notification after each run
                 send_msg(
                     f"✅ **{dataset_name} - Run {run_num} Complete**\n"
-                    f"Correct: {correct_count}/{total_proofs} ({correct_rate*100:.2f}%)\n"
+                    f"Correct: {run_stats['correct']}/{run_stats['total']} ({run_stats['correct_rate']*100:.2f}%)\n"
                     f"Avg time: {avg_time:.2f}s"
                 )
 
             except Exception as e:
-                send_msg(f"  Error during verification: {e}")
+                send_msg(f"❌ Error during verification: {e}")
                 import traceback
                 traceback.print_exc()
 
         # Compute dataset averages
         if dataset_stats["correct_rates"]:
+            import numpy as np
             dataset_avg_correct = np.mean(dataset_stats["correct_rates"])
             dataset_avg_time = np.mean(dataset_stats["avg_times"])
 
@@ -281,6 +196,7 @@ def verify_all_runs(
         all_stats["datasets"][dataset_name] = dataset_stats
 
     # Compute overall averages
+    import numpy as np
     all_correct_rates = []
     all_avg_times = []
     for dataset_stats in all_stats["datasets"].values():
@@ -295,63 +211,6 @@ def verify_all_runs(
         all_stats["overall_avg_time"] = np.mean(all_avg_times)
 
     return all_stats
-
-
-def plot_average_times(stats: Dict[str, Any], llm_name: str, results_base_dir: Path):
-    """
-    Plot average run times across all problems.
-    Stores plots in the same folder as time_n.json files.
-
-    Args:
-        stats: Statistics dictionary
-        llm_name: LLM name
-        results_base_dir: Base results directory (results/{llm_name})
-    """
-    for dataset_name, dataset_stats in stats["datasets"].items():
-        if not dataset_stats.get("runs"):
-            continue
-
-        # Output directory is the same as where time_n.json files are stored
-        dataset_dir = results_base_dir / dataset_name
-        dataset_dir.mkdir(parents=True, exist_ok=True)
-
-        # Get times from all runs
-        all_times = []
-        for run_stats in dataset_stats["runs"]:
-            time_file = dataset_dir / f"time_{run_stats['run']}.json"
-            if time_file.exists():
-                with open(time_file, 'r') as f:
-                    times = json.load(f)
-                    all_times.append(times)
-
-        if not all_times:
-            continue
-
-        # Compute average time for each problem across all runs
-        num_problems = len(all_times[0])
-        avg_times_per_problem = []
-
-        for i in range(num_problems):
-            times_for_problem = [run_times[i] for run_times in all_times if i < len(run_times)]
-            if times_for_problem:
-                avg_times_per_problem.append(np.mean(times_for_problem))
-
-        # Create bar chart
-        fig, ax = plt.subplots(figsize=(12, 6))
-        problem_ids = list(range(1, len(avg_times_per_problem) + 1))
-        ax.bar(problem_ids, avg_times_per_problem)
-        ax.set_xlabel('Problem ID')
-        ax.set_ylabel('Average Time (s)')
-        ax.set_title(f'Average Solving Time per Problem\n{llm_name} - {dataset_name}')
-        ax.grid(axis='y', alpha=0.3)
-
-        # Save plot in the same folder as time_n.json files (overwrite if exists)
-        plot_file = dataset_dir / "avg_times.png"
-        plt.tight_layout()
-        plt.savefig(plot_file, dpi=150)
-        plt.close()
-
-        print(f"Saved plot: {plot_file}")
 
 
 def score_llm(llm_name: str):
@@ -380,7 +239,14 @@ def score_llm(llm_name: str):
 
     # Create plots
     results_dir = Path("results") / llm_name
-    plot_average_times(stats, llm_name, results_dir)
+    for dataset_name, dataset_stats in stats["datasets"].items():
+        if dataset_stats.get("runs"):
+            dataset_dir = results_dir / dataset_name
+            try:
+                plot_file = plot_average_times(dataset_dir, llm_name, dataset_name, dataset_stats["runs"])
+                print(f"Saved plot: {plot_file}")
+            except Exception as e:
+                print(f"Error creating plot for {dataset_name}: {e}")
 
     # Save statistics to JSON (overwrite if exists)
     stats_file = results_dir / "statistics.json"
@@ -404,7 +270,7 @@ def main():
         score_llm(LLM_NAME)
     else:
         # Run multiple LLMs consecutively
-        llm_list = ["deepseek-r1", "deepseek-prover-v2","gpt-4o"]
+        llm_list = ["deepseek-r1", "deepseek-prover-v2", "gpt-4o"]
 
         for llm_name in llm_list:
             score_llm(llm_name)

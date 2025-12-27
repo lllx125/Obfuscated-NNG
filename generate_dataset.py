@@ -6,7 +6,7 @@ Creates obfuscated datasets with queries and updates original dataset.
 
 import sys
 from pathlib import Path
-from verification.jsonl_verifier import verify_dataset
+from verification.verify_individual import verify_dataset
 
 # Try to import tqdm, but make it optional
 try:
@@ -33,6 +33,7 @@ except ImportError:
 # Import functions from other modules
 from obfuscation.obfuscate_names import create_obfuscated_dataset
 from queries.generate_queries import generate_queries_for_dataset
+from utils.patch_dataset import patch_dataset
 
 
 def create_dataset(set_number, randomness_level, show_progress=True):
@@ -54,14 +55,21 @@ def create_dataset(set_number, randomness_level, show_progress=True):
 
     # Create obfuscated dataset
     if show_progress:
-        print(f"[1/2] Creating obfuscated dataset...")
+        print(f"[1/3] Creating obfuscated dataset...")
     obfuscated_dir = create_obfuscated_dataset(set_number, randomness_level, verbose=False)
     if show_progress:
         print(f"✓ Obfuscated dataset created: {obfuscated_dir}\n")
 
+    # Patch the dataset to fix any name mismatches
+    if show_progress:
+        print(f"[2/3] Patching dataset to fix name mismatches...")
+    patch_dataset(obfuscated_dir, verbose=False)
+    if show_progress:
+        print(f"✓ Dataset patched\n")
+
     # Generate queries
     if show_progress:
-        print(f"[2/2] Generating queries...")
+        print(f"[3/3] Generating queries...")
     queries_file = generate_queries_for_dataset(obfuscated_dir, verbose=False)
     if show_progress:
         print(f"✓ Queries generated: {queries_file}\n")
@@ -100,10 +108,14 @@ def update_original_with_queries():
     queries_file = generate_queries_for_dataset(original_dir, verbose=False)
 
 
+    print("Verifying original dataset...")
     error_id, sorry_id, banned_tactics = verify_dataset(Path(original_dir/"header_definitions.jsonl"),
                                                          Path(original_dir/"theorems.jsonl"))
     if error_id or sorry_id:
         print(f"✗ Original dataset verification failed.")
+        raise RuntimeError(f"Original dataset verification failed with errors: {error_id}, sorry: {sorry_id}")
+    else:
+        print(f"✓ Original dataset verified successfully.")
 
 
 def generate_all_datasets():
@@ -127,12 +139,19 @@ def generate_all_datasets():
     for set_num, randomness in datasets:
         print(f"\nGenerating Dataset {set_num} with randomness {randomness}...")
         obfuscated_dir, _ = create_dataset(set_num, randomness, show_progress=False)
+
+        print(f"Verifying Dataset {set_num}...")
         error_id, sorry_id, banned_tactics = verify_dataset(Path(obfuscated_dir / "header_definitions.jsonl"),
                                                              Path(obfuscated_dir / "theorems.jsonl"))
         if error_id or sorry_id:
-            print(f"✗ Dataset {set_num} verification failed.")
-    
-    print(f"\nAll datasets generated and verified successfully!")
+            print(f"✗ Dataset {set_num} verification failed with errors: {error_id}, sorry: {sorry_id}")
+            raise RuntimeError(f"Dataset {set_num} verification failed")
+        else:
+            print(f"✓ Dataset {set_num} verified successfully.")
+
+    print(f"\n{'='*60}")
+    print(f"✓ All datasets generated and verified successfully!")
+    print(f"{'='*60}")
 
 if __name__ == "__main__":
     generate_all_datasets()
