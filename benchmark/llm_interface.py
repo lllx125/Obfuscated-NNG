@@ -6,6 +6,7 @@ from typing import Dict, List, Any, Optional
 from openai import OpenAI
 from google import genai 
 from google.genai import types
+import anthropic
 
 # ============================================================================
 # CONFIGURATION
@@ -44,7 +45,15 @@ class ModelInterface:
             self._load_local_prover("deepseek-ai/DeepSeek-Prover-V2-7B")
         elif self.llm_name == "goedel-prover-v2":
             self._load_local_prover("Goedel-LM/Goedel-Prover-V2-8B")
-        elif self.llm_name in ["deepseek-r1", "gemini-pro", "gpt-4o", "gemini-flash", "deepseek-prover-v2"]:
+        elif self.llm_name in [
+            "deepseek-r1", 
+            "gemini-pro", 
+            "gemini-flash", 
+            "gpt-4o", 
+            "gpt-5",             # New 2025 Flagship
+            "claude-sonnet-4.5", # New 2025 Flagship
+            "deepseek-prover-v2"
+        ]:
             print(f"[!] API Model selected: {self.llm_name}.")
         else:
             raise ValueError(f"Unknown LLM: {self.llm_name}")
@@ -183,7 +192,7 @@ class ModelInterface:
 
     
     def _generate_local(self, messages: List[Dict[str, str]]) -> str:
-                    # 1. Smart Memory Check (Fast)
+        # 1. Smart Memory Check (Fast)
         self._maintain_memory_health()
         with torch.inference_mode():
             inputs = None
@@ -261,7 +270,7 @@ class ModelInterface:
 
     def _generate_api(self, messages: List[Dict[str, str]]) -> str:
         """
-        Handles API calls for OpenAI, DeepSeek, and Google Gemini.
+        Handles API calls for OpenAI, DeepSeek, Google Gemini, and Anthropic.
         Includes retry logic for API overload errors (503, 429, etc.)
         """
         import time as time_module
@@ -270,26 +279,27 @@ class ModelInterface:
         api_key = None
 
         # --- 1. Model Mapping ---
-        # Maps your internal names to the actual API model strings
         model_map = {
             "deepseek-r1": "deepseek-reasoner",
             "gpt-4o": "gpt-4o-mini",
+            "gpt-5": "gpt-5", 
+            "claude-sonnet-4.5": "claude-sonnet-4-5", 
             "gemini-flash": "gemini-2.5-flash",
-            "gemini-pro": "gemini-2.5-pro", # Assuming you want the Pro model for '2.5', or change to specific ID
+            "gemini-pro": "gemini-2.5-pro", 
             "deepseek-prover-v2": "deepseek/deepseek-prover-v2",
         }
 
         target_model = model_map[self.llm_name]
 
-        # Retry loop for API overload errors (matches global max_retry)
+        # Retry loop for API overload errors
         for retry_attempt in range(self.max_retry):
             try:
                 # =================================================================
                 # DEEPSEEK & OPENAI (OpenAI-Compatible APIs)
                 # =================================================================
-                if target_model in ["deepseek-reasoner", "gpt-4o-mini", "deepseek/deepseek-prover-v2"]:
+                # GPT-5 adheres to the standard OpenAI chat format
+                if target_model in ["deepseek-reasoner", "gpt-4o-mini", "gpt-5", "deepseek/deepseek-prover-v2"]:
                     client = None
-
 
                     is_deepseek = (target_model == "deepseek-reasoner")
                     is_openrouter = (target_model == "deepseek/deepseek-prover-v2")
@@ -301,6 +311,7 @@ class ModelInterface:
                         api_key = os.getenv("OPENROUTER_API_KEY")
                         base_url = "https://openrouter.ai/api/v1"
                     else:
+                        # Handles GPT-4o and GPT-5
                         api_key = os.getenv("OPENAI_API_KEY")
                         base_url = None
 
@@ -309,18 +320,19 @@ class ModelInterface:
                         raise ValueError(f"Missing API key: {key_name} environment variable is not set")
 
                     client = OpenAI(api_key=api_key, base_url=base_url, timeout=900.0)
-                    # Prepare arguments
+                    
                     kwargs = {
                         "model": target_model,
                         "messages": messages,
                         "stream": False
                     }
 
-                    # strict JSON mode for GPT-4o
+                    # Strict JSON mode
                     if is_deepseek or is_openrouter:
                         kwargs["max_tokens"] = 32000
                         kwargs["temperature"] = 0.6
                     else:
+                        # GPT-4o and GPT-5 support explicit json_object mode
                         kwargs["response_format"] = {"type": "json_object"}
                         kwargs["temperature"] = 0.2
                         kwargs["max_tokens"] = 16000
@@ -328,6 +340,38 @@ class ModelInterface:
                     response = client.chat.completions.create(**kwargs)
 
                     return response.choices[0].message.content
+
+                # =================================================================
+                # ANTHROPIC (CLAUDE)
+                # =================================================================
+                elif "claude" in target_model:                    
+                    api_key = os.getenv("ANTHROPIC_API_KEY")
+                    if not api_key:
+                        raise ValueError("Missing API key: ANTHROPIC_API_KEY environment variable is not set")
+                    
+                    client = anthropic.Anthropic(api_key=api_key)
+                    
+                    # Convert messages to Anthropic format (System prompt is separate argument)
+                    system_prompt = ""
+                    anthropic_messages = []
+                    
+                    for msg in messages:
+                        if msg["role"] == "system":
+                            system_prompt += msg["content"] + "\n"
+                        else:
+                            anthropic_messages.append(msg)
+                    
+                    # Claude 4.5 supports up to 64k output tokens
+                    response = client.messages.create(
+                        model=target_model,
+                        max_tokens=8192,
+                        temperature=0.2,
+                        system=system_prompt.strip(),
+                        messages=anthropic_messages
+                    )
+                    
+                    return response.content[0].text
+
                 # =================================================================
                 # GOOGLE GEMINI
                 # =================================================================
@@ -342,7 +386,6 @@ class ModelInterface:
                     system_instruction = messages[0]['content']
                     user_msg = messages[1]['content']
                     full_prompt = f"{system_instruction}\n\n{user_msg}"
-
 
                     safety_settings = [
                         types.SafetySetting(
@@ -382,51 +425,40 @@ class ModelInterface:
                     else:
                         kwargs["max_output_tokens"] = 65000
                         kwargs["thinking_config"] = types.ThinkingConfig(
-                            thinking_budget=32000  # Allocates ~32k tokens just for reasoning
+                            thinking_budget=32000
                         )
 
                     response = client.models.generate_content(
                         model=target_model,
                         contents=full_prompt,
-                        config=types.GenerateContentConfig(
-                            **kwargs
-                            )
+                        config=types.GenerateContentConfig(**kwargs)
                         )
-                    if not response.text:
-                        if response.candidates:
-                            reason = response.candidates[0].finish_reason
-                            print(f" [!] GEMINI BLOCKED. Reason: {reason}")
+                    
+                    if not response.text and response.candidates:
+                         print(f" [!] GEMINI BLOCKED. Reason: {response.candidates[0].finish_reason}")
 
                     return response.text
 
-                # Success - return the result
                 return '{"draft": "Unknown API Model", "code": "sorry"}'
 
             except Exception as e:
                 error_str = str(e)
-                # Check if it's an overload/rate limit error (503, 429, etc.)
+                # Check for overload/rate limit errors
                 is_overload = any(code in error_str for code in ['503', '429', 'UNAVAILABLE', 'overloaded', 'rate limit'])
 
-                # Always report the error to console
                 print(f"    [!] API Error ({self.llm_name}): {error_str}")
 
                 if is_overload and retry_attempt < self.max_retry - 1:
-                    wait_time = 60  # Wait 1 minute before retrying
+                    wait_time = 60 
                     print(f"    [⏳] Waiting {wait_time}s before retry {retry_attempt + 1}/{self.max_retry}...")
-                    # Send Discord notification for overload errors
-                    send_msg(f"⚠️ **API Overload**: {self.llm_name} - {error_str[:200]}. Retrying in 60s (attempt {retry_attempt + 1}/{self.max_retry})...")
+                    send_msg(f"⚠️ **API Overload**: {self.llm_name} - {error_str[:200]}. Retrying in 60s...")
                     time_module.sleep(wait_time)
-                    continue  # Retry
+                    continue 
                 else:
-                    # Not an overload error, or we've exhausted retries - send final error report
                     if retry_attempt >= self.max_retry - 1:
                         send_msg(f"❌ **API Error (Max Retries)**: {self.llm_name} - {error_str[:200]}")
-                    else:
-                        send_msg(f"❌ **API Error**: {self.llm_name} - {error_str[:200]}")
-                    # Break out of retry loop
                     break
 
-        # If we reach here, all retries exhausted or non-retryable error
         return '{"draft": "API Error", "code": "sorry"}'
     
     def _append_llm_specific_instructions(self, messages: List[Dict[str, str]]) -> List[Dict[str, str]]:

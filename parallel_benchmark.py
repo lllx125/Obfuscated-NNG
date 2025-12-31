@@ -23,9 +23,8 @@ NUM_RUN = 5
 START_RUN = 1
 MAX_RETRY = 3
 LLM_LIST = [
-    "deepseek-r1",
-    "gpt-4o",
-    "deepseek-prover-v2"
+    'gpt-5',
+    'claude-sonnet-4.5',
 ]
 
 # Parallel execution limits
@@ -38,6 +37,8 @@ LLM_RATE_LIMITS = {
     'deepseek-r1': 500,
     'gpt-4o': 480,
     'deepseek-prover-v2': 50,
+    'gpt-5': 480,
+    'claude-sonnet-4.5': 40
 }
 
 # Dataset ordering (slowest first for optimal distribution)
