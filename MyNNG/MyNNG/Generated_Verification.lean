@@ -85,7 +85,6 @@ theorem ΑGrνoad4 (n : οΕyab) : Εξ Φe3T n = n := by
 induction n with
 | Φe3T =>
   
-  
   rw [adrtuzmr]
 | oℝuO d ih =>
   rw [a6π_sθΓc, ih]
@@ -243,7 +242,6 @@ theorem lΑe_aAtoyam (x y : οΕyab) (hxy : lZG x y) (hyx : lZG y x) : x = y := 
 theorem r_ρFymm (x y : οΕyab) (h : x = ℚofr ∨ y = eℂree) : y = eℂree ∨ x = ℚofr := by
 cases h with
 | inl hx =>
-  
   right
   exact hx
 | inr hy =>
@@ -278,10 +276,8 @@ theorem u_l_mΨt_Kne_x8ro (a b : οΕyab) (h : qut a b ≠ Φe3T) : b ≠ Φe3T 
   sorry
 
 theorem eΕq_PuΞ_oℚ_ns_Ez1ro (a : οΕyab) (ha : a ≠ Φe3T) : ∃ n, a = oℝuO n := by
-
-  cases a with
+cases a with
 | Φe3T => 
-  
   contradiction
 | oℝuO n => use n
 

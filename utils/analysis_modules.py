@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+from scipy import stats
 
 
 # ============================================================================
@@ -192,10 +193,6 @@ def compute_proof_lengths(
         if not dataset_dir.exists():
             continue
 
-        # Skip original dataset (keep as 0)
-        if dataset_name == "original":
-            continue
-
         result_files = sorted(dataset_dir.glob("result_*.jsonl"))
 
         for run_idx, result_file in enumerate(result_files):
@@ -232,6 +229,12 @@ def compute_proof_length_stats(
 
     results = {}
 
+    print(f"\n{'='*60}")
+    print(f"Proof Length Statistics")
+    print(f"{'='*60}\n")
+    print(f"{'Dataset':<15} {'Avg Length':<15} {'Std Error':<15}")
+    print("-" * 45)
+
     for dataset_idx, dataset_name in enumerate(dataset_order):
         if dataset_idx >= proof_lengths.shape[0]:
             break
@@ -240,7 +243,7 @@ def compute_proof_length_stats(
         # Flatten across runs and problems
         dataset_lengths = proof_lengths[dataset_idx].flatten()
 
-        # Remove zeros (which could be missing data or original dataset)
+        # Remove zeros (which could be missing data)
         dataset_lengths = dataset_lengths[dataset_lengths > 0]
 
         if len(dataset_lengths) == 0:
@@ -255,7 +258,47 @@ def compute_proof_length_stats(
             "length_stderr": length_stderr
         }
 
+        print(f"{dataset_name:<15} {avg_length:>8.2f}        {length_stderr:>8.2f}")
+
+    print()
     return results
+
+
+def perform_stat_test(name: str, means: List[float], ses: List[float], n: int = 5):
+    """
+    Perform One-Way ANOVA using means and standard errors.
+
+    Args:
+        name: Name of the metric being tested (e.g., "Correct Rate", "Proof Length")
+        means: List of mean values [original, obfuscated_1, ..., obfuscated_5]
+        ses: List of standard errors [original, obfuscated_1, ..., obfuscated_5]
+        n: Number of runs (default: 5)
+    """
+    print(f"--- Analysis for {name} ---")
+
+    k = len(means)  # Number of datasets (6)
+    N = n * k       # Total number of observations
+
+    # Calculate variances (Var = SE^2 * n)
+    variances = [(se**2) * n for se in ses]
+
+    # 1. Grand Mean
+    grand_mean = np.mean(means)
+
+    # 2. Sum of Squares Between (SSB) - measures variation between datasets
+    ss_between = n * sum((m - grand_mean)**2 for m in means)
+    ms_between = ss_between / (k - 1)
+
+    # 3. Sum of Squares Within (SSW) - measures noise/variance within the 5 runs
+    ss_within = sum((n - 1) * v for v in variances)
+    ms_within = ss_within / (N - k)
+
+    # 4. F-statistic and P-value
+    f_stat = ms_between / ms_within
+    p_value = stats.f.sf(f_stat, k - 1, N - k)
+
+    status = "SIGNIFICANT" if p_value < 0.05 else "not significant"
+    print(f"F-statistic = {f_stat:.4f}, p-value = {p_value:.4f} ({status})")
 
 
 # ============================================================================
@@ -354,7 +397,6 @@ def plot_rate_and_time(
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"Saved plot: {save_path}")
     return save_path
 
 
@@ -476,7 +518,6 @@ def plot_correction_rate_per_problem(
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"Saved plot: {save_path}")
     return save_path
 
 
@@ -557,5 +598,4 @@ def plot_proof_length_analysis(
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"Saved plot: {save_path}")
     return save_path

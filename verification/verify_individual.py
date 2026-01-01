@@ -73,7 +73,8 @@ def verify_dataset(
     header_path: str,
     theorems_path: str,
     verbose: bool = False,
-    output_file: Path = DEFAULT_OUTPUT_FILE
+    output_file: Path = DEFAULT_OUTPUT_FILE,
+    analyze: bool = False
 ) -> tuple:
     """
     Verify a dataset by header and theorems file paths.
@@ -83,6 +84,7 @@ def verify_dataset(
         theorems_path: Path to theorems.jsonl file
         verbose: Whether to print progress messages
         output_file: Path to output Lean file
+        analyze: Whether to analyze the Lean file (default: False)
 
     Returns:
         Tuple of (error_ids, sorry_ids, banned_tactics_usage, error_details):
@@ -124,8 +126,17 @@ def verify_dataset(
     # Generate initial Lean file
     generate_lean_for_theorems(header_entries, theorems_entries, output_file)
 
-    # Analyze the Lean file
-    analysis = analyze_lean_file(output_file, theorems_entries, header_entries)
+    # Analyze the Lean file (only if analyze flag is set)
+    if analyze:
+        analysis = analyze_lean_file(output_file, theorems_entries, header_entries)
+    else:
+        # Return empty analysis results
+        analysis = {
+            'error_ids': [],
+            'sorry_ids': [],
+            'banned_tactics_usage': {},
+            'error_details': {}
+        }
 
     if verbose:
         print("\n" + "="*60)
@@ -154,7 +165,8 @@ def verify_dataset(
 def verify_individual_dataset(
     result_file: Path,
     repo_folder: str = ".",
-    output_file: Path = DEFAULT_OUTPUT_FILE
+    output_file: Path = DEFAULT_OUTPUT_FILE,
+    analyze: bool = True
 ) -> Dict[str, Any]:
     """
     Verify a single result file for a specific dataset.
@@ -163,6 +175,7 @@ def verify_individual_dataset(
         result_file: Path to result_n.jsonl file (e.g., results/gpt-4o/obfuscated_1/result_1.jsonl)
         repo_folder: Repository root folder
         output_file: Path to output Lean file
+        analyze: Whether to analyze the Lean file (default: False)
 
     Returns:
         Dictionary with verification results:
@@ -208,7 +221,8 @@ def verify_individual_dataset(
         str(header_file),
         str(generated_proofs_file),
         verbose=False,
-        output_file=output_file
+        output_file=output_file,
+        analyze=analyze
     )
 
     # Load generated proofs to count total
@@ -242,20 +256,28 @@ def verify_individual_dataset(
 def main():
     """
     Main function to verify a single dataset result.
-    Usage: python -m verification.verify_individual results/gpt-4o/obfuscated_1/result_1.jsonl
+    Usage: python -m verification.verify_individual results/gpt-4o/obfuscated_1/result_1.jsonl [--analyze]
     """
-    if len(sys.argv) < 2:
-        print("Usage: python -m verification.verify_individual <result_file>")
-        print("Example: python -m verification.verify_individual results/gpt-4o/obfuscated_1/result_1.jsonl")
-        print("\nThe dataset name is automatically parsed from the file path.")
-        sys.exit(1)
+    import argparse
 
-    result_file = sys.argv[1]
+    parser = argparse.ArgumentParser(
+        description="Verify a single dataset result",
+        usage="python -m verification.verify_individual <result_file> [--analyze]"
+    )
+    parser.add_argument("result_file", help="Path to result_n.jsonl file")
+    parser.add_argument(
+        "--analyze",
+        action="store_true",
+        default=False,
+        help="Analyze the Lean file (default: False)"
+    )
 
-    print(f"Verifying {result_file}...")
+    args = parser.parse_args()
+
+    print(f"Verifying {args.result_file}...")
 
     try:
-        stats = verify_individual_dataset(result_file)
+        stats = verify_individual_dataset(args.result_file, analyze=args.analyze)
 
         # Print results
         print(f"\n{'='*60}")

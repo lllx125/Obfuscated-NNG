@@ -28,8 +28,10 @@ def fix_indentation(code: str) -> str:
     code = re.sub(r'^(\s*)(:=\s*by\s+)([^\n])', fix_by_indentation, code, flags=re.MULTILINE)
 
     # Add indentation after block starters (e.g., induction, cases, repeat)
-    code = re.sub(r'(induction|cases|match|have|suffices)\s+.*?\s*=>\s*([^\n])',
-                  lambda m: m.group(0).replace(m.group(2), f'\n  {m.group(2)}'), code, flags=re.DOTALL)
+    # Note: Don't use DOTALL here - we want to match only on the same line
+    # to avoid breaking across pattern match branches (e.g., | erΤW =>)
+    code = re.sub(r'(induction|cases|match|have|suffices)\s+[^\n]*?\s*=>\s*([^\n])',
+                  lambda m: m.group(0).replace(m.group(2), f'\n  {m.group(2)}'), code)
 
     # Standardize 'with' blocks (often misformatted by LLMs)
     code = re.sub(r'(\s*\|\s*[\w\d]+\s*=>\s*)([^\n])', r'\1\n  \2', code)

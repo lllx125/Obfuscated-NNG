@@ -6,7 +6,6 @@ from typing import Dict, List, Any, Optional
 from openai import OpenAI
 from google import genai 
 from google.genai import types
-import anthropic
 
 # ============================================================================
 # CONFIGURATION
@@ -50,8 +49,8 @@ class ModelInterface:
             "gemini-pro", 
             "gemini-flash", 
             "gpt-4o", 
-            "gpt-5",             # New 2025 Flagship
-            "claude-sonnet-4.5", # New 2025 Flagship
+            "gpt-5",             # New Flagship
+            "claude-sonnet-4.5", # New Flagship
             "deepseek-prover-v2"
         ]:
             print(f"[!] API Model selected: {self.llm_name}.")
@@ -297,7 +296,6 @@ class ModelInterface:
                 # =================================================================
                 # DEEPSEEK & OPENAI (OpenAI-Compatible APIs)
                 # =================================================================
-                # GPT-5 adheres to the standard OpenAI chat format
                 if target_model in ["deepseek-reasoner", "gpt-4o-mini", "gpt-5", "deepseek/deepseek-prover-v2"]:
                     client = None
 
@@ -327,15 +325,23 @@ class ModelInterface:
                         "stream": False
                     }
 
-                    # Strict JSON mode
+                    # --- Handle Parameter Differences ---
                     if is_deepseek or is_openrouter:
+                        # DeepSeek and OpenRouter generally still use 'max_tokens'
                         kwargs["max_tokens"] = 32000
                         kwargs["temperature"] = 0.6
                     else:
-                        # GPT-4o and GPT-5 support explicit json_object mode
+                        # OpenAI Native (GPT-4o, GPT-5)
+                        # CRITICAL FIX: 
+                        # 1. Newer models (GPT-5, o-series) do not support 'max_tokens', use 'max_completion_tokens'
+                        # 2. GPT-5 forces temperature=1. Setting it to 0.2 causes Error 400.
+                        
                         kwargs["response_format"] = {"type": "json_object"}
-                        kwargs["temperature"] = 0.2
-                        kwargs["max_tokens"] = 16000
+                        kwargs["max_completion_tokens"] = 16000 
+                        
+                        # Only apply custom temperature for non-reasoning models (like GPT-4o)
+                        if target_model != "gpt-5" and not target_model.startswith("o1") and not target_model.startswith("o3"):
+                            kwargs["temperature"] = 0.2
 
                     response = client.chat.completions.create(**kwargs)
 
@@ -344,7 +350,9 @@ class ModelInterface:
                 # =================================================================
                 # ANTHROPIC (CLAUDE)
                 # =================================================================
-                elif "claude" in target_model:                    
+                elif "claude" in target_model:
+                    import anthropic
+                    
                     api_key = os.getenv("ANTHROPIC_API_KEY")
                     if not api_key:
                         raise ValueError("Missing API key: ANTHROPIC_API_KEY environment variable is not set")
@@ -361,7 +369,6 @@ class ModelInterface:
                         else:
                             anthropic_messages.append(msg)
                     
-                    # Claude 4.5 supports up to 64k output tokens
                     response = client.messages.create(
                         model=target_model,
                         max_tokens=8192,
@@ -382,7 +389,6 @@ class ModelInterface:
 
                     client = genai.Client(api_key=api_key)
 
-                    # Construct simple string prompt from messages
                     system_instruction = messages[0]['content']
                     user_msg = messages[1]['content']
                     full_prompt = f"{system_instruction}\n\n{user_msg}"
@@ -443,7 +449,6 @@ class ModelInterface:
 
             except Exception as e:
                 error_str = str(e)
-                # Check for overload/rate limit errors
                 is_overload = any(code in error_str for code in ['503', '429', 'UNAVAILABLE', 'overloaded', 'rate limit'])
 
                 print(f"    [!] API Error ({self.llm_name}): {error_str}")

@@ -15,6 +15,7 @@ from utils.analysis_modules import (
     compute_avg_and_std,
     compute_proof_lengths,
     compute_proof_length_stats,
+    perform_stat_test,
     plot_rate_and_time,
     plot_correction_rate_per_problem,
     plot_proof_length_analysis
@@ -46,17 +47,10 @@ def analyze_results(
     Returns:
         Dictionary containing all computed metrics
     """
-    print(f"\n{'='*60}")
-    print(f"Analyzing LLM: {llm_name}")
-    print(f"{'='*60}")
-
     results = {}
     save_dir = Path(repo_folder) / "results" / llm_name
 
-    # ========================================================================
-    # Module 1: Load statistics
-    # ========================================================================
-    print("\n[Module 1] Loading statistics...")
+    # Load statistics
     try:
         stats = load_statistics(llm_name, repo_folder)
         results['stats'] = stats
@@ -64,10 +58,7 @@ def analyze_results(
         print(f"Error: {e}")
         return results
 
-    # ========================================================================
-    # Module 2: Compute averages and standard errors
-    # ========================================================================
-    print("\n[Module 2] Computing averages and standard errors...")
+    # Compute averages and standard errors
     metrics = compute_avg_and_std(
         llm_name=llm_name,
         stats=stats,
@@ -76,13 +67,40 @@ def analyze_results(
     )
     results['metrics'] = metrics
 
+    # Perform Welch's t-tests for correct rates and times
+    if print_stats and metrics:
+        dataset_order = ["original", "obfuscated_1", "obfuscated_2", "obfuscated_3",
+                         "obfuscated_4", "obfuscated_5"]
+
+        # Extract means and standard errors for datasets present
+        score_means = []
+        score_ses = []
+        time_means = []
+        time_ses = []
+
+        for dataset_name in dataset_order:
+            if dataset_name in metrics:
+                m = metrics[dataset_name]
+                score_means.append(m["avg_score"])
+                score_ses.append(m["score_stderr"])
+                time_means.append(m["avg_time"])
+                time_ses.append(m["time_stderr"])
+
+        # Run statistical tests
+        if len(score_means) > 1:
+            print(f"\n{'='*60}")
+            print(f"One-Way ANOVA Results for {llm_name}")
+            print(f"{'='*60}\n")
+
+            perform_stat_test("Correct Rate (%)", score_means, score_ses)
+            print()
+            perform_stat_test("Average Time (s)", time_means, time_ses)
+            print()
+
     if not run_all_analyses:
         return results
 
-    # ========================================================================
-    # Module 3: Plot rate and time
-    # ========================================================================
-    print("\n[Module 3] Plotting rate and time analysis...")
+    # Plot rate and time
     if metrics:
         plot_rate_and_time(
             llm_name=llm_name,
@@ -91,10 +109,7 @@ def analyze_results(
             repo_folder=repo_folder
         )
 
-    # ========================================================================
-    # Module 4: Plot correction rate per problem
-    # ========================================================================
-    print("\n[Module 4] Plotting correction rate per problem...")
+    # Plot correction rate per problem
     plot_correction_rate_per_problem(
         llm_name=llm_name,
         stats=stats,
@@ -102,17 +117,14 @@ def analyze_results(
         repo_folder=repo_folder
     )
 
-    # ========================================================================
-    # Module 5: Proof length analysis
-    # ========================================================================
-    print("\n[Module 5] Computing proof lengths...")
+    # Proof length analysis
     proof_lengths = compute_proof_lengths(
         llm_name=llm_name,
         repo_folder=repo_folder
     )
 
     proof_length_stats = compute_proof_length_stats(proof_lengths)
-        
+
     plot_proof_length_analysis(
         llm_name=llm_name,
         proof_length_stats=proof_length_stats,
@@ -120,9 +132,26 @@ def analyze_results(
         repo_folder=repo_folder
     )
 
-    print(f"\n{'='*60}")
-    print(f"Analysis complete for {llm_name}")
-    print(f"{'='*60}\n")
+    # Perform Welch's t-test for proof lengths
+    if print_stats and proof_length_stats:
+        dataset_order = ["original", "obfuscated_1", "obfuscated_2", "obfuscated_3",
+                         "obfuscated_4", "obfuscated_5"]
+
+        length_means = []
+        length_ses = []
+
+        for dataset_name in dataset_order:
+            if dataset_name in proof_length_stats:
+                stats_data = proof_length_stats[dataset_name]
+                length_means.append(stats_data["avg_length"])
+                length_ses.append(stats_data["length_stderr"])
+
+        if len(length_means) > 1:
+            print(f"{'='*60}")
+            print(f"One-Way ANOVA Results for Proof Length")
+            print(f"{'='*60}\n")
+            perform_stat_test("Proof Length (characters)", length_means, length_ses)
+            print()
 
     return results
 
@@ -137,11 +166,6 @@ def main():
     ]
 
     repo_folder = "."
-
-    print("="*60)
-    print("Starting comprehensive analysis of LLM benchmark results...")
-    print(f"Repository folder: {Path(repo_folder).resolve()}")
-    print("="*60)
 
     all_results = {}
 
@@ -158,10 +182,6 @@ def main():
             print(f"\nError analyzing {llm_name}: {e}")
             import traceback
             traceback.print_exc()
-
-    print("\n" + "="*60)
-    print("Analysis complete for all LLMs")
-    print("="*60)
 
     return all_results
 

@@ -28,7 +28,7 @@ LLM_LIST = [
 ]
 
 # Parallel execution limits
-MAX_PARALLEL_PROCESSES = 10
+MAX_PARALLEL_PROCESSES = 5
 
 # Rate limits (requests per minute) for each LLM
 LLM_RATE_LIMITS = {
