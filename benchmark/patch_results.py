@@ -109,6 +109,156 @@ def scan_all_sorry_entries(repo_folder: str = ".") -> Dict[str, List]:
     return all_sorry_info
 
 
+def patch_single_query(
+    llm_name: str,
+    dataset_name: str,
+    run_num: int,
+    query_idx: int,
+    max_retries: int = 3,
+    repo_folder: str = ".",
+    dry_run: bool = False
+):
+    """
+    Patch a single query from a specific run, dataset, and LLM.
+
+    Args:
+        llm_name: The LLM name
+        dataset_name: The dataset name
+        run_num: The run number
+        query_idx: The query index (line number in the result file, 0-indexed)
+        max_retries: Maximum number of retry attempts
+        repo_folder: Repository root folder
+        dry_run: If True, only report the query without attempting to fix
+    """
+    repo_path = Path(repo_folder)
+    results_base = repo_path / "results" / llm_name / dataset_name
+    dataset_base = repo_path / "dataset" / dataset_name
+
+    result_file = results_base / f"result_{run_num}.jsonl"
+    time_file = results_base / f"time_{run_num}.json"
+    queries_file = dataset_base / "queries.jsonl"
+
+    # Check if files exist
+    if not result_file.exists():
+        print(f"Result file not found: {result_file}")
+        return
+
+    if not queries_file.exists():
+        print(f"Queries file not found: {queries_file}")
+        return
+
+    # Load data
+    results = load_jsonl(result_file)
+    queries = load_jsonl(queries_file)
+
+    times = []
+    if time_file.exists():
+        with open(time_file, 'r') as f:
+            times = json.load(f)
+    else:
+        times = [0.0] * len(results)
+
+    # Validate query index
+    if query_idx < 0 or query_idx >= len(results):
+        print(f"Error: Query index {query_idx} out of range (0-{len(results)-1})")
+        return
+
+    if query_idx >= len(queries):
+        print(f"Error: Query index {query_idx} out of range in queries file (0-{len(queries)-1})")
+        return
+
+    # Get the entry and query
+    entry = results[query_idx]
+    query = queries[query_idx]
+
+    # Extract theorem ID
+    theorem_id = query_idx
+    if isinstance(query, list):
+        for msg in query:
+            if isinstance(msg, dict) and 'id' in msg:
+                theorem_id = msg['id']
+                break
+    elif isinstance(query, dict):
+        theorem_id = query.get('id', query_idx)
+
+    print(f"\n{'='*60}")
+    print(f"SINGLE QUERY PATCH")
+    print(f"{'='*60}")
+    print(f"LLM: {llm_name}")
+    print(f"Dataset: {dataset_name}")
+    print(f"Run: {run_num}")
+    print(f"Query Index: {query_idx}")
+    print(f"Theorem ID: {theorem_id}")
+    print(f"Current Code: {entry.get('code', '')[:100]}...")
+    print(f"{'='*60}\n")
+
+    # If dry run, just show info and exit
+    if dry_run:
+        print("DRY RUN - Not attempting to patch")
+        return
+
+    # Check if this is a local model
+    is_local_model = llm_name in ["deepseek-prover-v2-local", "goedel-prover-v2"]
+    if is_local_model:
+        print(f"[!] WARNING: {llm_name} is a local model - requires GPU")
+        response = input("Continue anyway? (y/n): ")
+        if response.lower() != 'y':
+            return
+
+    # Initialize the model
+    print(f"[*] Initializing Model: {llm_name}")
+    try:
+        engine = ModelInterface(llm_name, max_retry=max_retries)
+    except Exception as e:
+        print(f"[!] Failed to initialize model: {e}")
+        return
+
+    # Retry with the LLM
+    success = False
+    for attempt in range(max_retries):
+        print(f"\nAttempt {attempt + 1}/{max_retries}...")
+
+        start_time = time.time()
+        try:
+            response = engine.generate(query)
+            elapsed_time = time.time() - start_time
+
+            # Check if the response is valid
+            if response.get("code", "").strip() != "sorry":
+                print(f"✓ Success! Patched in {elapsed_time:.2f}s")
+                print(f"New Code: {response.get('code', '')[:100]}...")
+
+                # Update the result and time
+                results[query_idx] = response
+                times[query_idx] = elapsed_time
+
+                success = True
+                break
+            else:
+                print(f"✗ Still got 'sorry' response")
+
+        except Exception as e:
+            print(f"✗ Error: {e}")
+            elapsed_time = time.time() - start_time
+
+    if success:
+        # Save updated results
+        print(f"\nSaving updated results to {result_file}")
+        save_jsonl(result_file, results)
+
+        print(f"Saving updated times to {time_file}")
+        with open(time_file, 'w') as f:
+            json.dump(times, f, indent=4)
+
+        print("\n✓ Successfully patched query!")
+    else:
+        print(f"\n✗ Failed to patch after {max_retries} attempts")
+
+    # Cleanup model
+    if engine and hasattr(engine, 'unload_model'):
+        engine.unload_model()
+
+
 def patch_results(
     llm_name: str,
     max_retries: int = 3,
@@ -345,8 +495,49 @@ def main():
         action='store_true',
         help='Actually fix the errors (without this flag, only reports errors)'
     )
+    parser.add_argument(
+        '--dataset',
+        type=str,
+        help='Dataset name (required for single query patch)'
+    )
+    parser.add_argument(
+        '--run',
+        type=int,
+        help='Run number (required for single query patch)'
+    )
+    parser.add_argument(
+        '--query',
+        type=int,
+        help='Query index (0-indexed line number, required for single query patch)'
+    )
 
     args = parser.parse_args()
+
+    # Check if single query patch mode
+    single_query_mode = args.dataset is not None or args.run is not None or args.query is not None
+
+    if single_query_mode:
+        # Validate that all required arguments are present
+        if not all([args.dataset, args.run is not None, args.query is not None]):
+            parser.error("For single query patch, --dataset, --run, and --query are all required")
+
+        if args.llm_name == 'all':
+            parser.error("For single query patch, you must specify a specific LLM name (not 'all')")
+
+        # Default to dry-run unless --fix is specified
+        dry_run = not args.fix or args.dry_run
+
+        # Patch single query
+        patch_single_query(
+            llm_name=args.llm_name,
+            dataset_name=args.dataset,
+            run_num=args.run,
+            query_idx=args.query,
+            max_retries=args.max_retries,
+            repo_folder=args.repo_folder,
+            dry_run=dry_run
+        )
+        return
 
     # Default to dry-run unless --fix is specified
     dry_run = not args.fix or args.dry_run

@@ -1,0 +1,616 @@
+# Prestige Centrality Rankings
+# Total nodes: 99
+# Converged: True after 13 iterations
+#
+# Rank | Name | Score | Statement
+#==============================================================================
+
+[1] mul_right_eq_one
+Score: 5.298826e-02
+theorem mul_right_eq_one (x y : MyNat) (h : mul x y = one) : x = one := by
+
+--------------------------------------------------------------------------------
+
+[2] add_sq
+Score: 4.652459e-02
+theorem add_sq (a b : MyNat) : pow (add a b) two = add (add (pow a two) (pow b two)) (mul (mul two a) b) := by
+
+--------------------------------------------------------------------------------
+
+[3] le_mul_right
+Score: 3.462402e-02
+theorem le_mul_right (a b : MyNat) (h : mul a b ≠ zero) : le a (mul a b) := by
+
+--------------------------------------------------------------------------------
+
+[4] mul_right_eq_self
+Score: 2.661640e-02
+theorem mul_right_eq_self (a b : MyNat) (ha : a ≠ zero) (h : mul a b = a) : b = one := by
+
+--------------------------------------------------------------------------------
+
+[5] mul_left_cancel
+Score: 2.174276e-02
+theorem mul_left_cancel (a b c : MyNat) (ha : a ≠ zero) (h : mul a b = mul a c) : b = c := by
+
+--------------------------------------------------------------------------------
+
+[6] le_antisymm
+Score: 2.146084e-02
+theorem le_antisymm (x y : MyNat) (hxy : le x y) (hyx : le y x) : x = y := by
+
+--------------------------------------------------------------------------------
+
+[7] pow_pow
+Score: 2.096318e-02
+theorem pow_pow (a m n : MyNat) : pow (pow a m) n = pow a (mul m n) := by
+
+--------------------------------------------------------------------------------
+
+[8] le_total
+Score: 1.761912e-02
+theorem le_total (x y : MyNat) : (le x y) ∨ (le y x) := by
+
+--------------------------------------------------------------------------------
+
+[9] pow_two
+Score: 1.734926e-02
+theorem pow_two (a : MyNat) : pow a two = mul a a := by
+
+--------------------------------------------------------------------------------
+
+[10] le_two
+Score: 1.638454e-02
+theorem le_two (x : MyNat) (hx : le x two) : x = zero ∨ x = one ∨ x = two := by
+
+--------------------------------------------------------------------------------
+
+[11] implication_four
+Score: 1.619282e-02
+theorem implication_four (x : MyNat) (h : add x one = four) : x = three := by
+
+--------------------------------------------------------------------------------
+
+[12] mul_pow
+Score: 1.576072e-02
+theorem mul_pow (a b n : MyNat) : pow (mul a b) n = mul (pow a n) (pow b n) := by
+
+--------------------------------------------------------------------------------
+
+[13] mul_eq_zero
+Score: 1.489721e-02
+theorem mul_eq_zero (a b : MyNat) (h : mul a b = zero) : a = zero ∨ b = zero := by
+
+--------------------------------------------------------------------------------
+
+[14] add_right_eq_self
+Score: 1.477597e-02
+theorem add_right_eq_self (x y : MyNat) : add x y = x → y = zero := by
+
+--------------------------------------------------------------------------------
+
+[15] pow_add
+Score: 1.447659e-02
+theorem pow_add (a m n : MyNat) : pow a (add m n) = mul (pow a m) (pow a n) := by
+
+--------------------------------------------------------------------------------
+
+[16] mul_comm
+Score: 1.437121e-02
+theorem mul_comm (a b : MyNat) : mul a b = mul b a := by
+
+--------------------------------------------------------------------------------
+
+[17] two_mul
+Score: 1.427351e-02
+theorem two_mul (m : MyNat) : mul two m = add m m := by
+
+--------------------------------------------------------------------------------
+
+[18] le_one
+Score: 1.403995e-02
+theorem le_one (x : MyNat) (hx : le x one) : x = zero ∨ x = one := by
+
+--------------------------------------------------------------------------------
+
+[19] succ_inj
+Score: 1.400923e-02
+theorem succ_inj (a b : MyNat) (h : succ a = succ b) : a = b := by
+  rw [← pred_succ a, h, pred_succ]
+
+--------------------------------------------------------------------------------
+
+[20] add_algo_1
+Score: 1.315690e-02
+theorem add_algo_1 (a b c d : MyNat) : add (add a b) (add c d) = add (add (add a c) d) b := by
+
+--------------------------------------------------------------------------------
+
+[21] one_ne_zero
+Score: 1.267630e-02
+theorem one_ne_zero : (one : MyNat) ≠ zero := by
+
+--------------------------------------------------------------------------------
+
+[22] one_le_of_ne_zero
+Score: 1.217015e-02
+theorem one_le_of_ne_zero (a : MyNat) (ha : a ≠ zero) : le one a := by
+
+--------------------------------------------------------------------------------
+
+[23] zero_ne_succ
+Score: 1.216846e-02
+theorem zero_ne_succ (a : MyNat) : zero ≠ succ a := by
+  intro h
+  rw [← is_zero_succ a]
+  rw [← h]
+  rw [is_zero_zero]
+  trivial
+-- multiplication
+
+--------------------------------------------------------------------------------
+
+[24] succ_ne_zero
+Score: 1.216846e-02
+theorem succ_ne_zero (a : MyNat) : succ a ≠ zero := by
+
+--------------------------------------------------------------------------------
+
+[25] mul_ne_zero
+Score: 1.087180e-02
+theorem mul_ne_zero (a b : MyNat) (ha : a ≠ zero) (hb : b ≠ zero) : mul a b ≠ zero := by
+
+--------------------------------------------------------------------------------
+
+[26] one_mul
+Score: 1.047470e-02
+theorem one_mul (m : MyNat) : mul one m = m := by
+
+--------------------------------------------------------------------------------
+
+[27] add_mul
+Score: 1.044395e-02
+theorem add_mul (a b c : MyNat) : mul (add a b) c = add (mul a c) (mul b c) := by
+
+--------------------------------------------------------------------------------
+
+[28] succ_mul
+Score: 1.044360e-02
+theorem succ_mul (a b : MyNat) : mul (succ a) b = add (mul a b) b := by
+
+--------------------------------------------------------------------------------
+
+[29] two_plus_two_ne_five
+Score: 1.031556e-02
+theorem two_plus_two_ne_five : add (succ (succ zero)) (succ (succ zero)) ≠ succ (succ (succ (succ (succ zero)))) := by
+
+--------------------------------------------------------------------------------
+
+[30] mul_le_mul_right
+Score: 1.025916e-02
+theorem mul_le_mul_right (a b t : MyNat) (h : le a b) : le (mul a t) (mul b t) := by
+
+--------------------------------------------------------------------------------
+
+[31] pred_succ
+Score: 1.003288e-02
+theorem pred_succ (n : MyNat) : pred (succ n) = n := rfl
+
+--------------------------------------------------------------------------------
+
+[32] pow_one
+Score: 9.759970e-03
+theorem pow_one (a : MyNat) : pow a one = a  := by
+
+--------------------------------------------------------------------------------
+
+[33] succ_le_succ
+Score: 9.507968e-03
+theorem succ_le_succ (x y : MyNat) (hx : le (succ x) (succ y)) : le x y := by
+
+--------------------------------------------------------------------------------
+
+[34] one_pow
+Score: 9.496725e-03
+theorem one_pow (m : MyNat) : pow (one : MyNat) m = one := by
+
+--------------------------------------------------------------------------------
+
+[35] mul_assoc
+Score: 9.034667e-03
+theorem mul_assoc (a b c : MyNat) : mul (mul a b) c = mul a (mul b c)  := by
+
+--------------------------------------------------------------------------------
+
+[36] add_left_eq_zero
+Score: 8.910345e-03
+theorem add_left_eq_zero (a b : MyNat) : add a b = zero → b = zero := by
+
+--------------------------------------------------------------------------------
+
+[37] add_comm
+Score: 8.797010e-03
+theorem add_comm (a b : MyNat) : add a b = add b a := by
+
+--------------------------------------------------------------------------------
+
+[38] add_left_cancel
+Score: 8.783100e-03
+theorem add_left_cancel (a b n : MyNat) : add n a = add n b → a = b := by
+
+--------------------------------------------------------------------------------
+
+[39] implication_six
+Score: 8.726909e-03
+theorem implication_six (x y : MyNat) : add x one = add y one → x = y := by
+
+--------------------------------------------------------------------------------
+
+[40] add_left_eq_self
+Score: 8.712282e-03
+theorem add_left_eq_self (x y : MyNat) : add x y = y → x = zero := by
+
+--------------------------------------------------------------------------------
+
+[41] add_right_eq_zero
+Score: 8.330919e-03
+theorem add_right_eq_zero (a b : MyNat) : add a b = zero → a = zero := by
+
+--------------------------------------------------------------------------------
+
+[42] add_right_cancel
+Score: 8.246921e-03
+theorem add_right_cancel (a b n : MyNat) : add a n = add b n → a = b := by
+
+--------------------------------------------------------------------------------
+
+[43] zero_ne_one
+Score: 8.236792e-03
+theorem zero_ne_one : (zero : MyNat) ≠ one := by
+
+--------------------------------------------------------------------------------
+
+[44] le_zero
+Score: 8.086452e-03
+theorem le_zero (x : MyNat) (hx : le x zero) : x = zero := by
+
+--------------------------------------------------------------------------------
+
+[45] mul_add
+Score: 8.086437e-03
+theorem mul_add (a b c : MyNat) : mul a (add b c) = add (mul a b) (mul a c) := by
+
+--------------------------------------------------------------------------------
+
+[46] mul_one
+Score: 7.983916e-03
+theorem mul_one (m : MyNat) : mul m one = m := by
+
+--------------------------------------------------------------------------------
+
+[47] implication_one
+Score: 7.795841e-03
+theorem implication_one (x y z : MyNat) (h1 : add x y = four) (h2 : add (mul three x) z = two) : add x y = four := by
+
+--------------------------------------------------------------------------------
+
+[48] is_zero_succ
+Score: 7.757077e-03
+theorem is_zero_succ (n : MyNat) : is_zero (succ n) = False := rfl
+
+--------------------------------------------------------------------------------
+
+[49] is_zero_zero
+Score: 7.734089e-03
+theorem is_zero_zero : is_zero zero = True := rfl
+
+--------------------------------------------------------------------------------
+
+[50] zero_mul
+Score: 7.503928e-03
+theorem zero_mul (m : MyNat) : mul zero m = zero := by
+
+--------------------------------------------------------------------------------
+
+[51] succ_ne_succ
+Score: 7.465914e-03
+theorem succ_ne_succ (m n : MyNat) (h : m ≠ n) : succ m ≠ succ n := by
+
+--------------------------------------------------------------------------------
+
+[52] zero_pow_succ
+Score: 7.195843e-03
+theorem zero_pow_succ (m : MyNat) : pow (zero : MyNat) (succ m) = zero := by
+
+--------------------------------------------------------------------------------
+
+[53] add_right_comm
+Score: 7.111840e-03
+theorem add_right_comm (a b c : MyNat) : add (add a b) c = add (add a c) b := by
+
+--------------------------------------------------------------------------------
+
+[54] add_left_comm
+Score: 7.111840e-03
+theorem add_left_comm (a b c : MyNat) : add a (add b c) = add b (add a c) := by
+
+--------------------------------------------------------------------------------
+
+[55] four_eq_succ_three
+Score: 6.998475e-03
+theorem four_eq_succ_three : four = succ three := by rfl
+-- power
+
+--------------------------------------------------------------------------------
+
+[56] le_succ_self
+Score: 6.979490e-03
+theorem le_succ_self (x : MyNat) : le x (succ x) := by
+
+--------------------------------------------------------------------------------
+
+[57] implication_two
+Score: 6.944606e-03
+theorem implication_two (x y : MyNat) (h : add zero x = add (add zero y) two) : x = add y two := by
+
+--------------------------------------------------------------------------------
+
+[58] zero_pow_zero
+Score: 6.939363e-03
+theorem zero_pow_zero : pow (zero : MyNat)  zero = one := by
+
+--------------------------------------------------------------------------------
+
+[59] one_add_le_self
+Score: 6.930958e-03
+theorem one_add_le_self (x : MyNat) : le x (add one x) := by
+
+--------------------------------------------------------------------------------
+
+[60] implication_three
+Score: 6.872041e-03
+theorem implication_three (x y : MyNat) (h1 : x = three) (h2 : x = three → y = four) : y = four := by
+
+--------------------------------------------------------------------------------
+
+[61] or_symm
+Score: 6.872041e-03
+theorem or_symm (x y : MyNat) (h : x = four ∨ y = three) : y = three ∨ x = four := by
+
+--------------------------------------------------------------------------------
+
+[62] succ_eq_add_one
+Score: 6.868700e-03
+theorem succ_eq_add_one (n : MyNat) : succ n = add n one := by
+
+--------------------------------------------------------------------------------
+
+[63] three_eq_succ_two
+Score: 6.808825e-03
+theorem three_eq_succ_two : three = succ two := by rfl
+
+--------------------------------------------------------------------------------
+
+[64] zero_le
+Score: 6.486445e-03
+theorem zero_le (x : MyNat) : le zero x := by
+
+--------------------------------------------------------------------------------
+
+[65] le_trans
+Score: 6.444899e-03
+theorem le_trans (x y z : MyNat) (hxy : le x y) (hyz : le y z) : le x z := by
+
+--------------------------------------------------------------------------------
+
+[66] two_eq_succ_one
+Score: 6.266966e-03
+theorem two_eq_succ_one : two = succ one := by rfl
+
+--------------------------------------------------------------------------------
+
+[67] add_assoc
+Score: 6.262278e-03
+theorem add_assoc (a b c : MyNat) : add (add a b) c = add a (add b c) := by
+
+--------------------------------------------------------------------------------
+
+[68] succ_add
+Score: 6.262278e-03
+theorem succ_add (a b : MyNat) : add (succ a) b = succ (add a b)  := by
+
+--------------------------------------------------------------------------------
+
+[69] zero_add
+Score: 6.262278e-03
+theorem zero_add (n : MyNat) : add zero n = n := by
+
+--------------------------------------------------------------------------------
+
+[70] implication_five
+Score: 6.113440e-03
+theorem implication_five (x : MyNat) : x = four → x = four := by
+
+--------------------------------------------------------------------------------
+
+[71] mul_left_ne_zero
+Score: 6.111341e-03
+theorem mul_left_ne_zero (a b : MyNat) (h : mul a b ≠ zero) : b ≠ zero := by
+
+--------------------------------------------------------------------------------
+
+[72] le_succ
+Score: 6.016755e-03
+theorem le_succ (a b : MyNat) : le a b → le a (succ b) := by
+
+--------------------------------------------------------------------------------
+
+[73] le_refl
+Score: 5.978893e-03
+theorem le_refl (x : MyNat) : le x x := by
+
+--------------------------------------------------------------------------------
+
+[74] reflexive
+Score: 5.978893e-03
+theorem reflexive (x : MyNat) : le x  x := by
+
+--------------------------------------------------------------------------------
+
+[75] one_eq_succ_zero
+Score: 5.801461e-03
+theorem one_eq_succ_zero : one = succ zero := by rfl
+
+--------------------------------------------------------------------------------
+
+[76] le_iff_exists_add
+Score: 5.779532e-03
+theorem le_iff_exists_add (a b : MyNat) : le a b ↔ ∃ (c : MyNat), b = add a c := Iff.rfl
+
+--------------------------------------------------------------------------------
+
+[77] eq_succ_of_ne_zero
+Score: 5.584717e-03
+theorem eq_succ_of_ne_zero (a : MyNat) (ha : a ≠ zero) : ∃ n, a = succ n := by
+
+--------------------------------------------------------------------------------
+
+[78] add_zero
+Score: 5.354838e-03
+axiom add_zero (a : MyNat) : add a zero = a
+
+--------------------------------------------------------------------------------
+
+[79] add
+Score: 5.354838e-03
+opaque add : MyNat → MyNat → MyNat
+
+--------------------------------------------------------------------------------
+
+[80] pred
+Score: 5.354838e-03
+def pred : MyNat → MyNat
+| zero => zero
+| succ n => n
+
+--------------------------------------------------------------------------------
+
+[81] instInhabited
+Score: 5.354838e-03
+instance : Inhabited MyNat where
+  default := MyNat.zero
+
+--------------------------------------------------------------------------------
+
+[82] succ
+Score: 5.354838e-03
+succ : MyNat → MyNat
+
+--------------------------------------------------------------------------------
+
+[83] is_zero
+Score: 5.354838e-03
+def is_zero : MyNat → Prop
+| zero => True
+| succ _ => False
+
+--------------------------------------------------------------------------------
+
+[84] zero
+Score: 5.354838e-03
+zero : MyNat
+
+--------------------------------------------------------------------------------
+
+[85] add_succ
+Score: 5.354838e-03
+axiom add_succ (a d : MyNat) : add a (succ d) = succ (add a d)
+
+--------------------------------------------------------------------------------
+
+[86] two
+Score: 5.354838e-03
+def two : MyNat := MyNat.succ one
+
+--------------------------------------------------------------------------------
+
+[87] mul
+Score: 5.354838e-03
+opaque mul : MyNat → MyNat → MyNat
+
+--------------------------------------------------------------------------------
+
+[88] mul_zero
+Score: 5.354838e-03
+axiom mul_zero (a : MyNat) : mul a zero = zero
+
+--------------------------------------------------------------------------------
+
+[89] mul_succ
+Score: 5.354838e-03
+axiom mul_succ (a b : MyNat) : mul a (succ b) = add (mul a b) a
+
+--------------------------------------------------------------------------------
+
+[90] one
+Score: 5.354838e-03
+def one : MyNat := MyNat.succ zero
+
+--------------------------------------------------------------------------------
+
+[91] three
+Score: 5.354838e-03
+def three : MyNat := MyNat.succ two
+
+--------------------------------------------------------------------------------
+
+[92] four
+Score: 5.354838e-03
+def four : MyNat := MyNat.succ three
+
+--------------------------------------------------------------------------------
+
+[93] pow
+Score: 5.354838e-03
+opaque pow : MyNat → MyNat → MyNat
+
+--------------------------------------------------------------------------------
+
+[94] pow_zero
+Score: 5.354838e-03
+axiom pow_zero (m : MyNat) : pow m zero = one
+
+--------------------------------------------------------------------------------
+
+[95] pow_succ
+Score: 5.354838e-03
+axiom pow_succ (m n : MyNat) : pow m (succ n) = mul (pow m n) m
+
+--------------------------------------------------------------------------------
+
+[96] le
+Score: 5.354838e-03
+def le (a b : MyNat) :=  ∃ (c : MyNat), b = add a c
+
+--------------------------------------------------------------------------------
+
+[97] lt_myNat
+Score: 5.354838e-03
+def lt_myNat (a b : MyNat) :=  (le a b) ∧ ¬ (le b  a)
+
+--------------------------------------------------------------------------------
+
+[98] implication_seven
+Score: 5.354838e-03
+theorem implication_seven (x y : MyNat) (h1 : x = y) (h2 : x ≠ y) : False := by
+
+--------------------------------------------------------------------------------
+
+[99] MyNat
+Score: 5.354838e-03
+inductive MyNat where
+| zero : MyNat
+| succ : MyNat → MyNat
+
+--------------------------------------------------------------------------------
+

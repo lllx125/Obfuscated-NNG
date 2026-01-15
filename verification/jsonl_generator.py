@@ -8,7 +8,7 @@ import json
 import re
 from pathlib import Path
 from typing import Dict, List, Set, Optional
-from verification.code_normalize import normalize_lean_code
+from code_normalize import normalize_lean_code
 
 
 # Lean code snippet to inject at the beginning of the generated file
@@ -149,6 +149,12 @@ def generate_lean_for_theorems(
                 proof = normalize_lean_code(proof_raw)
                 # Store the name back in the entry for later use
                 entry['name'] = name
+            elif 'proof' in entry:
+                # Parse code to extract statement, proof, and name
+                name, statement, proof_raw = parse_theorem_code(entry['proof'])
+                proof = normalize_lean_code(proof_raw)
+                # Store the name back in the entry for later use
+                entry['name'] = name
             else:
                 raise ValueError(f"Entry missing both 'statement' and 'code' fields: {entry}")
 
@@ -211,7 +217,7 @@ def generate_lean_for_results(
 
         # Copy theorem entry and replace proof
         proof_entry = theorem.copy()
-        proof_entry["proof"] = result.get("code", "sorry")
+        proof_entry["proof"] = result.get("code", result.get("proof", "sorry"))
 
         generated_proofs.append(proof_entry)
 
@@ -219,3 +225,11 @@ def generate_lean_for_results(
     generate_lean_for_theorems(header_entries, generated_proofs, output_file)
 
     return len(generated_proofs)
+
+if __name__ == "__main__":
+    generate_lean_for_results(
+        header_file=Path("dataset/original/header_definitions.jsonl"),
+        result_file=Path("dataset/original/theorems.jsonl"),
+        theorems_file=Path("dataset/original/theorems.jsonl"),
+        output_file=Path("generated_proofs.lean")
+    )

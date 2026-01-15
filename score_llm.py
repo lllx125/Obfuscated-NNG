@@ -270,7 +270,7 @@ def main():
         score_llm(LLM_NAME)
     else:
         # Run multiple LLMs consecutively
-        llm_list = ["deepseek-r1", "gpt-5", "claude-sonnet-4.5"]
+        llm_list = [ "gpt-5", "claude-sonnet-4.5"]
 
         for llm_name in llm_list:
             score_llm(llm_name)

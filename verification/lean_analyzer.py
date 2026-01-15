@@ -41,6 +41,8 @@ def get_theorem_line_map(theorems_entries: List[Dict], lean_file: Path) -> Dict[
 
     # Find theorems by looking for "theorem" keyword
     current_theorem = None
+    theorem_start_line = None
+
     for line_num, line in enumerate(lines, start=1):
         # Check if this line starts a theorem
         if line.strip().startswith('theorem '):
@@ -48,22 +50,34 @@ def get_theorem_line_map(theorems_entries: List[Dict], lean_file: Path) -> Dict[
             match = re.match(r'theorem\s+([\w\u0370-\u03FF\u2100-\u214F\']+)', line.strip())
             if match:
                 current_theorem = match.group(1)
+                theorem_start_line = line_num
 
         # If we're in a theorem, map this line to it
         if current_theorem:
             line_to_theorem[line_num] = current_theorem
 
-            # Check if this is the end of the theorem (next blank line after proof)
-            if line.strip() == '' and line_num > 0:
+            # Check if this is the end of the theorem
+            # A theorem ends when we see a blank line followed by either:
+            # - Another theorem declaration
+            # - End of namespace
+            # - End of file
+            # - Another top-level definition
+            if line.strip() == '' and line_num > theorem_start_line:
                 # Look ahead to see if next non-blank line is a new theorem or end
                 found_end = False
-                for future_line in lines[line_num:line_num+3]:
+                for i in range(line_num, min(line_num + 5, len(lines))):
+                    future_line = lines[i] if i < len(lines) else ""
                     if future_line.strip():
-                        if future_line.strip().startswith('theorem ') or future_line.strip().startswith('end '):
+                        if (future_line.strip().startswith('theorem ') or
+                            future_line.strip().startswith('end ') or
+                            future_line.strip().startswith('def ') or
+                            future_line.strip().startswith('axiom ') or
+                            future_line.strip().startswith('opaque ')):
                             found_end = True
                             break
                 if found_end:
                     current_theorem = None
+                    theorem_start_line = None
 
     return line_to_theorem
 
@@ -133,11 +147,23 @@ def parse_first_error(output: str, line_to_theorem: Dict[int, str]) -> Optional[
     # Get the FIRST error line
     first_error_line, error_msg = min(errors, key=lambda x: x[0])
 
-    # Map line to theorem
+    # Map line to theorem - try to find the closest preceding theorem
     if first_error_line in line_to_theorem:
         return line_to_theorem[first_error_line], first_error_line, error_msg
     else:
-        return None
+        # If exact match not found, try to find the closest preceding line that has a theorem
+        # This handles cases where the error is on a line after the theorem declaration
+        closest_line = None
+        for line_num in sorted(line_to_theorem.keys(), reverse=True):
+            if line_num <= first_error_line:
+                closest_line = line_num
+                break
+
+        if closest_line is not None:
+            return line_to_theorem[closest_line], first_error_line, error_msg
+        else:
+            # Error is before any theorem (likely in header/imports)
+            return None
 
 
 def count_sorries_in_proofs(theorems_entries: List[Dict]) -> List[int]:
@@ -291,8 +317,40 @@ def analyze_lean_file(
 
                 incorrect_proofs.add(first_failed)
             else:
-                # Failed but couldn't identify the theorem
-                raise RuntimeError("Verification failed but couldn't identify which theorem")
+                # Failed but couldn't identify the theorem - provide diagnostic info
+                # Save full error output to a debug file
+                debug_file = lean_file.parent / "debug_error_output.txt"
+                with open(debug_file, 'w') as f:
+                    f.write(f"=== Iteration {iteration} ===\n")
+                    f.write(f"Current incorrect proofs: {incorrect_proofs}\n\n")
+                    f.write("=== Full Lean Output ===\n")
+                    f.write(output)
+                    f.write("\n\n=== Line to Theorem Map ===\n")
+                    for line_num in sorted(line_to_theorem.keys()):
+                        f.write(f"Line {line_num}: {line_to_theorem[line_num]}\n")
+
+                # Extract first few lines of error for debugging
+                error_preview = output[:500] if len(output) > 500 else output
+
+                # Try to extract the error line number
+                error_pattern = re.compile(r'Generated_Verification\.lean:(\d+):\d+:\s*error')
+                match = error_pattern.search(output)
+
+                if match:
+                    error_line = int(match.group(1))
+                    raise RuntimeError(
+                        f"Verification failed but couldn't identify which theorem. "
+                        f"Error at line {error_line}. "
+                        f"This may be an error in the header/imports section. "
+                        f"Debug output saved to: {debug_file}\n"
+                        f"Error preview: {error_preview}"
+                    )
+                else:
+                    raise RuntimeError(
+                        f"Verification failed but couldn't parse error format. "
+                        f"Debug output saved to: {debug_file}\n"
+                        f"Output: {error_preview}"
+                    )
     else:
         # Reached max iterations
         raise RuntimeError(f"Maximum iterations ({max_iterations}) reached")

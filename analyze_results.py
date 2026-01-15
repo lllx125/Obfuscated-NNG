@@ -16,9 +16,7 @@ from utils.analysis_modules import (
     compute_proof_lengths,
     compute_proof_length_stats,
     perform_stat_test,
-    plot_rate_and_time,
-    plot_correction_rate_per_problem,
-    plot_proof_length_analysis
+    plot_combined_analysis
 )
 
 
@@ -100,37 +98,34 @@ def analyze_results(
     if not run_all_analyses:
         return results
 
-    # Plot rate and time
-    if metrics:
-        plot_rate_and_time(
-            llm_name=llm_name,
-            metrics=metrics,
-            save_dir=save_dir,
-            repo_folder=repo_folder
-        )
-
-    # Plot correction rate per problem
-    plot_correction_rate_per_problem(
-        llm_name=llm_name,
-        stats=stats,
-        save_dir=save_dir,
-        repo_folder=repo_folder
-    )
-
-    # Proof length analysis
+    # Compute proof length stats
     proof_lengths = compute_proof_lengths(
         llm_name=llm_name,
         repo_folder=repo_folder
     )
-
     proof_length_stats = compute_proof_length_stats(proof_lengths)
 
-    plot_proof_length_analysis(
-        llm_name=llm_name,
-        proof_length_stats=proof_length_stats,
-        save_dir=save_dir,
-        repo_folder=repo_folder
-    )
+    # Delete old individual plot files if they exist
+    old_plots = [
+        save_dir / f"{llm_name}_analysis.png",
+        save_dir / f"{llm_name}_correction_rate_per_problem.png",
+        save_dir / f"{llm_name}_proof_length.png"
+    ]
+    for old_plot in old_plots:
+        if old_plot.exists():
+            old_plot.unlink()
+            print(f"Deleted old plot: {old_plot}")
+
+    # Create combined 1x3 plot
+    if metrics and proof_length_stats:
+        plot_combined_analysis(
+            llm_name=llm_name,
+            metrics=metrics,
+            proof_length_stats=proof_length_stats,
+            save_dir=save_dir,
+            repo_folder=repo_folder
+        )
+        print(f"Created combined analysis plot for {llm_name}")
 
     # Perform Welch's t-test for proof lengths
     if print_stats and proof_length_stats:
@@ -162,7 +157,9 @@ def main():
     llm_list = [
         "deepseek-r1",
         "deepseek-prover-v2",
-        "gpt-4o"
+        "gpt-4o",
+        "gpt-5",
+        "claude-sonnet-4.5"
     ]
 
     repo_folder = "."

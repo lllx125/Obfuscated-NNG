@@ -8,6 +8,8 @@ LLM theorem proving benchmark results.
 
 import json
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend to avoid display issues
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
@@ -394,7 +396,7 @@ def plot_rate_and_time(
 
     # Save plot
     save_path = save_dir / f"{llm_name}_analysis.png"
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.savefig(str(save_path), dpi=300, bbox_inches='tight')
     plt.close()
 
     return save_path
@@ -515,7 +517,7 @@ def plot_correction_rate_per_problem(
 
     # Save plot
     save_path = save_dir / f"{llm_name}_correction_rate_per_problem.png"
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.savefig(str(save_path), dpi=300, bbox_inches='tight')
     plt.close()
 
     return save_path
@@ -595,7 +597,134 @@ def plot_proof_length_analysis(
 
     # Save plot
     save_path = save_dir / f"{llm_name}_proof_length.png"
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.savefig(str(save_path), dpi=300, bbox_inches='tight')
+    plt.close()
+
+    return save_path
+
+
+def plot_combined_analysis(
+    llm_name: str,
+    metrics: Dict,
+    proof_length_stats: Dict[str, Dict[str, float]],
+    save_dir: Path,
+    repo_folder: str = "."
+) -> Optional[Path]:
+    """
+    Create a combined 3x1 plot showing score, time, and proof length separately.
+
+    Args:
+        llm_name: The LLM name
+        metrics: Dictionary of metrics from compute_avg_and_std()
+        proof_length_stats: Dictionary from compute_proof_length_stats()
+        save_dir: Directory to save the plot
+        repo_folder: Repository root folder
+
+    Returns:
+        Path to saved plot file, or None if no data available
+    """
+    dataset_order = ["original", "obfuscated_1", "obfuscated_2", "obfuscated_3",
+                     "obfuscated_4", "obfuscated_5"]
+
+    # Prepare data for rate/time plot
+    datasets_present = []
+    scores = []
+    score_errors = []
+    times = []
+    time_errors = []
+
+    for dataset_name in dataset_order:
+        if dataset_name in metrics:
+            m = metrics[dataset_name]
+            datasets_present.append(dataset_name)
+            scores.append(m["avg_score"])
+            score_errors.append(m["score_stderr"])
+            times.append(m["avg_time"])
+            time_errors.append(m["time_stderr"])
+
+    # Prepare data for proof length plot
+    avg_lengths = []
+    length_errors = []
+
+    for dataset_name in datasets_present:
+        if dataset_name in proof_length_stats:
+            stats = proof_length_stats[dataset_name]
+            avg_lengths.append(stats["avg_length"])
+            length_errors.append(stats["length_stderr"])
+        else:
+            avg_lengths.append(0)
+            length_errors.append(0)
+
+    if not datasets_present:
+        print(f"No datasets found for {llm_name}")
+        return None
+
+    # Create 3x1 subplots (vertical layout)
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 12))
+
+    # X-axis positions
+    x_pos = np.arange(len(datasets_present))
+
+    # ========== Subplot 1: Correct Rate ==========
+    color1 = 'tab:blue'
+    ax1.errorbar(x_pos, scores, yerr=score_errors,
+                 fmt='o', color=color1, capsize=5, capthick=2,
+                 markersize=8, linestyle='', label='Correct Rate')
+    ax1.set_ylabel('Correct Rate (%)', fontsize=12)
+    ax1.set_ylim(0, 100)
+    ax1.grid(True, alpha=0.3)
+    ax1.set_xticks(x_pos)
+    ax1.set_xticklabels(datasets_present, rotation=15, ha='right')
+    ax1.set_title('Correct Rate', fontsize=13, fontweight='bold', pad=10)
+    ax1.legend(loc='best', fontsize=10)
+
+    # ========== Subplot 2: Average Time ==========
+    color2 = 'tab:orange'
+    ax2.errorbar(x_pos, times, yerr=time_errors,
+                 fmt='o', color=color2, capsize=5, capthick=2,
+                 markersize=8, linestyle='', label='Avg Time')
+    ax2.set_ylabel('Average Time (s)', fontsize=12)
+    ax2.grid(True, alpha=0.3)
+    ax2.set_xticks(x_pos)
+    ax2.set_xticklabels(datasets_present, rotation=15, ha='right')
+    ax2.set_title('Average Time', fontsize=13, fontweight='bold', pad=10)
+    ax2.legend(loc='best', fontsize=10)
+
+    # Set time y-axis to start from 0
+    y2_min, y2_max = ax2.get_ylim()
+    ax2.set_ylim(0, y2_max * 1.1)
+
+    # ========== Subplot 3: Proof Length ==========
+    color3 = 'tab:green'
+    ax3.errorbar(x_pos, avg_lengths, yerr=length_errors,
+                 fmt='o', color=color3, capsize=5, capthick=2,
+                 markersize=8, linestyle='', label='Avg Proof Length')
+    ax3.set_xlabel('Dataset', fontsize=12)
+    ax3.set_ylabel('Avg Proof Length (chars)', fontsize=12)
+    ax3.set_xticks(x_pos)
+    ax3.set_xticklabels(datasets_present, rotation=15, ha='right')
+    ax3.grid(True, alpha=0.3)
+    ax3.legend(loc='best', fontsize=10)
+    ax3.set_title('Proof Length', fontsize=13, fontweight='bold', pad=10)
+
+    # Auto-adjust y-axis for proof length
+    if avg_lengths and max(avg_lengths) > 0:
+        min_length = min([l for l in avg_lengths if l > 0])
+        max_length = max(avg_lengths)
+        max_error = max(length_errors) if length_errors else 0
+        y_range = max_length - min_length
+        y_padding = max(y_range * 0.1, max_error * 2)
+        ax3.set_ylim(bottom=max(0, min_length - y_padding),
+                     top=max_length + y_padding)
+
+    # Overall title
+    fig.suptitle(f'{llm_name} - Complete Analysis', fontsize=16, fontweight='bold')
+
+    fig.tight_layout()
+
+    # Save plot
+    save_path = save_dir / f"{llm_name}_analysis.png"
+    plt.savefig(str(save_path), dpi=300, bbox_inches='tight')
     plt.close()
 
     return save_path
