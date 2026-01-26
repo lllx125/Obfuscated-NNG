@@ -15,6 +15,37 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from scipy import stats
 
+# Configure matplotlib for publication quality
+# Use Type 1 fonts (vector fonts) to avoid Type 3 fonts
+matplotlib.rcParams['pdf.fonttype'] = 42  # TrueType fonts
+matplotlib.rcParams['ps.fonttype'] = 42   # TrueType fonts
+matplotlib.rcParams['font.family'] = 'sans-serif'
+matplotlib.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
+
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+def get_display_name(llm_name: str) -> str:
+    """
+    Get standardized display name for LLM.
+
+    Args:
+        llm_name: Internal LLM name (e.g., "gpt-4o", "claude-sonnet-4.5")
+
+    Returns:
+        Display name for plots (e.g., "GPT-4o", "Claude-Sonnet-4.5")
+    """
+    display_names = {
+        "gpt-4o": "GPT-4o",
+        "claude-sonnet-4.5": "Claude-Sonnet-4.5",
+        "deepseek-r1": "DeepSeek-R1",
+        "gpt-5": "GPT-5",
+        "deepseek-prover-v2": "DeepSeek-Prover-V2"
+    }
+    return display_names.get(llm_name, llm_name)
+
 
 # ============================================================================
 # Data Loading
@@ -149,7 +180,7 @@ def compute_proof_lengths(
     repo_folder: str = "."
 ) -> np.ndarray:
     """
-    Compute proof lengths (length of "draft" field) for each problem across all datasets and runs.
+    Compute proof plan lengths (length of "draft" field) for each problem across all datasets and runs.
 
     Args:
         llm_name: The LLM name
@@ -211,7 +242,7 @@ def compute_proof_length_stats(
     proof_lengths: np.ndarray
 ) -> Dict[str, Dict[str, float]]:
     """
-    Compute average proof length and standard error for each dataset.
+    Compute average proof plan length and standard error for each dataset.
 
     Args:
         proof_lengths: numpy array from compute_proof_lengths()
@@ -232,7 +263,7 @@ def compute_proof_length_stats(
     results = {}
 
     print(f"\n{'='*60}")
-    print(f"Proof Length Statistics")
+    print(f"Proof Plan Length Statistics")
     print(f"{'='*60}\n")
     print(f"{'Dataset':<15} {'Avg Length':<15} {'Std Error':<15}")
     print("-" * 45)
@@ -271,7 +302,7 @@ def perform_stat_test(name: str, means: List[float], ses: List[float], n: int = 
     Perform One-Way ANOVA using means and standard errors.
 
     Args:
-        name: Name of the metric being tested (e.g., "Correct Rate", "Proof Length")
+        name: Name of the metric being tested (e.g., "Correct Rate", "Proof Plan Length")
         means: List of mean values [original, obfuscated_1, ..., obfuscated_5]
         ses: List of standard errors [original, obfuscated_1, ..., obfuscated_5]
         n: Number of runs (default: 5)
@@ -305,6 +336,14 @@ def perform_stat_test(name: str, means: List[float], ses: List[float], n: int = 
 
 # ============================================================================
 # Plotting Functions
+# ============================================================================
+# Publication Quality Standards:
+# - CMYK-friendly colors (#0072B2 blue, #E69F00 orange) for print compatibility
+# - Different markers (circle, square) for grayscale differentiation
+# - Black edges on markers for clarity in grayscale
+# - 300 DPI resolution for all outputs
+# - Type 1/TrueType fonts (no Type 3 fonts) configured via rcParams
+# - Both PNG and PDF outputs (PDF preferred for CMYK in LaTeX)
 # ============================================================================
 
 def plot_rate_and_time(
@@ -530,7 +569,7 @@ def plot_proof_length_analysis(
     repo_folder: str = "."
 ) -> Optional[Path]:
     """
-    Plot average proof length with error bars across datasets.
+    Plot average proof plan length with error bars across datasets.
 
     Args:
         llm_name: The LLM name
@@ -557,7 +596,7 @@ def plot_proof_length_analysis(
             length_errors.append(stats["length_stderr"])
 
     if not datasets_present:
-        print(f"No proof length data available for {llm_name}")
+        print(f"No proof plan length data available for {llm_name}")
         return None
 
     # Create plot
@@ -566,15 +605,15 @@ def plot_proof_length_analysis(
     # X-axis positions
     x_pos = np.arange(len(datasets_present))
 
-    # Plot average proof lengths with error bars
+    # Plot average proof plan lengths with error bars
     ax.errorbar(x_pos, avg_lengths, yerr=length_errors,
                 fmt='o', color='tab:green', capsize=5, capthick=2,
-                markersize=8, linestyle='', label='Avg Proof Length')
+                markersize=8, linestyle='', label='Avg Proof Plan Length')
 
     # Styling
     ax.set_xlabel('Dataset', fontsize=12)
-    ax.set_ylabel('Average Proof Length (characters)', fontsize=12)
-    ax.set_title(f'{llm_name} - Average Proof Length Across Datasets',
+    ax.set_ylabel('Average Proof Plan Length (characters)', fontsize=12)
+    ax.set_title(f'{llm_name} - Average Proof Plan Length Across Datasets',
                  fontsize=14, fontweight='bold', pad=20)
     ax.set_xticks(x_pos)
     ax.set_xticklabels(datasets_present, rotation=15, ha='right')
@@ -611,7 +650,7 @@ def plot_combined_analysis(
     repo_folder: str = "."
 ) -> Optional[Path]:
     """
-    Create a combined 3x1 plot showing score, time, and proof length separately.
+    Create a combined 2x1 plot showing correct rate and time.
 
     Args:
         llm_name: The LLM name
@@ -642,7 +681,7 @@ def plot_combined_analysis(
             times.append(m["avg_time"])
             time_errors.append(m["time_stderr"])
 
-    # Prepare data for proof length plot
+    # Prepare data for proof plan length plot
     avg_lengths = []
     length_errors = []
 
@@ -659,72 +698,207 @@ def plot_combined_analysis(
         print(f"No datasets found for {llm_name}")
         return None
 
-    # Create 3x1 subplots (vertical layout)
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 12))
+    # Create 2x1 subplots (vertical layout)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8))
 
     # X-axis positions
     x_pos = np.arange(len(datasets_present))
 
+    # Create lambda labels: 0, 0.2, 0.4, 0.6, 0.8, 1.0
+    lambda_labels = [f'{i * 0.2:.1f}' for i in range(len(datasets_present))]
+
     # ========== Subplot 1: Correct Rate ==========
-    color1 = 'tab:blue'
+    # Use CMYK-friendly blue and distinct marker for grayscale accessibility
+    color1 = '#0072B2'  # CMYK-friendly blue
     ax1.errorbar(x_pos, scores, yerr=score_errors,
-                 fmt='o', color=color1, capsize=5, capthick=2,
-                 markersize=8, linestyle='', label='Correct Rate')
-    ax1.set_ylabel('Correct Rate (%)', fontsize=12)
+                 fmt='o-', color=color1, capsize=5, capthick=2,
+                 markersize=6, label='Correct Rate', linewidth=2,
+                 markeredgewidth=1.5, markeredgecolor='black',
+                 ecolor='black')
+    ax1.set_ylabel('Correct Rate (%)', fontsize=16)
     ax1.set_ylim(0, 100)
     ax1.grid(True, alpha=0.3)
     ax1.set_xticks(x_pos)
-    ax1.set_xticklabels(datasets_present, rotation=15, ha='right')
-    ax1.set_title('Correct Rate', fontsize=13, fontweight='bold', pad=10)
-    ax1.legend(loc='best', fontsize=10)
+    ax1.set_xticklabels(lambda_labels, rotation=0, fontsize=14)
+    ax1.set_xlabel('λ', fontsize=16)
+    ax1.set_title('Correct Rate', fontsize=17, fontweight='bold', pad=10)
+    ax1.legend(loc='best', fontsize=14)
+    ax1.tick_params(axis='y', labelsize=14)
 
     # ========== Subplot 2: Average Time ==========
-    color2 = 'tab:orange'
+    # Use CMYK-friendly orange and distinct marker for grayscale accessibility
+    color2 = '#E69F00'  # CMYK-friendly orange
     ax2.errorbar(x_pos, times, yerr=time_errors,
-                 fmt='o', color=color2, capsize=5, capthick=2,
-                 markersize=8, linestyle='', label='Avg Time')
-    ax2.set_ylabel('Average Time (s)', fontsize=12)
+                 fmt='s-', color=color2, capsize=5, capthick=2,
+                 markersize=6, label='Avg Time', linewidth=2,
+                 markeredgewidth=1.5, markeredgecolor='black',
+                 ecolor='black')
+    ax2.set_ylabel('Average Time (s)', fontsize=16)
     ax2.grid(True, alpha=0.3)
     ax2.set_xticks(x_pos)
-    ax2.set_xticklabels(datasets_present, rotation=15, ha='right')
-    ax2.set_title('Average Time', fontsize=13, fontweight='bold', pad=10)
-    ax2.legend(loc='best', fontsize=10)
+    ax2.set_xticklabels(lambda_labels, rotation=0, fontsize=14)
+    ax2.set_xlabel('λ', fontsize=16)
+    ax2.set_title('Average Time', fontsize=17, fontweight='bold', pad=10)
+    ax2.legend(loc='best', fontsize=14)
+    ax2.tick_params(axis='y', labelsize=14)
 
-    # Set time y-axis to start from 0
-    y2_min, y2_max = ax2.get_ylim()
-    ax2.set_ylim(0, y2_max * 1.1)
+    # Set time y-axis range to 0-200
+    ax2.set_ylim(0, 200)
 
-    # ========== Subplot 3: Proof Length ==========
-    color3 = 'tab:green'
-    ax3.errorbar(x_pos, avg_lengths, yerr=length_errors,
-                 fmt='o', color=color3, capsize=5, capthick=2,
-                 markersize=8, linestyle='', label='Avg Proof Length')
-    ax3.set_xlabel('Dataset', fontsize=12)
-    ax3.set_ylabel('Avg Proof Length (chars)', fontsize=12)
-    ax3.set_xticks(x_pos)
-    ax3.set_xticklabels(datasets_present, rotation=15, ha='right')
-    ax3.grid(True, alpha=0.3)
-    ax3.legend(loc='best', fontsize=10)
-    ax3.set_title('Proof Length', fontsize=13, fontweight='bold', pad=10)
-
-    # Auto-adjust y-axis for proof length
-    if avg_lengths and max(avg_lengths) > 0:
-        min_length = min([l for l in avg_lengths if l > 0])
-        max_length = max(avg_lengths)
-        max_error = max(length_errors) if length_errors else 0
-        y_range = max_length - min_length
-        y_padding = max(y_range * 0.1, max_error * 2)
-        ax3.set_ylim(bottom=max(0, min_length - y_padding),
-                     top=max_length + y_padding)
-
-    # Overall title
-    fig.suptitle(f'{llm_name} - Complete Analysis', fontsize=16, fontweight='bold')
+    # Overall title - use display name
+    display_name = get_display_name(llm_name)
+    fig.suptitle(f'{display_name}', fontsize=20, fontweight='bold')
 
     fig.tight_layout()
 
-    # Save plot
-    save_path = save_dir / f"{llm_name}_analysis.png"
-    plt.savefig(str(save_path), dpi=300, bbox_inches='tight')
+    # Save plot in both PNG and PDF formats
+    # PNG for quick viewing, PDF for publication (better CMYK support)
+    save_path_png = save_dir / f"{llm_name}_analysis.png"
+    save_path_pdf = save_dir / f"{llm_name}_analysis.pdf"
+
+    plt.savefig(str(save_path_png), dpi=300, bbox_inches='tight')
+    plt.savefig(str(save_path_pdf), dpi=300, bbox_inches='tight', format='pdf')
     plt.close()
 
-    return save_path
+    return save_path_png
+
+
+def plot_all_llms_combined(
+    llm_list: List[str],
+    repo_folder: str = "."
+) -> Optional[Path]:
+    """
+    Create a combined 2xN plot showing all LLMs side by side.
+    Each column represents one LLM, each row represents one metric (Correct Rate and Average Time).
+
+    Args:
+        llm_list: List of LLM names to include
+        repo_folder: Repository root folder
+
+    Returns:
+        Path to saved plot file, or None if no data available
+    """
+    dataset_order = ["original", "obfuscated_1", "obfuscated_2", "obfuscated_3",
+                     "obfuscated_4", "obfuscated_5"]
+
+    # Collect data for all LLMs
+    all_llm_data = {}
+
+    print("\nCollecting data for combined plot...")
+    for llm_name in llm_list:
+        try:
+            # Load statistics and compute metrics
+            stats = load_statistics(llm_name, repo_folder)
+            metrics = compute_avg_and_std(llm_name, stats, repo_folder, print_results=False)
+            proof_lengths = compute_proof_lengths(llm_name, repo_folder)
+            proof_length_stats = compute_proof_length_stats(proof_lengths)
+
+            # Prepare data
+            datasets_present = []
+            scores = []
+            score_errors = []
+            times = []
+            time_errors = []
+            avg_lengths = []
+            length_errors = []
+
+            for dataset_name in dataset_order:
+                if dataset_name in metrics:
+                    m = metrics[dataset_name]
+                    datasets_present.append(dataset_name)
+                    scores.append(m["avg_score"])
+                    score_errors.append(m["score_stderr"])
+                    times.append(m["avg_time"])
+                    time_errors.append(m["time_stderr"])
+
+                    if dataset_name in proof_length_stats:
+                        stats_data = proof_length_stats[dataset_name]
+                        avg_lengths.append(stats_data["avg_length"])
+                        length_errors.append(stats_data["length_stderr"])
+                    else:
+                        avg_lengths.append(0)
+                        length_errors.append(0)
+
+            if datasets_present:
+                all_llm_data[llm_name] = {
+                    'datasets': datasets_present,
+                    'scores': scores,
+                    'score_errors': score_errors,
+                    'times': times,
+                    'time_errors': time_errors,
+                    'avg_lengths': avg_lengths,
+                    'length_errors': length_errors
+                }
+                print(f"  ✓ Loaded data for {llm_name}")
+
+        except Exception as e:
+            print(f"  ✗ Could not load data for {llm_name}: {e}")
+            continue
+
+    if not all_llm_data:
+        print("No data available for any LLM")
+        return None
+
+    # Create 2 rows x N columns plot (N = number of LLMs)
+    num_llms = len(all_llm_data)
+    fig, axes = plt.subplots(2, num_llms, figsize=(4 * num_llms, 7))
+
+    # If only one LLM, axes won't be 2D
+    if num_llms == 1:
+        axes = axes.reshape(-1, 1)
+
+    # Process each LLM
+    for col_idx, (llm_name, data) in enumerate(all_llm_data.items()):
+        x_pos = np.arange(len(data['datasets']))
+        lambda_labels = [f'{i * 0.2:.1f}' for i in range(len(data['datasets']))]
+        display_name = get_display_name(llm_name)
+
+        # Row 0: Correct Rate
+        ax = axes[0, col_idx]
+        # Use CMYK-friendly blue and distinct marker for grayscale accessibility
+        ax.errorbar(x_pos, data['scores'], yerr=data['score_errors'],
+                    fmt='o-', color='#0072B2', capsize=5, capthick=2,
+                    markersize=5, linewidth=2, markeredgewidth=1.5,
+                    markeredgecolor='black', ecolor='black')
+        ax.set_ylim(0, 100)
+        ax.grid(True, alpha=0.3)
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(lambda_labels, rotation=0, fontsize=12)
+        ax.tick_params(axis='y', labelsize=12)
+
+        if col_idx == 0:
+            ax.set_ylabel('Correct Rate (%)', fontsize=14)
+        ax.set_title(display_name, fontsize=15, fontweight='bold', pad=10)
+
+        # Row 1: Average Time
+        ax = axes[1, col_idx]
+        # Use CMYK-friendly orange and square marker for grayscale accessibility
+        ax.errorbar(x_pos, data['times'], yerr=data['time_errors'],
+                    fmt='s-', color='#E69F00', capsize=5, capthick=2,
+                    markersize=5, linewidth=2, markeredgewidth=1.5,
+                    markeredgecolor='black', ecolor='black')
+        ax.set_ylim(0, 200)
+        ax.grid(True, alpha=0.3)
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(lambda_labels, rotation=0, fontsize=12)
+        ax.set_xlabel('λ', fontsize=14)
+        ax.tick_params(axis='y', labelsize=12)
+
+        if col_idx == 0:
+            ax.set_ylabel('Average Time (s)', fontsize=14)
+
+    fig.tight_layout()
+
+    # Save to root directory in both PNG and PDF formats
+    # PNG for quick viewing, PDF for publication (better CMYK support)
+    save_path_png = Path(repo_folder) / "all_llms_combined_analysis.png"
+    save_path_pdf = Path(repo_folder) / "all_llms_combined_analysis.pdf"
+
+    plt.savefig(str(save_path_png), dpi=300, bbox_inches='tight')
+    plt.savefig(str(save_path_pdf), dpi=300, bbox_inches='tight', format='pdf')
+    plt.close()
+
+    print(f"\nSaved combined plot for all LLMs:")
+    print(f"  PNG: {save_path_png}")
+    print(f"  PDF: {save_path_pdf}")
+    return save_path_png

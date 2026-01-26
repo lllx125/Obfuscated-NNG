@@ -16,7 +16,8 @@ from utils.analysis_modules import (
     compute_proof_lengths,
     compute_proof_length_stats,
     perform_stat_test,
-    plot_combined_analysis
+    plot_combined_analysis,
+    plot_all_llms_combined
 )
 
 
@@ -34,7 +35,7 @@ def analyze_results(
     2. Compute averages and standard errors for scores/times
     3. Plot rate and time with error bars
     4. Plot correction rate per problem across runs
-    5. Compute and plot proof length analysis
+    5. Compute and plot proof plan length analysis
 
     Args:
         llm_name: The LLM name
@@ -98,7 +99,7 @@ def analyze_results(
     if not run_all_analyses:
         return results
 
-    # Compute proof length stats
+    # Compute proof plan length stats
     proof_lengths = compute_proof_lengths(
         llm_name=llm_name,
         repo_folder=repo_folder
@@ -108,6 +109,7 @@ def analyze_results(
     # Delete old individual plot files if they exist
     old_plots = [
         save_dir / f"{llm_name}_analysis.png",
+        save_dir / f"{llm_name}_analysis.pdf",
         save_dir / f"{llm_name}_correction_rate_per_problem.png",
         save_dir / f"{llm_name}_proof_length.png"
     ]
@@ -127,7 +129,7 @@ def analyze_results(
         )
         print(f"Created combined analysis plot for {llm_name}")
 
-    # Perform Welch's t-test for proof lengths
+    # Perform Welch's t-test for proof plan lengths
     if print_stats and proof_length_stats:
         dataset_order = ["original", "obfuscated_1", "obfuscated_2", "obfuscated_3",
                          "obfuscated_4", "obfuscated_5"]
@@ -143,9 +145,9 @@ def analyze_results(
 
         if len(length_means) > 1:
             print(f"{'='*60}")
-            print(f"One-Way ANOVA Results for Proof Length")
+            print(f"One-Way ANOVA Results for Proof Plan Length")
             print(f"{'='*60}\n")
-            perform_stat_test("Proof Length (characters)", length_means, length_ses)
+            perform_stat_test("Proof Plan Length (characters)", length_means, length_ses)
             print()
 
     return results
@@ -155,11 +157,11 @@ def main():
     """Main function to analyze results for multiple LLMs."""
     # List of LLMs to analyze
     llm_list = [
-        "deepseek-r1",
-        "deepseek-prover-v2",
         "gpt-4o",
+        "claude-sonnet-4.5",
+        "deepseek-r1",
         "gpt-5",
-        "claude-sonnet-4.5"
+        "deepseek-prover-v2",
     ]
 
     repo_folder = "."
@@ -179,6 +181,17 @@ def main():
             print(f"\nError analyzing {llm_name}: {e}")
             import traceback
             traceback.print_exc()
+
+    # Create combined plot for all LLMs
+    print("\n" + "="*60)
+    print("Creating combined plot for all LLMs")
+    print("="*60)
+    try:
+        plot_all_llms_combined(llm_list, repo_folder)
+    except Exception as e:
+        print(f"\nError creating combined plot: {e}")
+        import traceback
+        traceback.print_exc()
 
     return all_results
 
