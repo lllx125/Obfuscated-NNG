@@ -20,7 +20,6 @@ This repository facilitates a research project. The following is the abstract:
 python3 generate_dataset.py
 
 # Run benchmarks
-export LLM_NAME="deepseek-r1"
 python3 parallel_benchmark.py
 
 # Score results
